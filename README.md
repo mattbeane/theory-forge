@@ -144,12 +144,12 @@ The most important intellectual move in this pipeline is finding the **sensitizi
 3. But not everyone violates it—there's heterogeneity
 4. The sensitizing literature explains *who* violates and *why*
 
-**Example**:
-- Finding: Seasonal workers respond 2x as strongly to incentives
-- Theory violated: P-E fit predicts misfit → withdrawal
-- Heterogeneity: Only *some* seasonal workers intensify effort
-- Sensitizing literature: Work orientation (Wrzesniewski, Schein)
-- Contribution: Orientation moderates the misfit-response relationship
+**Example** (from prior published work):
+- Finding: Some surgical trainees skilled up fast despite minimal formal practice
+- Theory violated: Deliberate practice predicts skill requires repetition
+- Heterogeneity: Only *some* trainees achieved rapid skill gains
+- Sensitizing literature: Deviance and workarounds
+- Contribution: "Shadow learning" explains skill variance outside formal training
 
 ### Frame Shifts Are Normal
 
@@ -193,4 +193,4 @@ MIT. Use it, modify it, share it.
 
 ## Questions?
 
-Open an issue or contact mbeane@ucsb.edu
+Open an issue or contact mattbeane@ucsb.edu

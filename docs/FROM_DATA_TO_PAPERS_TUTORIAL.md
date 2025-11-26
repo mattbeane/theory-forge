@@ -13,17 +13,16 @@ I'm an ethnographer. Most of my work involves fieldwork, interviews, and careful
 In late November 2025, I saw a tweet from Aniket Panjwani suggesting that coding agents like Claude Code could transform exploratory data analysis for social scientists. I decided to test this claim—not on toy data, but on real research datasets I'd collected years ago and never fully exploited.
 
 **What I had:**
-- **Dataset 1**: 59,000 temp worker exit records + daily productivity data + automation project timelines + 351 interviews and 718 hours of observation from 12 warehouse sites
-- **Dataset 2**: 68,000+ worker-month observations on a performance incentive program + 77 interviews with 47 informants from 4 facilities
+- **Dataset 1**: ~60,000 worker exit records + daily productivity data + project timelines + 300+ interviews and 700+ hours of observation from multiple sites
+- **Dataset 2**: ~70,000 worker-month observations on a performance program + 77 interviews with 47 informants from multiple facilities
 
 **What I produced in 5 days of part-time work:**
-- **Paper 1**: "Option Cultivation: Why Workers Stay in Anticipation of Uncertain Automation" (targeting ASQ)
-- **Paper 2**: "The Seasonal Paradox: How Flexible Staffing Both Enables and Undermines Productivity"
-- **Paper 3**: "When Misfit Motivates: Work Orientation and Responses to Performance Pay in Warehouse Work"
+- 3 distinct papers, each targeting a different journal
+- Each paper went through 3-5 complete reframings
+- Final versions have expanded literature reviews, quantitative analyses with robustness checks, integrated qualitative evidence, figures, and journal-appropriate formatting
+- Each was stress-tested by a second AI system acting as adversarial pre-reviewer
 
-Each paper went through 3-5 complete reframings. The final versions have expanded literature reviews, quantitative analyses with robustness checks, integrated qualitative evidence, figures, and are formatted for target journals. They've been stress-tested by a second AI system acting as adversarial pre-reviewer.
-
-This document explains how.
+This document explains the process—without revealing the specific content of papers still under development.
 
 ---
 
@@ -58,7 +57,7 @@ None of this requires you to be a methods expert. It requires you to be a *domai
 **Example prompt**:
 > "I have data files in [directory]. List what's there, give me basic descriptives, and flag anything unusual or potentially interesting."
 
-**What you're looking for**: Anomalies that trigger your domain expertise. When the AI says "28% of workers logged zero hours before exiting," you think "that's weird—something's happening at recruitment or onboarding." That recognition comes from *you*, not the AI.
+**What you're looking for**: Anomalies that trigger your domain expertise. When the AI flags something unexpected in your data, you think "that's weird—something's happening here." That recognition comes from *you*, not the AI.
 
 **Your role**: Curator. The AI generates; you recognize what matters.
 
@@ -75,19 +74,17 @@ None of this requires you to be a methods expert. It requires you to be a *domai
 
 **Critical insight**: Your first framing will almost certainly be wrong. That's fine. The goal is to generate options, not commit.
 
-**Example from this project**:
+**The frame shift pattern**:
 
-My first framing for Paper 1 was "Automation causes turnover among temp workers." When we ran robustness checks, the finding didn't survive volume controls. We reframed to "Workers flee approaching automation." But the data showed the *opposite*—turnover *decreased* before automation.
+Across 3 papers, I went through 13 total frame shifts. A typical sequence looks like:
 
-That inversion became the paper: "Why Workers *Stay* in Anticipation of Uncertain Automation."
-
-**Frame shift count across 3 papers**: 13 total
-
-| Paper | Frame Shifts | Final Title |
-|-------|--------------|-------------|
-| Paper 1 | 5 | Option Cultivation: Why Workers Stay in Anticipation of Uncertain Automation |
-| Paper 2 | 3 | The Seasonal Paradox: How Flexible Staffing Both Enables and Undermines Productivity |
-| Paper 3 | 5 | When Misfit Motivates: Work Orientation and Responses to Performance Pay |
+| Stage | What Happened |
+|-------|---------------|
+| Frame 1 | Initial hypothesis based on obvious pattern |
+| Frame 2 | Reframe after robustness check kills original finding |
+| Frame 3 | Reframe when data shows opposite of expected pattern |
+| Frame 4 | Evolve framing to be more theoretical (not just descriptive) |
+| Frame 5 | Final framing with active mechanism and clear contribution |
 
 **Your role**: Evaluator. Kill framings that don't survive scrutiny. Recognize when an inversion is more interesting than the original hypothesis.
 
@@ -100,29 +97,20 @@ That inversion became the paper: "Why Workers *Stay* in Anticipation of Uncertai
 You've found a robust empirical pattern that violates an established theoretical prediction. Now you need a *second* literature—a "sensitizing" or "interpretive" lens—that explains the heterogeneity in your data.
 
 **The pattern**:
-1. Primary theory makes a prediction (e.g., "misfit leads to withdrawal")
-2. Your data violates it (e.g., "some workers intensify effort when misfit")
-3. You ask: "What explains *which* workers violate the prediction?"
-4. You find a literature on that explanatory factor (e.g., "work orientation")
+1. Primary theory makes a prediction (e.g., "X leads to Y")
+2. Your data violates it (e.g., "sometimes X leads to NOT-Y")
+3. You ask: "What explains *which* cases violate the prediction?"
+4. You find a literature on that explanatory factor
 5. Your contribution *bridges* the two literatures
 
-**Examples from this project**:
+**Generic example**:
+- Primary theory: Theory A predicts that workers in situation X will behave in way Y
+- Violation: Your data shows some workers behave in way NOT-Y
+- Sensitizing question: "Why do only *some* workers violate the prediction?"
+- Sensitizing literature: A body of work on individual differences, orientations, or situational factors
+- Extension: That factor moderates the Theory A prediction
 
-**Paper 1**:
-- Primary theory: Labor economics predicts workers exit when automation threatens jobs
-- Violation: Workers stayed; turnover *decreased* before automation
-- Sensitizing question: "Why do some workers stay while others flee?"
-- Sensitizing literature: Real options theory (Dixit & Pindyck)
-- Extension: Workers don't just *hold* options—they *cultivate* them through engagement
-
-**Paper 3**:
-- Primary theory: P-E fit theory predicts misfit → withdrawal
-- Violation: Seasonal workers responded 2x as strongly to incentives as full-time
-- Sensitizing question: "Why do only *some* misfit workers intensify effort?"
-- Sensitizing literature: Work orientation (Wrzesniewski) + Career anchors (Schein)
-- Extension: Orientation moderates the misfit-response relationship
-
-**My own prior work** (for comparison):
+**From my own prior work** (published, so I can share):
 - Primary theory: Skill development through deliberate practice
 - Violation: Some surgical trainees skilled up fast despite no formal practice time
 - Sensitizing question: "How are they learning without practice?"
@@ -148,7 +136,7 @@ You've found a robust empirical pattern that violates an established theoretical
 Early drafts often anchor on a small number of foundational papers. Reviewers will notice. You need to show you know the field is vibrant and ongoing.
 
 **Example prompt**:
-> "The lit review is anchored on just Wrzesniewski (1997) and Schein (1978). We need to show this is a vibrant, long-standing field. Find recent work—especially anything from the last 5 years that updates or challenges these frameworks."
+> "The lit review is anchored on just [Foundational Author 1] and [Foundational Author 2]. We need to show this is a vibrant, long-standing field. Find recent work—especially anything from the last 5 years that updates or challenges these frameworks."
 
 **Problem 2: Genre requirements**
 
@@ -158,7 +146,7 @@ Different journals have different expectations:
 - **AMJ**: Clear hypotheses, robustness checks, practical implications
 
 **Example prompt**:
-> "Expand this to full Management Science length. That means ~10,000 words, detailed methods section, multiple robustness checks, and extended discussion of boundary conditions."
+> "Expand this to full [Journal] length. That means ~X words, detailed methods section, multiple robustness checks, and extended discussion of boundary conditions."
 
 **Your role**: Editor. You know what top journals expect because you've published in them (or read enough to internalize the genre).
 
@@ -172,20 +160,19 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 
 **The key**: Don't ask for summaries. Ask for *specific evidence* for *specific mechanisms*.
 
-**Example prompt** (actual prompt I used):
+**Example prompt structure**:
 
 ```
-### HIGH PRIORITY: Why Do Seasonal Workers Respond More?
+### HIGH PRIORITY: Why does [Pattern from Quant Data] occur?
 
-1. **Income salience**: Do seasonal workers talk about money differently? More stressed about bills?
-2. **Bonus significance**: Is a $50 bonus life-changing for seasonal but trivial for FT?
-3. **Proving themselves**: Are seasonal workers trying to get noticed for promotion?
-4. **No ceiling effect**: Have FT workers already hit their effort max?
+1. **Mechanism A**: [Specific observable evidence you'd expect]
+2. **Mechanism B**: [Specific observable evidence you'd expect]
+3. **Mechanism C**: [Specific observable evidence you'd expect]
 
-### MEDIUM PRIORITY: Why Is Pay Inverted?
+### MEDIUM PRIORITY: Why does [Secondary Pattern]?
 
-5. **Bonus caps**: Are there explicit or implicit caps on what seasonal workers can earn?
-6. **Manager discretion**: Do managers direct bonuses to FT workers preferentially?
+4. **Explanation A**: [What to look for]
+5. **Explanation B**: [What to look for]
 
 ### Look for disconfirming evidence. What quotes challenge the interpretation?
 
@@ -196,7 +183,7 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 4. Suggestions for integration
 ```
 
-**The payoff**: This prompt, applied to 77 interviews, produced the insight that became Paper 3's core contribution: the "seasonal" category blends three distinct worker types (career-oriented, flexibility-seeking, income-targeting), each responding differently to the same incentive system.
+**The payoff**: This structured approach, applied to my interviews, produced insights that became core contributions—revealing heterogeneity within categories that the quantitative data alone couldn't explain.
 
 **Your role**: Mechanism detective. You hypothesize what's going on; the AI finds the evidence.
 
@@ -213,18 +200,15 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 **What goes in a verification brief**:
 
 ```markdown
-### Claim 1: Pre-Treatment Anticipation Effect
+### Claim 1: [Description]
 
-**Statement**: Voluntary resignations decrease in the 6 months before automation.
+**Statement**: "[Exact claim as it will appear in paper]"
 
-**Expected results**:
-- Robot facilities: 40.0% → 21.7% = -18.3 pp (p<0.001)
-- Sorter facilities: 22.4% → 3.3% = -19.1 pp (p<0.001)
+**Expected results**: [Specific numbers]
 
-**Data files**: `Temp Exit Data.csv`, `Project Listing.xlsx`
+**Data files**: [Which files]
 
-**Verification code**:
-[Full Python script that reproduces the analysis]
+**Verification code**: [Full script that reproduces the analysis]
 
 **Questions for verification**:
 1. Do these numbers replicate?
@@ -246,15 +230,15 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 - Theory seems shallow → dig for deeper mechanism
 - Contribution unclear → sharpen the established prediction you're violating
 
-**Example (Paper 1)**:
+**Typical evolution**:
 
-| Draft | Framing | Why It Died |
-|-------|---------|-------------|
-| 1 | "Automation causes turnover" | Didn't survive volume controls |
-| 2 | "Workers flee automation" | Data showed opposite |
-| 3 | "Anticipation Paradox" | Descriptive, not theoretical |
-| 4 | "Waiting for the Robots" | Still passive |
-| 5 | **"Option Cultivation"** | Active mechanism, real options extension |
+| Draft | Issue | Resolution |
+|-------|-------|------------|
+| 1 | Finding didn't survive controls | Reframe around what DID survive |
+| 2 | Data showed opposite of prediction | Make the inversion the story |
+| 3 | Framing too descriptive | Add theoretical mechanism |
+| 4 | Passive framing | Emphasize active mechanism |
+| 5 | Final version | Clear contribution, robust finding |
 
 **Your role**: Intellectual integrity. You kill your darlings when the evidence doesn't support them.
 
@@ -264,11 +248,11 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 
 **What you do**: Catch what reviewers would catch before they catch it.
 
-**Common issues I caught**:
-- Program name not anonymized (GROW → ACHIEVE)
-- Site names not anonymized (Gallatin → Gallifrey)
-- Claims about what workers "want" when we only have revealed preferences
-- Vague sample sizes ("60+ interviews" → "77 interviews with 47 unique informants")
+**Common issues to watch for**:
+- Organization/program names not anonymized
+- Site/location names not anonymized
+- Claims about preferences when you only have revealed behaviors
+- Vague sample sizes (make them precise)
 
 **Example prompt**:
 > "Review this paper for anonymization failures, overclaims, and imprecise statistics. Flag anything a reviewer would catch."
@@ -295,17 +279,17 @@ The contribution comes from showing something the literature wouldn't expect—a
 
 ### 4. "Find the heterogeneity"
 
-Both major papers benefited from looking *within* categories to find subgroups that behave differently. The aggregate effect often obscures the real story.
+All three papers benefited from looking *within* categories to find subgroups that behave differently. The aggregate effect often obscures the real story.
 
 ### 5. "We don't have data on that"
 
-I caught multiple overclaims—places where we were asserting something (e.g., "what workers want") that we hadn't actually measured. Revealed preferences ≠ stated preferences.
+I caught multiple overclaims—places where we were asserting something we hadn't actually measured. Revealed preferences ≠ stated preferences.
 
 ### 6. "This has to fit [journal] format"
 
 Genre awareness. Different journals want different things. I internalized those expectations from years of reading and reviewing.
 
-### 7. "Send it to [expensive AI] for review"
+### 7. "Send it to [different AI] for review"
 
 Using a different AI system as adversarial pre-reviewer catches errors and forces precision. It's like asking a skeptical colleague to read your draft—except available at 2am.
 
@@ -385,36 +369,4 @@ What I learned: This undersells it. The real power isn't graphs and regressions�
 
 ---
 
-## Appendix: Full Frame Shift Log
-
-### Paper 1: Automation and Worker Behavior
-
-| # | Frame | Fate |
-|---|-------|------|
-| 1 | "Automation causes turnover among temp workers" | Killed: didn't survive volume controls |
-| 2 | "Workers flee approaching automation" | Killed: data showed opposite pattern |
-| 3 | "The Anticipation Paradox: Turnover declines before automation" | Evolved: too descriptive |
-| 4 | "Waiting for the Robots: Worker responses to approaching automation" | Evolved: passive framing |
-| 5 | **"Option Cultivation: Why Workers Stay in Anticipation of Uncertain Automation"** | Final: active mechanism, extends real options theory |
-
-### Paper 2: Staffing and Productivity
-
-| # | Frame | Fate |
-|---|-------|------|
-| 1 | "Seasonal staffing and facility productivity" | Evolved: purely descriptive |
-| 2 | "Turnover contagion in warehouse operations" | Evolved: one finding, not full story |
-| 3 | **"The Seasonal Paradox: How Flexible Staffing Both Enables and Undermines Productivity"** | Final: captures the tension |
-
-### Paper 3: Incentive Pay Response
-
-| # | Frame | Fate |
-|---|-------|------|
-| 1 | "Incentive Misallocation: Why High-Responders Get Low Pay" | Killed: allocation isn't the puzzle |
-| 2 | "Motivational Leverage: How Situation Shapes Incentive Response" | Evolved: leverage is property of what? |
-| 3 | "Signaling to Escape: How Contingent Workers Use Performance Pay" | Evolved: only explains one subgroup |
-| 4 | "When Misfit Motivates" (draft 1) | Evolved: too broad |
-| 5 | **"When Misfit Motivates: Work Orientation and Responses to Performance Pay in Warehouse Work"** | Final: full theoretical mechanism |
-
----
-
-*Document created November 2025. For questions: mbeane@ucsb.edu*
+*Document created November 2025. For questions: mattbeane@ucsb.edu*
