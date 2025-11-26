@@ -1,0 +1,34 @@
+# Data files (users should not commit their data)
+data/
+*.csv
+*.xlsx
+*.xls
+*.parquet
+
+# Analysis outputs (generated, not committed)
+analysis/
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary
+*.tmp
+*.temp
