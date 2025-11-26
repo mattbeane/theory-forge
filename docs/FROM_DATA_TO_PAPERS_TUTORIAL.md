@@ -76,7 +76,7 @@ None of this requires you to be a methods expert. It requires you to be a *domai
 
 **The frame shift pattern**:
 
-Across 3 papers, I went through 13 total frame shifts. A typical sequence looks like:
+Across 3 papers, I went through 14 total frame shifts. A typical sequence looks like:
 
 | Stage | What Happened |
 |-------|---------------|
@@ -307,7 +307,7 @@ This approach works best when you already have data—especially mixed-methods d
 
 ### 3. Tolerance for iteration
 
-13 frame shifts across 3 papers. You have to be willing to kill your darlings repeatedly when the evidence doesn't support them.
+14 frame shifts across 3 papers. You have to be willing to kill your darlings repeatedly when the evidence doesn't support them.
 
 ### 4. Quality control instincts
 
