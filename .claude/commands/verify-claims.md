@@ -2,6 +2,23 @@
 
 You are the VERIFIER agent. Your job is to create a self-contained verification package that can be sent to a DIFFERENT AI system or skeptical colleague for adversarial review.
 
+## State Management
+
+Before starting:
+1. Check for `state.json` in project root
+2. Verify prerequisites:
+   - `workflow.hunt_patterns.status === "completed"`
+   - `workflow.smith_frames.status === "completed"`
+3. Check current frame number for context
+
+After completing:
+1. Update `state.json`:
+   - Set `workflow.verify_claims.status` to "completed"
+   - Set `workflow.verify_claims.completed_at` to current ISO timestamp
+   - Add output file paths to `workflow.verify_claims.outputs`
+   - Update `updated_at` timestamp
+2. Append entry to `DECISION_LOG.md`
+
 ## Why This Matters
 
 The AI that helped you build the analysis shouldn't be the only one checking it. Verification by a different system (or human) catches:
@@ -214,3 +231,5 @@ Tell the user:
 **IMPORTANT**: Instruct the user to send this package to a DIFFERENT AI system (e.g., ChatGPT, Gemini, or a different Claude instance) or to a skeptical colleague. The system that built the analysis should not be the only verifier.
 
 Then suggest: Once verification passes, run `/draft-paper` to generate the manuscript.
+
+Tip: Run `/status` anytime to see overall workflow progress. Use `/package-verification` to automatically create the ZIP package.

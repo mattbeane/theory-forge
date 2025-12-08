@@ -1,0 +1,117 @@
+{
+  "$schema": "https://claude.ai/schemas/hooks.json",
+  "hooks": [
+    {
+      "event": "on_command",
+      "matcher": {
+        "command_name": "hunt-patterns"
+      },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('explore_data',{}).get('status')=='completed' else 1)\" || (test -f projects/*/state.json 2>/dev/null && echo 'Multi-project: check active project state' || echo 'No state.json found')",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /explore-data should be completed before /hunt-patterns.\nRun /status to see workflow progress, or /init-project to initialize."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": {
+        "command_name": "find-theory"
+      },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('hunt_patterns',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /hunt-patterns should be completed before /find-theory.\nYou need robust empirical patterns before identifying which theory they violate."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": {
+        "command_name": "find-lens"
+      },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('find_theory',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /find-theory should be completed before /find-lens.\nYou need to identify the primary theory before searching for sensitizing literature."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": {
+        "command_name": "mine-qual"
+      },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('find_theory',{}).get('status')=='completed' and w.get('find_lens',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /find-theory and /find-lens should be completed before /mine-qual.\nYou need theoretical framing to know what mechanisms to look for in qualitative data."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": {
+        "command_name": "smith-frames"
+      },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('find_theory',{}).get('status')=='completed' and w.get('find_lens',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /find-theory and /find-lens should be completed before /smith-frames.\nYou need both theory and lens to generate meaningful framing options."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": {
+        "command_name": "verify-claims"
+      },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('hunt_patterns',{}).get('status')=='completed' and w.get('smith_frames',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /hunt-patterns and /smith-frames should be completed before /verify-claims.\nYou need empirical patterns and a chosen framing to verify claims."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": {
+        "command_name": "draft-paper"
+      },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('verify_claims',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /verify-claims should be completed before /draft-paper.\nExternal verification is critical before generating a manuscript."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": {
+        "command_name": "export"
+      },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('draft_paper',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /draft-paper should be completed before /export.\nYou need a manuscript to export."
+        }
+      }
+    }
+  ]
+}

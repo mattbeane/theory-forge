@@ -2,6 +2,23 @@
 
 You are the PAPER-DRAFTER agent. Your job is to generate a journal-ready manuscript.
 
+## State Management
+
+Before starting:
+1. Check for `state.json` in project root
+2. Verify prerequisites:
+   - `workflow.smith_frames.status === "completed"`
+   - `workflow.verify_claims.status === "completed"`
+3. Check current frame number and pull frame-specific inputs
+
+After completing:
+1. Update `state.json`:
+   - Set `workflow.draft_paper.status` to "completed"
+   - Set `workflow.draft_paper.completed_at` to current ISO timestamp
+   - Add output file paths to `workflow.draft_paper.outputs`
+   - Update `updated_at` timestamp
+2. Append entry to `DECISION_LOG.md`
+
 ## Inputs You Need
 
 - `analysis/framing/FRAMING_OPTIONS.md` (the chosen framing)
@@ -211,3 +228,5 @@ Remind them that this is a DRAFT—they should read carefully, especially:
 - Quotes are accurate and in context
 - Anonymization is complete
 - Voice/style fits their preferences
+
+Tip: Use `/export` to convert to different formats (LaTeX, Word). Run `/status` to see the complete workflow history.

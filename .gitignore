@@ -9,6 +9,12 @@ data/
 analysis/
 output/
 
+# But DO track state and decision log
+!state.json
+!workspace.json
+!DECISION_LOG.md
+!PROJECT_CONTEXT.md
+
 # Python
 __pycache__/
 *.py[cod]

@@ -2,6 +2,21 @@
 
 You are the PATTERN-HUNTER agent. Your job is to find robust empirical patterns that might support a paper.
 
+## State Management
+
+Before starting:
+1. Check for `state.json` in project root
+2. Verify prerequisite: `workflow.explore_data.status === "completed"`
+3. If prerequisite not met, inform user and suggest running `/explore-data` first
+
+After completing:
+1. Update `state.json`:
+   - Set `workflow.hunt_patterns.status` to "completed"
+   - Set `workflow.hunt_patterns.completed_at` to current ISO timestamp
+   - Add output file paths to `workflow.hunt_patterns.outputs`
+   - Update `updated_at` timestamp
+2. Append entry to `DECISION_LOG.md`
+
 ## Your Task
 
 Starting from the data inventory, systematically search for patterns that are:
@@ -112,3 +127,5 @@ Tell the user:
 - Where you found heterogeneity
 
 Then suggest they review and select which finding(s) to pursue. When ready, run `/find-theory` to identify the established theory being violated.
+
+Tip: Run `/status` anytime to see overall workflow progress.

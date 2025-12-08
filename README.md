@@ -41,18 +41,39 @@ Open Claude Desktop and navigate to the directory containing:
 - This repo (or copy the `.claude/commands/` folder into your project)
 - Your data files
 
-### 4. Set up your project structure
+### 4. Initialize your project
 
+Run the initialization command to set up the full structure:
+```
+/init-project
+```
+
+This creates:
 ```
 your-project/
 ├── .claude/
-│   └── commands/        # Copy from this repo
+│   ├── commands/        # Agent prompts
+│   └── hooks.json       # Quality gate validations
 ├── data/
-│   ├── quant/           # Your quantitative data files
+│   ├── quant/           # Quantitative data files
 │   └── qual/            # Interview transcripts, field notes
-├── analysis/            # Will be populated as you work
-├── literature/          # Papers, citations
-└── output/              # Final manuscript
+│       ├── interviews/
+│       └── fieldnotes/
+├── analysis/
+│   ├── exploration/     # /explore-data outputs
+│   ├── patterns/        # /hunt-patterns outputs
+│   ├── framing/         # Frame iterations (frame-1/, frame-2/, etc.)
+│   └── verification/    # Verification packages
+├── literature/
+│   ├── primary/         # Core theory papers
+│   ├── sensitizing/     # Sensitizing literature
+│   └── refs.bib         # Bibliography
+├── output/
+│   ├── drafts/          # Generated manuscripts
+│   └── exports/         # LaTeX, Word, PDF conversions
+├── PROJECT_CONTEXT.md   # Fill in your project details
+├── DECISION_LOG.md      # Auto-tracked decisions
+└── state.json           # Workflow state (auto-managed)
 ```
 
 ### 5. Run the pipeline
@@ -62,11 +83,18 @@ Start with:
 /explore-data
 ```
 
+Check progress anytime with:
+```
+/status
+```
+
 Then follow the workflow, invoking each agent when ready.
 
 ---
 
 ## The Agents
+
+### Core Pipeline
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
@@ -78,6 +106,25 @@ Then follow the workflow, invoking each agent when ready.
 | `/smith-frames` | Generate and evaluate theoretical framings | After qual mining |
 | `/verify-claims` | Create verification package for external review | Before drafting |
 | `/draft-paper` | Generate journal-ready manuscript | After verification |
+
+### Project Management
+
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `/init-project` | Set up project structure and state tracking | Before starting |
+| `/status` | View workflow progress and next steps | Anytime |
+| `/switch-project` | Switch between papers (multi-project mode) | Multi-paper workflows |
+| `/new-frame` | Start fresh theoretical iteration | When reframing |
+| `/new-frame list` | View all frame attempts | Reviewing progress |
+| `/new-frame compare` | Compare framings side-by-side | Choosing direction |
+
+### Output & Integration
+
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `/export [format]` | Convert to LaTeX, Word, PDF, HTML | After drafting |
+| `/package-verification` | Create ZIP for external review | After verification |
+| `/import-refs [source]` | Import references from BibTeX, Zotero, DOI | Literature gathering |
 
 ---
 
@@ -153,11 +200,32 @@ The most important intellectual move in this pipeline is finding the **sensitizi
 
 ### Frame Shifts Are Normal
 
-Expect 3-5 complete reframings per paper. Your first hypothesis will almost certainly be wrong. The workflow accommodates this—loop back to `/hunt-patterns` or `/smith-frames` as needed.
+Expect 3-5 complete reframings per paper. Your first hypothesis will almost certainly be wrong. The workflow accommodates this with explicit frame management:
+
+```
+/new-frame              # Archive current frame, start fresh
+/new-frame list         # See all your frame attempts
+/new-frame compare      # Compare framings side-by-side
+```
+
+Each frame preserves your empirical work (data exploration, patterns) while giving you a clean slate for theory, lens, and framing.
 
 ### External Verification
 
 The `/verify-claims` agent produces a self-contained package (ZIP file) you should send to a *different* AI system or a skeptical colleague. The model that helped you build the analysis shouldn't be the only one checking it.
+
+Use `/package-verification` to automatically create the ZIP with checksums and reviewer instructions.
+
+### Quality Gates
+
+The workflow includes hooks that warn you when running commands out of sequence:
+
+```
+⚠️  Quality Gate: /hunt-patterns should be completed before /find-theory.
+    You need robust empirical patterns before identifying which theory they violate.
+```
+
+These are warnings, not blocks—you can proceed if you have good reason, but they help prevent wasted effort.
 
 ---
 

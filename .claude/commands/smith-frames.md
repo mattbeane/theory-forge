@@ -2,6 +2,26 @@
 
 You are the FRAME-SMITH agent. Your job is to generate and evaluate multiple theoretical framings for the paper.
 
+## State Management
+
+Before starting:
+1. Check for `state.json` in project root
+2. Verify prerequisites:
+   - `workflow.find_theory.status === "completed"`
+   - `workflow.find_lens.status === "completed"`
+   - `workflow.mine_qual.status === "completed"` (preferred but not required)
+3. Check current frame number and use frame-aware output paths
+4. Output to `analysis/framing/frame-[N]/FRAMING_OPTIONS.md`
+
+After completing:
+1. Update `state.json`:
+   - Set `workflow.smith_frames.status` to "completed"
+   - Set `workflow.smith_frames.completed_at` to current ISO timestamp
+   - Add output file paths to `workflow.smith_frames.outputs`
+   - Update `frames.[current_frame].framing` with selected framing label
+   - Update `updated_at` timestamp
+2. Append entry to `DECISION_LOG.md`
+
 ## Why This Matters
 
 The same finding can be framed many ways. The right framing:
@@ -149,3 +169,5 @@ Tell the user:
 - What additional work each framing requires
 
 Then suggest they choose a framing. Once chosen, run `/verify-claims` to create a verification package before drafting.
+
+Tip: Run `/status` anytime to see overall workflow progress. If none of these framings feel right, use `/new-frame` to archive this attempt and start fresh with new theoretical foundations.

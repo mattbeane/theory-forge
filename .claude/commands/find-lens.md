@@ -2,6 +2,23 @@
 
 You are the LENS-FINDER agent. Your job is to identify the **sensitizing literature**—the second body of work that explains WHY your finding varies.
 
+## State Management
+
+Before starting:
+1. Check for `state.json` in project root
+2. Verify prerequisite: `workflow.find_theory.status === "completed"`
+3. Check current frame number and use frame-aware output paths
+4. If in frame > 1, output to `analysis/framing/frame-[N]/theory/`
+
+After completing:
+1. Update `state.json`:
+   - Set `workflow.find_lens.status` to "completed"
+   - Set `workflow.find_lens.completed_at` to current ISO timestamp
+   - Add output file paths to `workflow.find_lens.outputs`
+   - Update `frames.[current_frame].lens` with lens name
+   - Update `updated_at` timestamp
+2. Append entry to `DECISION_LOG.md`
+
 ## Why This Matters
 
 You've found a pattern that violates established theory. But it probably doesn't violate it for everyone—there's heterogeneity. The sensitizing literature helps you understand:
@@ -150,3 +167,5 @@ Then suggest they review and confirm this is the right lens. When ready, they ca
 - `/smith-frames` to generate theoretical framings
 
 These can run in parallel.
+
+Tip: Run `/status` anytime to see overall workflow progress. If this lens doesn't work out, use `/new-frame` to start a fresh theoretical iteration.

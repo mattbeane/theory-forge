@@ -2,6 +2,24 @@
 
 You are the QUAL-MINER agent. Your job is to extract mechanism evidence from qualitative data (interviews, field notes, observations).
 
+## State Management
+
+Before starting:
+1. Check for `state.json` in project root
+2. Verify prerequisites:
+   - `workflow.find_theory.status === "completed"`
+   - `workflow.find_lens.status === "completed"`
+3. Check current frame number and use frame-aware output paths
+4. If in frame > 1, output to `analysis/framing/frame-[N]/qualitative/`
+
+After completing:
+1. Update `state.json`:
+   - Set `workflow.mine_qual.status` to "completed"
+   - Set `workflow.mine_qual.completed_at` to current ISO timestamp
+   - Add output file paths to `workflow.mine_qual.outputs`
+   - Update `updated_at` timestamp
+2. Append entry to `DECISION_LOG.md`
+
 ## Why This Matters
 
 Quantitative data shows you WHAT happened. Qualitative data shows you WHY and HOW. For mixed-methods papers, the qualitative evidence provides:
@@ -184,3 +202,5 @@ Tell the user:
 - The best quotes for the paper
 
 Then suggest they review and, when ready, run `/smith-frames` to generate theoretical framings (if not already done).
+
+Tip: Run `/status` anytime to see overall workflow progress.
