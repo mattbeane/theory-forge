@@ -12,12 +12,14 @@ A set of specialized prompts ("agents") that guide you through the full data-to-
 
 1. **Explore** your data
 2. **Find** robust patterns
-3. **Identify** the theory you're violating
-4. **Find** the sensitizing literature that explains heterogeneity
-5. **Mine** qualitative evidence for mechanisms
-6. **Generate** and evaluate framings
-7. **Verify** claims before drafting
-8. **Draft** a journal-ready manuscript
+3. **Check the puzzle** — Is this surprising? Is the null compelling? (Zuckerman lite)
+4. **Identify** the theory you're violating
+5. **Find** the sensitizing literature that explains heterogeneity
+6. **Mine** qualitative evidence for mechanisms
+7. **Generate** and evaluate framings
+8. **Check the framing** — Full Zuckerman criteria before committing
+9. **Verify** claims before drafting
+10. **Draft** a journal-ready manuscript
 
 Each agent is a slash command you invoke in Claude Code. You stay in control—making judgment calls at each transition—while the AI handles the grunt work.
 
@@ -100,12 +102,13 @@ Then follow the workflow, invoking each agent when ready.
 |---------|---------|-------------|
 | `/explore-data` | Initial data reconnaissance | Start here |
 | `/hunt-patterns` | Find robust empirical patterns | After exploration |
-| `/find-theory` | Identify theory being violated | After finding patterns |
+| `/eval-zuckerman-lite` | **Early puzzle check**: Is this a puzzle? Is the null compelling? | After patterns, BEFORE theory |
+| `/find-theory` | Identify theory being violated | After puzzle check passes |
 | `/find-lens` | Find sensitizing/interpretive literature | After identifying theory |
 | `/mine-qual` | Extract mechanism evidence from interviews | After finding lens |
 | `/smith-frames` | Generate and evaluate theoretical framings | After qual mining |
-| `/eval-zuckerman` | Evaluate paper framing against Zuckerman's criteria | After drafting or before submission |
-| `/verify-claims` | Create verification package for external review | Before drafting |
+| `/eval-zuckerman` | **Full framing check**: All 10 Zuckerman criteria | After framing, BEFORE verification |
+| `/verify-claims` | Create verification package for external review | After framing check passes |
 | `/draft-paper` | Generate journal-ready manuscript | After verification |
 
 ### Project Management
@@ -144,7 +147,18 @@ Then follow the workflow, invoking each agent when ready.
   [Review findings] ──► Select which patterns to pursue
      │
      ▼
-/find-theory
+┌────────────────────────────────────────────────────────┐
+│  /eval-zuckerman-lite  ◄── EARLY PUZZLE CHECK          │
+│  • Is this a puzzle in the world (not a lit gap)?      │
+│  • Is the null hypothesis compelling?                  │
+│  • Who is your audience (row vs column)?               │
+└────────────────────────────────────────────────────────┘
+     │
+     ▼
+  [Pass?] ──► No? Reframe the pattern or find a different one
+     │
+     ▼
+/find-theory  ◄── Now you know WHICH theory you're violating
      │
      ▼
   [Review] ──► Is this the right theory to violate?
@@ -164,6 +178,17 @@ Then follow the workflow, invoking each agent when ready.
          [Choose framing]
                 │
                 ▼
+┌────────────────────────────────────────────────────────┐
+│  /eval-zuckerman  ◄── FULL FRAMING CHECK               │
+│  • All 10 Zuckerman criteria                           │
+│  • One idea? Null built up AND saved?                  │
+│  • Lit review or puzzle-focused theory section?        │
+└────────────────────────────────────────────────────────┘
+                │
+                ▼
+  [Pass?] ──► No? Loop back to /smith-frames
+                │
+                ▼
          /verify-claims
                 │
                 ▼
@@ -171,9 +196,6 @@ Then follow the workflow, invoking each agent when ready.
                 │
                 ▼
          /draft-paper
-                │
-                ▼
-         /eval-zuckerman  ──► Revise if needed, loop back to /smith-frames
                 │
                 ▼
             [Done!]
@@ -231,15 +253,24 @@ The workflow includes hooks that warn you when running commands out of sequence:
 
 These are warnings, not blocks—you can proceed if you have good reason, but they help prevent wasted effort.
 
-### Zuckerman Criteria
+### Zuckerman Criteria (Two-Stage Check)
 
-The `/eval-zuckerman` agent evaluates your paper against Ezra Zuckerman's "Tips for Article-Writers"—10 criteria that capture what makes academic papers compelling. Key criteria include:
-- Frame around a real-world puzzle (not a literature gap)
-- Build up the null hypothesis before knocking it down
-- Know your audience and frame consistently for them
-- Review literature to show what's compelling-but-flawed, not as an end in itself
+Ezra Zuckerman's "Tips for Article-Writers" provides 10 criteria that capture what makes academic papers compelling. This workflow integrates them at two points:
 
-Run this before submission to catch common framing weaknesses. See `Zuckerman_UP_2008_Tips_For_Writers.pdf` in this repo for the original memo.
+**Stage 1: `/eval-zuckerman-lite`** (after `/hunt-patterns`, before `/find-theory`)
+- Is this a puzzle in the world (not a literature gap)?
+- Is the null hypothesis compelling?
+- Who is your audience (row vs column)?
+
+**Stage 2: `/eval-zuckerman`** (after `/smith-frames`, before `/verify-claims`)
+- Full 10-criteria evaluation
+- One idea? Null built up AND saved?
+- Lit review or puzzle-focused theory section?
+- Clear narrative arc?
+
+The early check prevents you from investing in theory development for a non-puzzle. The full check ensures your framing is sound before you commit to verification and drafting.
+
+See `Zuckerman_UP_2008_Tips_For_Writers.pdf` in this repo for the original memo.
 
 ---
 

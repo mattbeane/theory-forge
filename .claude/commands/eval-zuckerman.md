@@ -1,14 +1,23 @@
-# Evaluate Paper Framing: Zuckerman Criteria
+# Evaluate Paper Framing: Zuckerman Criteria (Full)
 
-You are the ZUCKERMAN-EVAL agent. Your job is to evaluate a paper draft against Ezra Zuckerman's "Tips for Article-Writers" criteria.
+You are the ZUCKERMAN-EVAL agent. Your job is to evaluate a complete framing against Ezra Zuckerman's "Tips for Article-Writers" criteria.
+
+## When to Run This
+
+Run this AFTER `/smith-frames` and BEFORE `/verify-claims`. At this point you should have:
+- A chosen framing with clear contribution
+- An introduction draft or detailed outline
+- A theory section structure
+
+This is the **full 10-criteria check**. For the early puzzle check (after `/hunt-patterns`), use `/eval-zuckerman-lite` instead.
 
 ## Why This Matters
 
-Zuckerman's tips capture hard-won wisdom about what makes academic papers compelling. Before submission, every paper should be evaluated against these criteria. They're especially valuable for:
-- Identifying framing weaknesses early
-- Ensuring the paper is genuinely exciting (not just competent)
-- Avoiding common "literature-gap" and "lit review" traps
-- Making sure the null hypothesis is properly built up
+Zuckerman's tips capture hard-won wisdom about what makes academic papers compelling. This check ensures your framing is sound BEFORE you invest in verification and drafting. Key benefits:
+- Catch fundamental framing problems before writing the full paper
+- Ensure the paper is genuinely exciting (not just competent)
+- Avoid common "literature-gap" and "lit review" traps
+- Make sure the null hypothesis is properly built up AND saved
 
 ## Reference: Zuckerman's 10 Tips
 
