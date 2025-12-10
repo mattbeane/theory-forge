@@ -137,12 +137,11 @@ class StyleValidator:
     ]
 
     # Contribution list indicators
+    # NOTE: Ordinal transitions ("First, we find X. Second, we contribute Y.") are OK.
+    # Only flag the "makes three contributions:" setup pattern.
     CONTRIBUTION_LIST_PATTERNS = [
         r'(makes?|offers?)\s+(three|four|several|multiple)\s+contributions?',
         r'contributions?\s+(are|include)\s*:',
-        r'[Ff]irst(ly)?,?\s+we\s+(extend|show|contribute)',
-        r'[Ss]econd(ly)?,?\s+we\s+(extend|show|contribute)',
-        r'[Tt]hird(ly)?,?\s+we\s+(extend|show|contribute)',
     ]
 
     def __init__(
@@ -219,8 +218,19 @@ class StyleValidator:
         """Check for bullet points."""
         violations = []
         lines = text.split('\n')
+        in_tablenotes = False
 
         for i, line in enumerate(lines):
+            # Track tablenotes environment (standard LaTeX for table footnotes)
+            if r'\begin{tablenotes}' in line:
+                in_tablenotes = True
+                continue
+            if r'\end{tablenotes}' in line:
+                in_tablenotes = False
+                continue
+            if in_tablenotes:
+                continue
+
             for pattern in self._bullet_re:
                 if pattern.match(line):
                     violations.append(Violation(
@@ -269,12 +279,17 @@ class StyleValidator:
                 ))
 
         # Also check for \item commands directly (may appear without environment in some contexts)
+        # BUT: skip \item in tablenotes environments (standard LaTeX for table footnotes)
         item_pattern = re.compile(r'\\item\b')
         for match in item_pattern.finditer(text):
             # Get surrounding context
-            start = max(0, match.start() - 20)
+            start = max(0, match.start() - 50)
             end = min(len(text), match.end() + 30)
             context = text[start:end].strip()
+
+            # Skip if this is within a tablenotes environment
+            if 'tablenotes' in context.lower():
+                continue
 
             violations.append(Violation(
                 type=ViolationType.BULLET_POINT,
