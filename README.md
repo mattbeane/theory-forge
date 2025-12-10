@@ -282,6 +282,48 @@ See `Zuckerman_UP_2008_Tips_For_Writers.pdf` in this repo for the original memo.
 
 ---
 
+## Style Enforcer Module
+
+The `style_enforcer/` module provides automated validation and generation for qualitative management papers targeting ASQ, Organization Science, and Management Science.
+
+### The Problem
+
+LLMs draw on economics/strategy papers (hypothesis-test structure), generic academic voice (passive, hedged), and bullet points. They don't naturally produce the management theory-building register without continuous constraint enforcement.
+
+### Key Features
+
+```python
+from style_enforcer import StyleValidator, ManuscriptOrchestrator
+
+# Validate existing text
+validator = StyleValidator()
+result = validator.validate(manuscript_text)
+
+if result.hard_violation_count > 0:
+    for v in result.violations:
+        print(f"{v.type.value}: {v.message}")
+```
+
+**Hard Rules (always enforced):**
+- No bullet points—ever
+- No numbered lists—convert to prose
+- Contributions as narrative (not "This paper makes three contributions: First...")
+
+**Soft Rules (flagged if severe):**
+- Passive voice <30%
+- Hedging density
+- Orphaned statistics (must interpret within 2 sentences)
+- Quote setup and length
+
+**v2 Hallucination Prevention:**
+- `DataInventory`: Scans available data files
+- `StatisticsValidator`: Flags unverified statistical claims
+- `SectionSanityChecker`: Section-level validation (methods accuracy, figures)
+
+See `style_enforcer/README.md` for full documentation.
+
+---
+
 ## What This Doesn't Do
 
 - Collect data for you
