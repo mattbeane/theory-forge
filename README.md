@@ -104,6 +104,7 @@ Then follow the workflow, invoking each agent when ready.
 | `/find-lens` | Find sensitizing/interpretive literature | After identifying theory |
 | `/mine-qual` | Extract mechanism evidence from interviews | After finding lens |
 | `/smith-frames` | Generate and evaluate theoretical framings | After qual mining |
+| `/eval-zuckerman` | Evaluate paper framing against Zuckerman's criteria | After drafting or before submission |
 | `/verify-claims` | Create verification package for external review | Before drafting |
 | `/draft-paper` | Generate journal-ready manuscript | After verification |
 
@@ -172,6 +173,9 @@ Then follow the workflow, invoking each agent when ready.
          /draft-paper
                 │
                 ▼
+         /eval-zuckerman  ──► Revise if needed, loop back to /smith-frames
+                │
+                ▼
             [Done!]
 ```
 
@@ -226,6 +230,16 @@ The workflow includes hooks that warn you when running commands out of sequence:
 ```
 
 These are warnings, not blocks—you can proceed if you have good reason, but they help prevent wasted effort.
+
+### Zuckerman Criteria
+
+The `/eval-zuckerman` agent evaluates your paper against Ezra Zuckerman's "Tips for Article-Writers"—10 criteria that capture what makes academic papers compelling. Key criteria include:
+- Frame around a real-world puzzle (not a literature gap)
+- Build up the null hypothesis before knocking it down
+- Know your audience and frame consistently for them
+- Review literature to show what's compelling-but-flawed, not as an end in itself
+
+Run this before submission to catch common framing weaknesses. See `Zuckerman_UP_2008_Tips_For_Writers.pdf` in this repo for the original memo.
 
 ---
 
