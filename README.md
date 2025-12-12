@@ -334,6 +334,18 @@ See `style_enforcer/README.md` for full documentation.
 
 ---
 
+## Comparison with Critiques of GenAI in Qualitative Research
+
+Nguyen & Welch (2025) published a rigorous critique of GenAI use in qualitative data analysis, arguing that LLMs are fundamentally unsuited for this work due to epistemic risks including hallucination, unreliability, and anthropomorphic fallacies.
+
+Their critique targets a specific use case—LLMs as *autonomous* coding/analysis tools that replace human interpretation. This workflow takes a structurally different approach: the human remains the theorist and interpreter; the LLM accelerates search and enforces structure.
+
+See [`nguyen-welch-comparison.md`](nguyen-welch-comparison.md) for a detailed analysis of how this workflow relates to their critique.
+
+**Citation**: Nguyen, D. C., & Welch, C. (2025). Generative artificial intelligence in qualitative data analysis: Analyzing—or just chatting? *Organizational Research Methods, 29*(1), 3–39. https://doi.org/10.1177/10944281251377154
+
+---
+
 ## Origin
 
 This workflow was developed by Matt Beane (UC Santa Barbara) after using Claude Code to produce three papers from dormant datasets in 5 days. The full story is in `docs/FROM_DATA_TO_PAPERS_TUTORIAL.md`.
