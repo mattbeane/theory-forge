@@ -10,7 +10,7 @@ This is a feature, not a bug.
 
 | P-Hacking | Pre-Review |
 |-----------|------------|
-| Change data to fit story | Data is ground truth, unchanged |
+| Change data to fit story | Quant data is fixed; you investigate, not alter |
 | Hide disconfirming evidence | Surface and engage with challenges |
 | Post-hoc rationalization | Principled adjudication with clear rules |
 | Undocumented | Full audit trail in claim revisions |
@@ -21,9 +21,10 @@ The key distinction: **quant findings are fixed**. Pre-review refines mechanism 
 
 When adjudicating contested claims:
 
-1. **Empirical claims (quant)** = ground truth
-   - Only challengeable by other quant evidence
-   - Qual perceptions that contradict quant → mistaken beliefs, not challenges
+1. **Empirical claims (quant)** = almost always ground truth
+   - Usually only challengeable by other quant evidence
+   - Qual perceptions that contradict quant → usually mistaken beliefs, not challenges
+   - BUT: pause and ask "what might we be missing?" — qual can reveal data gaps
 
 2. **Mechanism claims (theoretical)** = interpretations
    - Can be challenged by qual evidence

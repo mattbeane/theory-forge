@@ -355,7 +355,7 @@ python living_paper/lp.py prereview --out prereview_report.md
 
 When adjudicating contested claims:
 
-1. **Quant claims = ground truth** — only challengeable by other quant evidence
+1. **Quant claims = almost always ground truth** — but pause to ask what quant might be missing when qual contradicts
 2. **Qual perceptions contradicting quant** → reclassify as "illustrates mistaken beliefs"
 3. **Mechanism claims** → can be challenged by qual, BUT quant patterns can rule out mechanisms
 
