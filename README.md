@@ -328,32 +328,37 @@ See `style_enforcer/README.md` for full documentation.
 
 ---
 
-## Living Paper & Pre-Review
+## Living Paper Integration (Seamless)
 
-This workflow integrates with **[Living Paper](https://github.com/mattbeane/living-paper)**, a standalone tool for bidirectional claim-evidence traceability. Living Paper is a separate project designed for adoption by qualitative researchers everywhere—both retrospectively (existing papers) and prospectively (new research).
+Living Paper is **bundled** with this workflow—no separate installation needed. When you run `/verify-claims`, it automatically:
+
+1. Ingests your claims, evidence, and links into the Living Paper database
+2. Runs verification checks
+3. Generates a reviewer package you can send directly to journal reviewers
 
 ### What Living Paper Does
 
 - Maintains verifiable links between claims and evidence
 - Supports three-tier access control (PUBLIC, CONTROLLED, WITNESS_ONLY)
-- Enables pre-review: adversarial self-audit before submission
+- Generates standalone HTML reviewer interfaces (reviewers just double-click to open)
 - Enforces quant/qual hierarchy in claim adjudication
 
-### Integration with Paper-Mining-Agents
+### The Flow
 
-After running `/verify-claims`, you can ingest the verification output into Living Paper:
-
-```bash
-# In your project directory
-python living_paper/lp.py init
-python living_paper/lp.py ingest \
-  --claims analysis/verification/claims.jsonl \
-  --evidence analysis/verification/evidence.jsonl \
-  --links analysis/verification/links.csv
-
-# Generate pre-review report
-python living_paper/lp.py prereview --out prereview_report.md
 ```
+/audit-claims     →  Searches raw data for supporting AND challenging evidence
+                     Outputs: analysis/audit/claims.jsonl, evidence.jsonl, links.csv
+
+/verify-claims    →  Creates verification package + auto-runs Living Paper
+                     Outputs: analysis/verification/reviewer_package/
+                              (HTML interface reviewers can open directly)
+```
+
+No manual `lp.py` commands needed—the workflow handles it.
+
+### Standalone Use
+
+For more control, see the [Living Paper repo](https://github.com/mattbeane/living-paper).
 
 ### Quant/Qual Adjudication Rules
 

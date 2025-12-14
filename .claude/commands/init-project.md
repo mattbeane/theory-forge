@@ -40,7 +40,7 @@ The user may specify:
    │   ├── framing/            # /smith-frames outputs (frame-1/, frame-2/, etc.)
    │   ├── audit/              # /audit-claims outputs (evidence from raw data)
    │   └── verification/       # /verify-claims outputs
-   ├── living_paper/           # Living paper CLI (copied from paper-mining-agents)
+   ├── living_paper/           # Living paper CLI (bundled for seamless verification)
    ├── literature/
    │   ├── primary/            # Core theory papers
    │   ├── sensitizing/        # Sensitizing literature

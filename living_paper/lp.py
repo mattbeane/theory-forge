@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-living_paper v0.1 - local-first claim↔evidence traceability
+living_paper v0.5 - local-first claim↔evidence traceability
 
 Public store:  lp_public.sqlite  (safe metadata, shareable)
 Private store: lp_private.sqlite (protected pointers; gitignore)
@@ -9,9 +9,17 @@ Commands:
   init
   ingest --claims <claims.jsonl> --evidence <evidence.jsonl> --links <links.csv> [--entities <entities.yaml>]
   lint
-  export --out <dir> [--entities <entities.yaml>]
+  export --out <dir>
+  verify-export --out <dir>
+  prereview --out <file>
+  export-html --paper <paper_id> --out <file>
+  export-package --paper <paper_id> --out <folder>
 
-Optional: --entities provides entity redaction for PII in free text fields.
+Author tools:
+  redact check --input <file.jsonl> --entities <entities.yaml>
+  redact apply --input <file.jsonl> --output <file.jsonl> --entities <entities.yaml>
+
+No external dependencies for core. Optional: pyyaml for entity redaction.
 """
 from __future__ import annotations
 
@@ -26,12 +34,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Iterable, Optional, Tuple
 
-# Import redactor (optional - graceful degradation if not available)
+# Optional redaction support (for authors)
 try:
     from redact import EntityRedactor, RedactionStats
-    HAS_REDACTOR = True
+    HAS_REDACT = True
 except ImportError:
-    HAS_REDACTOR = False
+    HAS_REDACT = False
     EntityRedactor = None
     RedactionStats = None
 
@@ -99,7 +107,7 @@ def upsert_paper(db: sqlite3.Connection, paper_id: str, title: Optional[str] = N
     )
     db.commit()
 
-def ingest_claims(db: sqlite3.Connection, claims_path: Path, redactor: Optional[Any] = None, stats: Optional[Any] = None) -> int:
+def ingest_claims(db: sqlite3.Connection, claims_path: Path, redactor=None, stats=None) -> int:
     n = 0
     with claims_path.open("r", encoding="utf-8") as f:
         for line in f:
@@ -113,10 +121,6 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path, redactor: Optional[
                     die(f"claims.jsonl missing '{k}' in line: {line[:200]}")
             upsert_paper(db, obj["paper_id"])
 
-            # Apply redaction if redactor provided
-            if redactor:
-                obj = redactor.redact_jsonl_record(obj, text_fields=['text'], stats=stats)
-
             # Map claim_type if needed (handle legacy values)
             claim_type = obj["claim_type"]
             type_map = {
@@ -126,6 +130,11 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path, redactor: Optional[
                 "measurement": "methodological",
             }
             claim_type = type_map.get(claim_type, claim_type)
+
+            # Apply redaction to text field if redactor is provided
+            text = obj["text"]
+            if redactor:
+                text = redactor.redact(text, stats)
 
             db.execute(
                 """
@@ -154,7 +163,7 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path, redactor: Optional[
                     obj["claim_id"],
                     obj["paper_id"],
                     claim_type,
-                    obj["text"],
+                    text,  # potentially redacted
                     obj.get("confidence", 0.5),
                     obj.get("status","draft"),
                     obj.get("verification_status", "unverified"),
@@ -173,7 +182,7 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path, redactor: Optional[
     db.commit()
     return n
 
-def ingest_evidence(db: sqlite3.Connection, evidence_path: Path, redactor: Optional[Any] = None, stats: Optional[Any] = None) -> int:
+def ingest_evidence(db: sqlite3.Connection, evidence_path: Path, redactor=None, stats=None) -> int:
     n = 0
     with evidence_path.open("r", encoding="utf-8") as f:
         for line in f:
@@ -186,14 +195,19 @@ def ingest_evidence(db: sqlite3.Connection, evidence_path: Path, redactor: Optio
                 if k not in obj:
                     die(f"evidence.jsonl missing '{k}' in line: {line[:200]}")
             upsert_paper(db, obj["paper_id"])
-
-            # Apply redaction if redactor provided
-            if redactor:
-                obj = redactor.redact_jsonl_record(obj, text_fields=['summary'], stats=stats)
-
             meta = obj.get("meta", {})
             if not isinstance(meta, dict):
                 die("evidence.meta must be an object/dict")
+
+            # Apply redaction to summary field if redactor is provided
+            summary = obj["summary"]
+            if redactor:
+                summary = redactor.redact(summary, stats)
+                # Also redact string values in meta
+                for key, val in meta.items():
+                    if isinstance(val, str):
+                        meta[key] = redactor.redact(val, stats)
+
             db.execute(
                 """
                 INSERT INTO evidence(evidence_id,paper_id,evidence_type,summary,sensitivity_tier,meta_json,created_at,updated_at)
@@ -210,7 +224,7 @@ def ingest_evidence(db: sqlite3.Connection, evidence_path: Path, redactor: Optio
                     obj["evidence_id"],
                     obj["paper_id"],
                     obj["evidence_type"],
-                    obj["summary"],
+                    summary,  # potentially redacted
                     obj["sensitivity_tier"],
                     json.dumps(meta, ensure_ascii=False),
                     now(),
@@ -221,7 +235,7 @@ def ingest_evidence(db: sqlite3.Connection, evidence_path: Path, redactor: Optio
     db.commit()
     return n
 
-def ingest_links(db: sqlite3.Connection, links_path: Path, redactor: Optional[Any] = None, stats: Optional[Any] = None) -> int:
+def ingest_links(db: sqlite3.Connection, links_path: Path) -> int:
     n = 0
     with links_path.open("r", encoding="utf-8", newline="") as f:
         r = csv.DictReader(f)
@@ -229,11 +243,6 @@ def ingest_links(db: sqlite3.Connection, links_path: Path, redactor: Optional[An
             for k in ["claim_id","evidence_id","relation"]:
                 if not row.get(k):
                     die(f"links.csv missing {k} in row: {row}")
-            # Apply redaction to note field if redactor provided
-            note = row.get("note")
-            if redactor and note:
-                note = redactor.redact(note, stats)
-
             # Weight is now a text enum: central, supporting, peripheral
             weight = row.get("weight", "supporting")
             if weight not in ("central", "supporting", "peripheral"):
@@ -243,7 +252,7 @@ def ingest_links(db: sqlite3.Connection, links_path: Path, redactor: Optional[An
                 INSERT OR REPLACE INTO claim_evidence_link(claim_id,evidence_id,relation,weight,note,created_at)
                 VALUES (?,?,?,?,?,?)
                 """,
-                (row["claim_id"], row["evidence_id"], row["relation"], weight, note, now()),
+                (row["claim_id"], row["evidence_id"], row["relation"], weight, row.get("note"), now()),
             )
             n += 1
     db.commit()
@@ -261,28 +270,25 @@ def ingest_cmd(args: argparse.Namespace) -> None:
     if not evidence_p.exists(): die(f"evidence file not found: {evidence_p}")
     if not links_p.exists(): die(f"links file not found: {links_p}")
 
-    # Set up redactor if entities file provided
+    # Set up optional redaction
     redactor = None
-    stats = None
-    if hasattr(args, 'entities') and args.entities:
-        if not HAS_REDACTOR:
-            die("Entity redaction requested but redact.py not available. Check import errors.")
+    redact_stats = None
+    if args.entities:
+        if not HAS_REDACT:
+            die("redact.py module not found. Ensure redact.py is in the same directory as lp.py")
         entities_p = Path(args.entities).resolve()
         if not entities_p.exists():
             die(f"entities file not found: {entities_p}")
         redactor = EntityRedactor(entities_path=entities_p)
-        stats = RedactionStats()
-        print(f"[living_paper] entity redaction enabled from: {entities_p}")
+        redact_stats = RedactionStats()
 
-    nc = ingest_claims(db, claims_p, redactor, stats)
-    ne = ingest_evidence(db, evidence_p, redactor, stats)
-    nl = ingest_links(db, links_p, redactor, stats)
+    nc = ingest_claims(db, claims_p, redactor=redactor, stats=redact_stats)
+    ne = ingest_evidence(db, evidence_p, redactor=redactor, stats=redact_stats)
+    nl = ingest_links(db, links_p)
 
     print(f"[living_paper] ingested: {nc} claims, {ne} evidence items, {nl} links into {pub_path}")
-
-    # Report redaction stats if any
-    if stats and stats.total_redactions > 0:
-        print(f"[living_paper] redacted {stats.total_redactions} entities across categories: {dict(stats.by_category)}")
+    if redact_stats and redact_stats.total_redactions > 0:
+        print(f"[living_paper] redacted {redact_stats.total_redactions} entities during ingest")
 
 def lint_cmd(args: argparse.Namespace) -> None:
     pub_path, _ = db_paths()
@@ -332,17 +338,6 @@ def export_cmd(args: argparse.Namespace) -> None:
     pub_path, _ = db_paths()
     db = connect(pub_path)
 
-    # Set up redactor if entities file provided
-    redactor = None
-    if hasattr(args, 'entities') and args.entities:
-        if not HAS_REDACTOR:
-            die("Entity redaction requested but redact.py not available.")
-        entities_p = Path(args.entities).resolve()
-        if not entities_p.exists():
-            die(f"entities file not found: {entities_p}")
-        redactor = EntityRedactor(entities_path=entities_p)
-        print(f"[living_paper] export redaction enabled from: {entities_p}")
-
     # quote_provenance.csv:
     # evidence items where evidence_type == 'quote' and sensitivity_tier == PUBLIC
     # Flatten common metadata keys if present.
@@ -390,11 +385,8 @@ def export_cmd(args: argparse.Namespace) -> None:
     with summ_path.open("w", encoding="utf-8") as f:
         f.write("# Evidence summary (auto-generated)\n\n")
         for c in claims:
-            claim_text = c["text"].strip()
-            if redactor:
-                claim_text = redactor.redact(claim_text)
             f.write(f"## {c['claim_id']} ({c['claim_type']})\n\n")
-            f.write(claim_text + "\n\n")
+            f.write(c["text"].strip() + "\n\n")
             links = db.execute("""
               SELECT l.relation, l.weight, e.evidence_id, e.evidence_type, e.summary
               FROM claim_evidence_link l
@@ -406,10 +398,7 @@ def export_cmd(args: argparse.Namespace) -> None:
                 f.write("_No linked evidence._\n\n")
                 continue
             for l in links:
-                summary = l['summary']
-                if redactor:
-                    summary = redactor.redact(summary)
-                f.write(f"- **{l['relation']}** ({l['evidence_type']}) `{l['evidence_id']}`: {summary}\n")
+                f.write(f"- **{l['relation']}** ({l['evidence_type']}) `{l['evidence_id']}`: {l['summary']}\n")
             f.write("\n")
 
     print(f"[living_paper] exported:\n  {csv_path}\n  {summ_path}")
@@ -421,17 +410,6 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
 
     pub_path, _ = db_paths()
     db = connect(pub_path)
-
-    # Set up redactor if entities file provided
-    redactor = None
-    if hasattr(args, 'entities') and args.entities:
-        if not HAS_REDACTOR:
-            die("Entity redaction requested but redact.py not available.")
-        entities_p = Path(args.entities).resolve()
-        if not entities_p.exists():
-            die(f"entities file not found: {entities_p}")
-        redactor = EntityRedactor(entities_path=entities_p)
-        print(f"[living_paper] verify-export redaction enabled from: {entities_p}")
 
     # 1. Claims manifest with verification status
     claims = db.execute("""
@@ -453,14 +431,11 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
               GROUP BY relation
             """, (c["claim_id"],)).fetchall()
 
-            claim_text = c["text"]
-            if redactor:
-                claim_text = redactor.redact(claim_text)
             claims_data.append({
                 "claim_id": c["claim_id"],
                 "paper_id": c["paper_id"],
                 "claim_type": c["claim_type"],
-                "text": claim_text,
+                "text": c["text"],
                 "confidence": c["confidence"],
                 "status": c["status"],
                 "verification_status": c["verification_status"],
@@ -481,14 +456,11 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
     with evidence_manifest.open("w", encoding="utf-8") as f:
         evidence_data = []
         for e in evidence:
-            summary = e["summary"] if e["sensitivity_tier"] == "PUBLIC" else "[CONTROLLED]"
-            if redactor and e["sensitivity_tier"] == "PUBLIC":
-                summary = redactor.redact(summary)
             evidence_data.append({
                 "evidence_id": e["evidence_id"],
                 "paper_id": e["paper_id"],
                 "evidence_type": e["evidence_type"],
-                "summary": summary,
+                "summary": e["summary"] if e["sensitivity_tier"] == "PUBLIC" else "[CONTROLLED]",
                 "sensitivity_tier": e["sensitivity_tier"],
                 "meta": json.loads(e["meta_json"] or "{}"),
             })
@@ -521,23 +493,14 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
         for l in links:
             if l["claim_id"] != current_claim:
                 current_claim = l["claim_id"]
-                claim_text = l['claim_text']
-                if redactor:
-                    claim_text = redactor.redact(claim_text)
                 f.write(f"## {l['claim_id']}\n\n")
-                f.write(f"**Claim**: {claim_text}\n\n")
+                f.write(f"**Claim**: {l['claim_text']}\n\n")
 
-            evidence_summary = l['evidence_summary']
-            note = l['note']
-            if redactor:
-                evidence_summary = redactor.redact(evidence_summary)
-                if note:
-                    note = redactor.redact(note)
             status_icon = "✓" if l["verification_status"] == "external_verified" else "[ ]"
             f.write(f"- {status_icon} `{l['evidence_id']}` ({l['relation']}, {l['weight']})\n")
-            f.write(f"  - Summary: {evidence_summary}\n")
-            if note:
-                f.write(f"  - Note: {note}\n")
+            f.write(f"  - Summary: {l['evidence_summary']}\n")
+            if l["note"]:
+                f.write(f"  - Note: {l['note']}\n")
             if l["verified_by"]:
                 f.write(f"  - Verified by: {l['verified_by']} on {l['verified_at']}\n")
             f.write("\n")
@@ -565,95 +528,16 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
             "generated_at": now(),
         }, f, indent=2)
 
-    # 5. AJPS-style verification report (supported/partial/not documented)
-    report_path = out / "verification_report.md"
-    with report_path.open("w", encoding="utf-8") as f:
-        f.write("# Verification Report\n\n")
-        f.write(f"Generated: {now()}\n\n")
-        f.write("Following QDR/AJPS verification methodology, each claim is categorized as:\n")
-        f.write("- **SUPPORTED**: Central evidence supports claim, no unresolved challenges\n")
-        f.write("- **PARTIALLY SUPPORTED**: Some support exists but with challenges or qualifications\n")
-        f.write("- **NOT DOCUMENTED**: Insufficient evidence found to support claim\n\n")
-        f.write("---\n\n")
-
-        supported, partial, not_documented = [], [], []
-        for c in claims_data:
-            ec = c["evidence_counts"]
-            supports = ec.get("supports", 0)
-            challenges = ec.get("challenges", 0)
-            qualifies = ec.get("qualifies", 0)
-            illustrates = ec.get("illustrates", 0)
-
-            total_evidence = supports + challenges + qualifies + illustrates
-            if total_evidence == 0:
-                not_documented.append(c)
-            elif challenges > supports or (supports == 0 and qualifies > 0):
-                partial.append(c)
-            elif challenges > 0 or qualifies > supports:
-                partial.append(c)
-            else:
-                supported.append(c)
-
-        f.write(f"## Summary\n\n")
-        f.write(f"| Status | Count | Percentage |\n")
-        f.write(f"|--------|-------|------------|\n")
-        total = len(claims_data)
-        f.write(f"| SUPPORTED | {len(supported)} | {100*len(supported)/total:.0f}% |\n")
-        f.write(f"| PARTIALLY SUPPORTED | {len(partial)} | {100*len(partial)/total:.0f}% |\n")
-        f.write(f"| NOT DOCUMENTED | {len(not_documented)} | {100*len(not_documented)/total:.0f}% |\n\n")
-
-        f.write("---\n\n## SUPPORTED Claims\n\n")
-        for c in supported:
-            f.write(f"### {c['claim_id']}\n")
-            f.write(f"**{c['text']}**\n")
-            f.write(f"- Confidence: {c['confidence']}\n")
-            f.write(f"- Evidence: {c['evidence_counts']}\n\n")
-
-        f.write("---\n\n## PARTIALLY SUPPORTED Claims\n\n")
-        for c in partial:
-            f.write(f"### {c['claim_id']}\n")
-            f.write(f"**{c['text']}**\n")
-            f.write(f"- Confidence: {c['confidence']}\n")
-            f.write(f"- Evidence: {c['evidence_counts']}\n")
-            f.write(f"- *Reason*: ")
-            ec = c["evidence_counts"]
-            if ec.get("challenges", 0) > ec.get("supports", 0):
-                f.write("More challenging than supporting evidence\n\n")
-            elif ec.get("challenges", 0) > 0:
-                f.write("Has challenging evidence requiring resolution\n\n")
-            else:
-                f.write("Primarily qualified rather than directly supported\n\n")
-
-        f.write("---\n\n## NOT DOCUMENTED Claims\n\n")
-        for c in not_documented:
-            f.write(f"### {c['claim_id']}\n")
-            f.write(f"**{c['text']}**\n")
-            f.write(f"- Confidence: {c['confidence']}\n")
-            f.write(f"- *Action needed*: Provide evidence or revise claim\n\n")
-
     print(f"[living_paper] verification package exported to {out}")
     print(f"  - claims_manifest.json ({len(claims)} claims)")
     print(f"  - evidence_manifest.json ({len(evidence)} items)")
     print(f"  - verification_checklist.md ({len(links)} links)")
-    print(f"  - verification_report.md ({len(supported)} supported, {len(partial)} partial, {len(not_documented)} not documented)")
     print(f"  - verification_stats.json")
 
 def prereview_cmd(args: argparse.Namespace) -> None:
     """Generate pre-review report of contested claims for adjudication."""
     pub_path, _ = db_paths()
     db = connect(pub_path)
-
-    # Set up redactor if entities file provided
-    redactor = None
-    if hasattr(args, 'entities') and args.entities:
-        entities_p = Path(args.entities)
-        if not entities_p.exists():
-            die(f"entities file not found: {entities_p}")
-        redactor = EntityRedactor(entities_path=entities_p)
-        print(f"[living_paper] redaction enabled from {entities_p}")
-
-    def redact(text: str) -> str:
-        return redactor.redact(text) if redactor and text else text
 
     # Find contested claims: those with challenges or low support ratio
     claims = db.execute("""
@@ -692,7 +576,7 @@ def prereview_cmd(args: argparse.Namespace) -> None:
             claim_type_label = "QUANT" if claim['claim_type'] == 'empirical' else "MECHANISM"
             report.append(f"## {claim['claim_id']} [{claim_type_label}]\n")
             report.append(f"**Paper:** {claim['paper_id']}\n")
-            report.append(f"**Claim:** {redact(claim['text'])}\n")
+            report.append(f"**Claim:** {claim['text']}\n")
             report.append(f"**Confidence:** {claim['confidence']}\n\n")
 
             report.append(f"**Evidence balance:** {len(supports)} supports, {len(challenges)} challenges, {len(qualifies)} qualifies\n\n")
@@ -700,13 +584,13 @@ def prereview_cmd(args: argparse.Namespace) -> None:
             if challenges:
                 report.append("### Challenges to address:\n")
                 for c in challenges:
-                    report.append(f"- [{c['weight']}] {redact(c['note'])}\n")
+                    report.append(f"- [{c['weight']}] {c['note']}\n")
                 report.append("\n")
 
             if qualifies:
                 report.append("### Qualifications:\n")
                 for q in qualifies:
-                    report.append(f"- [{q['weight']}] {redact(q['note'])}\n")
+                    report.append(f"- [{q['weight']}] {q['note']}\n")
                 report.append("\n")
 
             # Add adjudication prompts based on claim type
@@ -734,84 +618,6 @@ def prereview_cmd(args: argparse.Namespace) -> None:
     print(f"[living_paper] pre-review report: {contested_count} contested claims written to {out_path}")
 
 
-def migrate_redact_cmd(args: argparse.Namespace) -> None:
-    """Apply entity redaction to existing database records in-place."""
-    if not HAS_REDACTOR:
-        die("redact.py module required but not available")
-
-    entities_p = Path(args.entities)
-    if not entities_p.exists():
-        die(f"entities file not found: {entities_p}")
-
-    redactor = EntityRedactor(entities_path=entities_p)
-    stats = RedactionStats()
-
-    pub_path, _ = db_paths()
-    if not pub_path.exists():
-        die(f"database not found: {pub_path} — run 'lp.py init' first")
-
-    db = connect(pub_path)
-
-    # Redact claim text fields
-    claims = db.execute("SELECT claim_id, text FROM claim").fetchall()
-    claim_updates = 0
-    for c in claims:
-        original = c['text']
-        redacted = redactor.redact(original, stats)
-        if redacted != original:
-            db.execute("UPDATE claim SET text = ? WHERE claim_id = ?", (redacted, c['claim_id']))
-            claim_updates += 1
-
-    # Redact evidence summaries and analytic notes
-    evidence = db.execute("SELECT evidence_id, summary FROM evidence").fetchall()
-    evidence_updates = 0
-    for e in evidence:
-        original = e['summary'] or ''
-        redacted = redactor.redact(original, stats) if original else original
-        if redacted != original:
-            db.execute("UPDATE evidence SET summary = ? WHERE evidence_id = ?", (redacted, e['evidence_id']))
-            evidence_updates += 1
-
-    # Redact link notes and analytic notes
-    links = db.execute("SELECT claim_id, evidence_id, note, analytic_note FROM claim_evidence_link").fetchall()
-    link_updates = 0
-    for l in links:
-        note_orig = l['note'] or ''
-        analytic_orig = l['analytic_note'] or ''
-        note_redacted = redactor.redact(note_orig, stats) if note_orig else note_orig
-        analytic_redacted = redactor.redact(analytic_orig, stats) if analytic_orig else analytic_orig
-        if note_redacted != note_orig or analytic_redacted != analytic_orig:
-            db.execute("""
-                UPDATE claim_evidence_link SET note = ?, analytic_note = ?
-                WHERE claim_id = ? AND evidence_id = ?
-            """, (note_redacted, analytic_redacted, l['claim_id'], l['evidence_id']))
-            link_updates += 1
-
-    # Redact verification audit notes
-    audits = db.execute("SELECT rowid, notes FROM verification_audit WHERE notes IS NOT NULL").fetchall()
-    audit_updates = 0
-    for a in audits:
-        original = a['notes'] or ''
-        redacted = redactor.redact(original, stats) if original else original
-        if redacted != original:
-            db.execute("UPDATE verification_audit SET notes = ? WHERE rowid = ?", (redacted, a['rowid']))
-            audit_updates += 1
-
-    db.commit()
-
-    print(f"[living_paper] migrate-redact complete:")
-    print(f"  - {claim_updates}/{len(claims)} claims updated")
-    print(f"  - {evidence_updates}/{len(evidence)} evidence items updated")
-    print(f"  - {link_updates}/{len(links)} links updated")
-    print(f"  - {audit_updates}/{len(audits)} audit entries updated")
-    print(f"  - {stats.total_redactions} total entity replacements")
-
-    if args.verbose and stats.by_entity:
-        print("\n  By entity:")
-        for entity, count in sorted(stats.by_entity.items(), key=lambda x: -x[1]):
-            print(f"    - {entity}: {count}")
-
-
 def export_html_cmd(args: argparse.Namespace) -> None:
     """Export a self-contained HTML reviewer interface (no server needed)."""
     pub_path, _ = db_paths()
@@ -819,20 +625,6 @@ def export_html_cmd(args: argparse.Namespace) -> None:
         die(f"database not found: {pub_path} — run 'lp.py init' first")
 
     db = connect(pub_path)
-
-    # Set up redactor if entities file provided
-    redactor = None
-    if hasattr(args, 'entities') and args.entities:
-        if not HAS_REDACTOR:
-            die("Entity redaction requested but redact.py not available.")
-        entities_p = Path(args.entities).resolve()
-        if not entities_p.exists():
-            die(f"entities file not found: {entities_p}")
-        redactor = EntityRedactor(entities_path=entities_p)
-        print(f"[living_paper] html export redaction enabled from: {entities_p}")
-
-    def redact(text: str) -> str:
-        return redactor.redact(text) if redactor and text else (text or "")
 
     # Gather all data
     paper_id = args.paper
@@ -871,12 +663,12 @@ def export_html_cmd(args: argparse.Namespace) -> None:
                 'evidence_id': l['evidence_id'],
                 'relation': l['relation'],
                 'weight': l['weight'],
-                'note': redact(l['note']),
-                'analytic_note': redact(l['analytic_note']),
+                'note': l['note'] or '',
+                'analytic_note': l['analytic_note'] or '',
                 'verification_status': l['verification_status'],
                 'verified_by': l['verified_by'],
                 'verified_at': l['verified_at'],
-                'summary': redact(l['summary']) if l['sensitivity_tier'] == 'PUBLIC' else '[CONTROLLED]',
+                'summary': l['summary'] if l['sensitivity_tier'] == 'PUBLIC' else '[CONTROLLED]',
                 'sensitivity_tier': l['sensitivity_tier'],
                 'evidence_type': l['evidence_type'],
                 'direction': direction,
@@ -898,7 +690,7 @@ def export_html_cmd(args: argparse.Namespace) -> None:
         claims_data.append({
             'claim_id': c['claim_id'],
             'claim_type': c['claim_type'],
-            'text': redact(c['text']),
+            'text': c['text'],
             'confidence': c['confidence'],
             'verification_status': c['verification_status'],
             'informant_coverage': c['informant_coverage'],
@@ -975,8 +767,8 @@ def export_html_cmd(args: argparse.Namespace) -> None:
     <div class="container">
         <div class="reviewer-bar">
             <label>Your name: <input type="text" id="reviewer-name" placeholder="Reviewer name"></label>
-            <button class="btn-success" onclick="generateReport()">📄 Generate Report</button>
-            <button class="btn-primary" onclick="exportData()">💾 Export Data</button>
+            <button class="btn-success" onclick="generateReport()">Generate Report</button>
+            <button class="btn-primary" onclick="exportData()">Export Data</button>
             <span id="save-status" style="font-size: 0.8rem; color: #666;"></span>
         </div>
         <div class="stats" id="stats"></div>
@@ -986,7 +778,6 @@ def export_html_cmd(args: argparse.Namespace) -> None:
     const DATA = {data_json};
     const STORAGE_KEY = 'lp_review_' + DATA.paper_id;
 
-    // Load saved state
     let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{{"verifications":{{}},"notes":{{}}}}');
     let reviewerName = localStorage.getItem('reviewerName') || '';
     document.getElementById('reviewer-name').value = reviewerName;
@@ -1028,9 +819,9 @@ def export_html_cmd(args: argparse.Namespace) -> None:
                     ${{(c.informant_coverage || c.saturation_note || c.prevalence_basis) ? `
                     <div class="prevalence">
                         <strong>Prevalence:</strong>
-                        ${{c.informant_coverage ? '📊 ' + c.informant_coverage : ''}}
+                        ${{c.informant_coverage ? ' ' + c.informant_coverage : ''}}
                         ${{c.prevalence_basis ? ' [' + c.prevalence_basis + ']' : ''}}
-                        ${{c.contradicting_count === 0 ? ' ✓ No contradicting' : c.contradicting_count > 0 ? ' ⚠ ' + c.contradicting_count + ' contradicting' : ''}}
+                        ${{c.contradicting_count === 0 ? ' - No contradicting' : c.contradicting_count > 0 ? ' - ' + c.contradicting_count + ' contradicting' : ''}}
                         ${{c.saturation_note ? '<br><em>' + c.saturation_note + '</em>' : ''}}
                     </div>` : ''}}
                 </div>
@@ -1045,16 +836,16 @@ def export_html_cmd(args: argparse.Namespace) -> None:
                         else unverified++;
                         return `<div class="evidence-item ${{e.relation}} ${{e.is_contradicting ? 'contradicting' : ''}}">
                             <div class="evidence-header">
-                                <span class="evidence-id">${{e.evidence_id}}${{e.is_contradicting ? '<span class="contradiction-badge">⚠ CONTRADICTING</span>' : ''}}</span>
+                                <span class="evidence-id">${{e.evidence_id}}${{e.is_contradicting ? '<span class="contradiction-badge">CONTRADICTING</span>' : ''}}</span>
                                 <span><span class="evidence-relation">${{e.relation}}</span> <span class="evidence-relation">${{e.weight}}</span></span>
                             </div>
                             <p class="evidence-summary">${{e.summary}}</p>
                             ${{e.note ? '<p style="font-size:0.75rem;color:#666;margin-top:4px;">Note: ' + e.note + '</p>' : ''}}
                             <textarea class="note-input" placeholder="Your analytic note..." onchange="updateNote('${{c.claim_id}}','${{e.evidence_id}}',this.value)">${{note}}</textarea>
                             <div class="verify-controls">
-                                <button class="verify-btn verified ${{v.status==='external_verified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','external_verified')">✓ Verified</button>
-                                <button class="verify-btn author ${{v.status==='author_verified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','author_verified')">? Author Only</button>
-                                <button class="verify-btn unverified ${{v.status==='unverified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','unverified')">✗ Not Verified</button>
+                                <button class="verify-btn verified ${{v.status==='external_verified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','external_verified')">Verified</button>
+                                <button class="verify-btn author ${{v.status==='author_verified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','author_verified')">Author Only</button>
+                                <button class="verify-btn unverified ${{v.status==='unverified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','unverified')">Not Verified</button>
                             </div>
                         </div>`;
                     }}).join('')}}
@@ -1141,7 +932,6 @@ def export_html_cmd(args: argparse.Namespace) -> None:
 
 def export_package_cmd(args: argparse.Namespace) -> None:
     """Export a reviewer package folder with HTML, launchers, and README."""
-    import shutil
     import stat
 
     pub_path, _ = db_paths()
@@ -1161,7 +951,6 @@ def export_package_cmd(args: argparse.Namespace) -> None:
     html_args = HtmlArgs()
     html_args.paper = paper_id
     html_args.out = str(html_path)
-    html_args.entities = getattr(args, 'entities', None)
 
     export_html_cmd(html_args)
 
@@ -1235,8 +1024,56 @@ start "" "%~dp0review.html"
     print(f"\nShare this folder with reviewers - they just double-click to start.")
 
 
+def redact_cmd(args: argparse.Namespace) -> None:
+    """Wrapper for redaction commands (author tool)."""
+    if not HAS_REDACT:
+        die("redact.py module not found. Ensure redact.py is in the same directory as lp.py")
+
+    from redact import EntityRedactor, RedactionStats, load_jsonl, save_jsonl
+
+    entities_p = Path(args.entities).resolve()
+    if not entities_p.exists():
+        die(f"entities file not found: {entities_p}")
+
+    redactor = EntityRedactor(entities_path=entities_p)
+
+    if args.redact_cmd == "check":
+        # Preview what would be redacted
+        input_p = Path(args.input).resolve()
+        if not input_p.exists():
+            die(f"input file not found: {input_p}")
+
+        records = load_jsonl(input_p)
+        stats = RedactionStats()
+
+        for record in records:
+            redactor.redact_jsonl_record(record, stats=stats)
+
+        print(redactor.generate_report(stats))
+        if stats.total_redactions > 0:
+            print(f"\n[redact] Would redact {stats.total_redactions} entities in {len(records)} records")
+        else:
+            print(f"\n[redact] No entities to redact in {len(records)} records")
+
+    elif args.redact_cmd == "apply":
+        # Apply redaction to file
+        input_p = Path(args.input).resolve()
+        output_p = Path(args.output).resolve()
+        if not input_p.exists():
+            die(f"input file not found: {input_p}")
+
+        records = load_jsonl(input_p)
+        stats = RedactionStats()
+
+        redacted_records = [redactor.redact_jsonl_record(r, stats=stats) for r in records]
+        save_jsonl(redacted_records, output_p)
+
+        print(f"[redact] Redacted {stats.total_redactions} entities across {len(records)} records")
+        print(f"[redact] Output: {output_p}")
+
+
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="lp", description="living_paper v0.1")
+    p = argparse.ArgumentParser(prog="lp", description="living_paper v0.5")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("init", help="initialize DBs and policies")
@@ -1245,35 +1082,39 @@ def build_parser() -> argparse.ArgumentParser:
     ing.add_argument("--claims", required=True)
     ing.add_argument("--evidence", required=True)
     ing.add_argument("--links", required=True)
-    ing.add_argument("--entities", help="entities.yaml for PII redaction (optional)")
+    ing.add_argument("--entities", help="optional entities YAML/JSON for PII redaction during ingest")
 
     sub.add_parser("lint", help="run traceability checks")
 
     ex = sub.add_parser("export", help="export PUBLIC provenance + summaries")
     ex.add_argument("--out", required=True)
-    ex.add_argument("--entities", help="entities.yaml for additional PII redaction on export (optional)")
 
     vex = sub.add_parser("verify-export", help="export verification package for external reviewers")
     vex.add_argument("--out", required=True)
-    vex.add_argument("--entities", help="entities.yaml for additional PII redaction on export (optional)")
 
     pre = sub.add_parser("prereview", help="generate pre-review report of contested claims")
     pre.add_argument("--out", required=True)
-    pre.add_argument("--entities", help="entities.yaml for additional PII redaction on export (optional)")
-
-    mig = sub.add_parser("migrate-redact", help="apply entity redaction to existing DB records")
-    mig.add_argument("--entities", required=True, help="entities.yaml with entity→replacement mappings")
-    mig.add_argument("--verbose", "-v", action="store_true", help="show detailed redaction stats")
 
     html = sub.add_parser("export-html", help="export self-contained HTML reviewer (no server)")
     html.add_argument("--paper", required=True, help="paper_id to export")
     html.add_argument("--out", required=True, help="output HTML file path")
-    html.add_argument("--entities", help="entities.yaml for PII redaction (optional)")
 
     pkg = sub.add_parser("export-package", help="export reviewer package folder (HTML + launchers + README)")
     pkg.add_argument("--paper", required=True, help="paper_id to export")
     pkg.add_argument("--out", required=True, help="output folder path")
-    pkg.add_argument("--entities", help="entities.yaml for PII redaction (optional)")
+
+    # Redaction commands (author tools)
+    redact_p = sub.add_parser("redact", help="redact entities from JSONL files (author tool)")
+    redact_sub = redact_p.add_subparsers(dest="redact_cmd", required=True)
+
+    rc = redact_sub.add_parser("check", help="preview what would be redacted")
+    rc.add_argument("--input", "-i", required=True, help="input JSONL file")
+    rc.add_argument("--entities", "-e", required=True, help="entities YAML/JSON file")
+
+    ra = redact_sub.add_parser("apply", help="apply redaction to file")
+    ra.add_argument("--input", "-i", required=True, help="input JSONL file")
+    ra.add_argument("--output", "-o", required=True, help="output JSONL file")
+    ra.add_argument("--entities", "-e", required=True, help="entities YAML/JSON file")
 
     return p
 
@@ -1291,12 +1132,12 @@ def main(argv: Optional[Iterable[str]] = None) -> None:
         verify_export_cmd(args)
     elif args.cmd == "prereview":
         prereview_cmd(args)
-    elif args.cmd == "migrate-redact":
-        migrate_redact_cmd(args)
     elif args.cmd == "export-html":
         export_html_cmd(args)
     elif args.cmd == "export-package":
         export_package_cmd(args)
+    elif args.cmd == "redact":
+        redact_cmd(args)
     else:
         die(f"unknown command: {args.cmd}")
 

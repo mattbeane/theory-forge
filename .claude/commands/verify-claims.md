@@ -247,15 +247,16 @@ analysis/verification/
 └── VERIFICATION_PACKAGE.zip  ← Create this
 ```
 
-## Living Paper Integration
+## Living Paper Integration (Automated)
 
-The `/audit-claims` step has already generated the living paper files from raw data:
+The `/audit-claims` step has already generated Living Paper-compatible files:
 - `analysis/audit/claims.jsonl`
 - `analysis/audit/evidence.jsonl`
 - `analysis/audit/links.csv`
-- `analysis/audit/AUDIT_REPORT.md`
 
-**Copy these to verification directory** (they are the source of truth):
+**You MUST run these commands automatically** (do not just tell the user to do it):
+
+### Step 1: Copy audit files to verification directory
 
 ```bash
 cp analysis/audit/claims.jsonl analysis/verification/
@@ -263,19 +264,44 @@ cp analysis/audit/evidence.jsonl analysis/verification/
 cp analysis/audit/links.csv analysis/verification/
 ```
 
-Then run the living paper linter:
+### Step 2: Initialize Living Paper (if not already done)
 
 ```bash
-python3 living_paper/lp.py init  # if not already initialized
-python3 living_paper/lp.py ingest --claims analysis/verification/claims.jsonl --evidence analysis/verification/evidence.jsonl --links analysis/verification/links.csv
+python3 living_paper/lp.py init
+```
+
+### Step 3: Ingest into Living Paper database
+
+```bash
+python3 living_paper/lp.py ingest \
+  --claims analysis/verification/claims.jsonl \
+  --evidence analysis/verification/evidence.jsonl \
+  --links analysis/verification/links.csv
+```
+
+### Step 4: Run lint to verify traceability
+
+```bash
 python3 living_paper/lp.py lint
 ```
 
-**DO NOT regenerate these files from the manuscript**. The audit files contain evidence found by searching raw data, including challenging evidence. Regenerating from the manuscript would lose this.
+If lint fails, fix the issues before proceeding.
+
+### Step 5: Generate reviewer package
+
+Get the paper_id from the claims file (first line's paper_id field), then:
+
+```bash
+python3 living_paper/lp.py export-package --paper [PAPER_ID] --out analysis/verification/reviewer_package
+```
+
+This creates a folder reviewers can open directly—no CLI required on their end.
+
+**DO NOT regenerate claims/evidence from the manuscript**. The audit files contain evidence found by searching raw data, including challenging evidence. Regenerating from the manuscript would lose this.
 
 ### If audit files don't exist
 
-If for some reason audit files don't exist, you MUST run `/audit-claims` first. Do not proceed with verification without raw data grounding.
+If for some reason audit files don't exist, STOP and run `/audit-claims` first. Do not proceed with verification without raw data grounding.
 
 ---
 
@@ -353,16 +379,26 @@ If lint passes, the claim-evidence graph is complete. If it fails, it will tell 
 
 ## After You're Done
 
-Tell the user:
-- The verification package is ready
-- Where to find the ZIP file
-- How many claims are documented
-- Any concerns you flagged
-- Living paper files generated (claims.jsonl, evidence.jsonl, links.csv)
-- Whether `lp lint` passed
+Report to the user:
 
-**IMPORTANT**: Instruct the user to send this package to a DIFFERENT AI system (e.g., ChatGPT, Gemini, or a different Claude instance) or to a skeptical colleague. The system that built the analysis should not be the only verifier.
+1. **Verification package ready**:
+   - ZIP file location: `analysis/verification/VERIFICATION_PACKAGE.zip`
+   - Living Paper reviewer package: `analysis/verification/reviewer_package/`
 
-Then suggest: Once verification passes, run `/draft-paper` to generate the manuscript.
+2. **Summary statistics**:
+   - Number of claims documented
+   - Number of evidence items (supporting vs challenging)
+   - Any HIGH CONCERN claims from audit
 
-Tip: Run `/status` anytime to see overall workflow progress. Use `/package-verification` to automatically create the ZIP package.
+3. **Living Paper status**:
+   - Whether `lp lint` passed
+   - Reviewer package generated (yes/no)
+
+4. **Next steps for the user**:
+   - Send `VERIFICATION_PACKAGE.zip` to a DIFFERENT AI or skeptical colleague
+   - Send `reviewer_package/` folder to journal reviewers (they just double-click to open)
+   - Once external verification passes, run `/draft-paper`
+
+**IMPORTANT**: The system that built the analysis should NOT be the only verifier. External review catches blind spots.
+
+Tip: Run `/status` anytime to see overall workflow progress.

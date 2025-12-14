@@ -286,11 +286,11 @@ The following data sources exist but were not drawn on:
 
 ## Output Files
 
-Generate:
-1. `analysis/verification/AUDIT_REPORT.md` — Human-readable audit findings
-2. `analysis/verification/claims.jsonl` — Claims with audit annotations
-3. `analysis/verification/evidence.jsonl` — ALL evidence found (supporting AND challenging)
-4. `analysis/verification/links.csv` — Links with relation types and weights
+Generate in `analysis/audit/`:
+1. `analysis/audit/AUDIT_REPORT.md` — Human-readable audit findings
+2. `analysis/audit/claims.jsonl` — Claims with audit annotations (Living Paper format)
+3. `analysis/audit/evidence.jsonl` — ALL evidence found, supporting AND challenging (Living Paper format)
+4. `analysis/audit/links.csv` — Links with relation types and weights (Living Paper format)
 
 ## After Auditing
 
