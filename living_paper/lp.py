@@ -853,7 +853,7 @@ def export_html_cmd(args: argparse.Namespace) -> None:
         links = db.execute("""
             SELECT l.evidence_id, l.relation, l.weight, l.note, l.analytic_note,
                    l.verification_status, l.verified_by, l.verified_at,
-                   e.summary, e.sensitivity_tier, e.evidence_type
+                   e.summary, e.sensitivity_tier, e.evidence_type, e.meta_json
             FROM claim_evidence_link l
             JOIN evidence e ON e.evidence_id = l.evidence_id
             WHERE l.claim_id = ?
@@ -862,6 +862,11 @@ def export_html_cmd(args: argparse.Namespace) -> None:
 
         evidence_list = []
         for l in links:
+            # Extract direction from meta_json for contradiction flagging
+            meta = json.loads(l['meta_json'] or '{}')
+            direction = meta.get('direction', '').upper()
+            is_contradicting = direction == 'CHALLENGES'
+
             evidence_list.append({
                 'evidence_id': l['evidence_id'],
                 'relation': l['relation'],
@@ -873,7 +878,9 @@ def export_html_cmd(args: argparse.Namespace) -> None:
                 'verified_at': l['verified_at'],
                 'summary': redact(l['summary']) if l['sensitivity_tier'] == 'PUBLIC' else '[CONTROLLED]',
                 'sensitivity_tier': l['sensitivity_tier'],
-                'evidence_type': l['evidence_type']
+                'evidence_type': l['evidence_type'],
+                'direction': direction,
+                'is_contradicting': is_contradicting
             })
 
         # Compute support status
@@ -942,6 +949,8 @@ def export_html_cmd(args: argparse.Namespace) -> None:
         .evidence-item.supports {{ border-left-color: #4caf50; }}
         .evidence-item.challenges {{ border-left-color: #f44336; }}
         .evidence-item.qualifies {{ border-left-color: #ff9800; }}
+        .evidence-item.contradicting {{ background: #fff3f3; border-left-color: #f44336; border-left-width: 4px; }}
+        .contradiction-badge {{ background: #f44336; color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 3px; font-weight: bold; margin-left: 8px; }}
         .evidence-header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }}
         .evidence-id {{ font-family: monospace; font-size: 0.7rem; color: #666; }}
         .evidence-relation {{ font-size: 0.6rem; text-transform: uppercase; padding: 2px 5px; border-radius: 3px; background: #e0e0e0; }}
@@ -1034,9 +1043,9 @@ def export_html_cmd(args: argparse.Namespace) -> None:
                         if (v.status === 'external_verified') verified++;
                         else if (v.status === 'author_verified') author++;
                         else unverified++;
-                        return `<div class="evidence-item ${{e.relation}}">
+                        return `<div class="evidence-item ${{e.relation}} ${{e.is_contradicting ? 'contradicting' : ''}}">
                             <div class="evidence-header">
-                                <span class="evidence-id">${{e.evidence_id}}</span>
+                                <span class="evidence-id">${{e.evidence_id}}${{e.is_contradicting ? '<span class="contradiction-badge">⚠ CONTRADICTING</span>' : ''}}</span>
                                 <span><span class="evidence-relation">${{e.relation}}</span> <span class="evidence-relation">${{e.weight}}</span></span>
                             </div>
                             <p class="evidence-summary">${{e.summary}}</p>
