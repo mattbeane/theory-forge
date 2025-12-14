@@ -60,8 +60,19 @@ This is often where the real contribution lies: bridging two literatures that ha
 
 4. **Evaluate fit**
 
+   **CRITICAL: Identify a LITERATURE, not a single paper.**
+
+   A common anti-pattern is anchoring your theoretical lens on one influential paper (e.g., "Thompson 1967"). This is fragile and unconvincing. Reviewers will ask: "Why just this paper?"
+
+   Instead, identify a **body of work**—a literature with:
+   - Multiple foundational papers (not just one canonical cite)
+   - Ongoing empirical work building on the foundations
+   - Debates, extensions, and boundary conditions explored
+   - A recognizable label (e.g., "organizational learning," "real options theory")
+
    The best sensitizing literature:
-   - Has strong empirical foundation
+   - Is a substantial body of work (10+ papers minimum, ideally 50+)
+   - Has strong empirical foundation across multiple studies
    - Has NOT been connected to your primary theory (bridge opportunity)
    - Offers clear mechanism (not just "X correlates with Y")
    - Is active/vibrant (recent publications, ongoing debate)
@@ -103,10 +114,20 @@ Create `analysis/theory/SENSITIZING_LITERATURE.md`:
 
 [2-3 sentences on why this is the right lens]
 
-### Canonical Citations
-- [Author (Year)] - [Title] - [Foundational]
-- [Author (Year)] - [Title] - [Key empirical]
-- [Author (Year)] - [Title] - [Recent review/update]
+### Canonical Citations (MINIMUM 5 PAPERS)
+
+**Foundational/Theoretical:**
+- [Author (Year)] - [Title]
+- [Author (Year)] - [Title]
+
+**Key Empirical Studies:**
+- [Author (Year)] - [Title]
+- [Author (Year)] - [Title]
+
+**Recent Reviews/Meta-analyses:**
+- [Author (Year)] - [Title]
+
+NOTE: If you cannot identify at least 5 papers, this is not a literature—it's a single paper or nascent concept. Find a more established body of work.
 
 ### Core Concepts
 

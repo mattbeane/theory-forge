@@ -9,7 +9,34 @@ Before starting:
 2. Verify prerequisites:
    - `workflow.hunt_patterns.status === "completed"`
    - `workflow.smith_frames.status === "completed"`
+   - `workflow.audit_claims.status === "completed"` ← **REQUIRED**
 3. Check current frame number for context
+
+**CRITICAL**: If `audit_claims` has not been run, STOP and tell the user:
+
+```
+STOP: You must run /audit-claims before /verify-claims.
+
+The audit step searches your RAW DATA for evidence that supports AND challenges
+each claim. Without this step, verification is meaningless—you're just checking
+that the analysis is internally consistent, not that it's grounded in evidence.
+
+Run: /audit-claims
+
+This will:
+1. Search all interview transcripts for relevant evidence
+2. Identify supporting AND challenging evidence
+3. Flag claims with weak or contested support
+4. Generate the evidence files needed for living paper verification
+```
+
+If `audit_claims.high_concern_claims` is not empty, warn:
+```
+WARNING: The audit found HIGH CONCERN claims that may need revision:
+[List the claims]
+
+Proceeding with verification, but these claims should be addressed.
+```
 
 After completing:
 1. Update `state.json`:
@@ -220,6 +247,110 @@ analysis/verification/
 └── VERIFICATION_PACKAGE.zip  ← Create this
 ```
 
+## Living Paper Integration
+
+The `/audit-claims` step has already generated the living paper files from raw data:
+- `analysis/audit/claims.jsonl`
+- `analysis/audit/evidence.jsonl`
+- `analysis/audit/links.csv`
+- `analysis/audit/AUDIT_REPORT.md`
+
+**Copy these to verification directory** (they are the source of truth):
+
+```bash
+cp analysis/audit/claims.jsonl analysis/verification/
+cp analysis/audit/evidence.jsonl analysis/verification/
+cp analysis/audit/links.csv analysis/verification/
+```
+
+Then run the living paper linter:
+
+```bash
+python3 living_paper/lp.py init  # if not already initialized
+python3 living_paper/lp.py ingest --claims analysis/verification/claims.jsonl --evidence analysis/verification/evidence.jsonl --links analysis/verification/links.csv
+python3 living_paper/lp.py lint
+```
+
+**DO NOT regenerate these files from the manuscript**. The audit files contain evidence found by searching raw data, including challenging evidence. Regenerating from the manuscript would lose this.
+
+### If audit files don't exist
+
+If for some reason audit files don't exist, you MUST run `/audit-claims` first. Do not proceed with verification without raw data grounding.
+
+---
+
+## DEPRECATED: Manual Generation (DO NOT USE)
+
+The following section describes the OLD approach of generating evidence from manuscripts.
+**This approach is deprecated because it produces circular verification.**
+
+### ~~Generate `analysis/verification/claims.jsonl`~~
+
+~~One JSON object per line. For each substantive claim in the paper:~~
+
+```json
+{"claim_id": "CLM-001", "paper_id": "PAPER_ID", "claim_type": "mechanism", "text": "The exact claim text", "status": "draft", "verification_mode": "public_provenance", "frame_id": "FRAME-N"}
+```
+
+**claim_type** values:
+- `descriptive` — what happened (empirical pattern)
+- `mechanism` — how/why it happens
+- `boundary_condition` — when/for whom it holds
+- `measurement` — how a construct is operationalized
+- `process` — methodological choices
+
+**verification_mode** values:
+- `public_provenance` — metadata can be public
+- `controlled_access` — requires DUA for verification
+- `witness_only` — only witness can verify
+
+### Generate `analysis/verification/evidence.jsonl`
+
+One JSON object per line. For each piece of supporting/challenging evidence:
+
+```json
+{"evidence_id": "EVD-001", "paper_id": "PAPER_ID", "evidence_type": "quote", "summary": "Safe paraphrase of the evidence (no PII)", "sensitivity_tier": "PUBLIC", "meta": {"interview_id": "INT_XXX", "informant_role_bin": "manager", "informant_tenure_bin": "5y+", "site_bin": "SITE_A", "line_start": 234, "line_end": 238, "mechanism_hypothesis": "H1_name", "evidence_type": "supporting"}}
+```
+
+**evidence_type** values: `quote`, `fieldnote`, `observation`, `quant_output`, `other`
+
+**sensitivity_tier** values: `PUBLIC`, `CONTROLLED`, `WITNESS_ONLY`
+
+**meta fields** (for qual evidence):
+- `interview_id` — hashed/pseudonymized interview identifier
+- `informant_role_bin` — binned role category (not specific title)
+- `informant_tenure_bin` — binned tenure (e.g., "<1y", "1-5y", "5y+")
+- `site_bin` — site identifier if multiple sites
+- `line_start`, `line_end` — location in source document
+- `mechanism_hypothesis` — which mechanism this evidence relates to
+- `evidence_type` — "supporting" or "challenging"
+
+**Important**: Bin rare categories to prevent re-identification. If only one HR director was interviewed, use a broader role bin.
+
+### Generate `analysis/verification/links.csv`
+
+```csv
+claim_id,evidence_id,relation,weight,note
+CLM-001,EVD-001,supports,1.0,
+CLM-001,EVD-002,challenges,1.0,
+```
+
+**relation** values: `supports`, `challenges`, `illustrates`
+
+### After generating these files
+
+Run the living paper linter to verify traceability:
+
+```bash
+python3 living_paper/lp.py init  # if not already initialized
+python3 living_paper/lp.py ingest --claims analysis/verification/claims.jsonl --evidence analysis/verification/evidence.jsonl --links analysis/verification/links.csv
+python3 living_paper/lp.py lint
+```
+
+If lint passes, the claim-evidence graph is complete. If it fails, it will tell you which claims lack evidence.
+
+---
+
 ## After You're Done
 
 Tell the user:
@@ -227,6 +358,8 @@ Tell the user:
 - Where to find the ZIP file
 - How many claims are documented
 - Any concerns you flagged
+- Living paper files generated (claims.jsonl, evidence.jsonl, links.csv)
+- Whether `lp lint` passed
 
 **IMPORTANT**: Instruct the user to send this package to a DIFFERENT AI system (e.g., ChatGPT, Gemini, or a different Claude instance) or to a skeptical colleague. The system that built the analysis should not be the only verifier.
 

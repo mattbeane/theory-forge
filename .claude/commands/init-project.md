@@ -38,7 +38,9 @@ The user may specify:
    │   ├── lens/               # /find-lens outputs
    │   ├── qualitative/        # /mine-qual outputs
    │   ├── framing/            # /smith-frames outputs (frame-1/, frame-2/, etc.)
+   │   ├── audit/              # /audit-claims outputs (evidence from raw data)
    │   └── verification/       # /verify-claims outputs
+   ├── living_paper/           # Living paper CLI (copied from paper-mining-agents)
    ├── literature/
    │   ├── primary/            # Core theory papers
    │   ├── sensitizing/        # Sensitizing literature
@@ -47,6 +49,7 @@ The user may specify:
    │   ├── drafts/             # Generated manuscripts
    │   ├── tables/
    │   └── figures/
+   ├── project_config.yaml     # Data locations and sensitivity settings
    ├── PROJECT_CONTEXT.md      # User fills in
    ├── DECISION_LOG.md         # Track choices
    └── state.json              # Workflow state (auto-managed)
@@ -94,6 +97,14 @@ The user may specify:
          "completed_at": null,
          "outputs": []
        },
+       "audit_claims": {
+         "status": "pending",
+         "completed_at": null,
+         "outputs": [],
+         "supporting_count": 0,
+         "challenging_count": 0,
+         "high_concern_claims": []
+       },
        "verify_claims": {
          "status": "pending",
          "completed_at": null,
@@ -123,7 +134,44 @@ The user may specify:
    }
    ```
 
-4. **Create PROJECT_CONTEXT.md template**
+4. **Create project_config.yaml**
+
+   ```yaml
+   # Project Configuration
+   # This file tells the pipeline where to find your data
+
+   data_sources:
+     qual:
+       # Path to interview transcripts (relative to project root)
+       interviews: "data/qual/interviews"
+       # Path to field notes
+       fieldnotes: "data/qual/fieldnotes"
+     quant:
+       # Path to quantitative data files
+       primary: "data/quant"
+     # Additional data sources (legacy locations, shared data, etc.)
+     additional: []
+
+   sensitivity:
+     # Default sensitivity tier for new evidence
+     default_tier: "CONTROLLED"
+     # Fields that can be included in PUBLIC exports
+     public_allowed_fields:
+       - "informant_role_bin"
+       - "informant_tenure_bin"
+       - "site_bin"
+       - "evidence_type"
+     # Minimum cell size for aggregates (k-anonymity)
+     min_cell_size: 5
+
+   anonymization:
+     # Replace these strings in evidence summaries
+     redact_patterns: []
+     # Site pseudonym mappings
+     site_mappings: {}
+   ```
+
+5. **Create PROJECT_CONTEXT.md template**
 
    ```markdown
    # Project Context

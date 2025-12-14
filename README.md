@@ -324,6 +324,52 @@ See `style_enforcer/README.md` for full documentation.
 
 ---
 
+## Living Paper & Pre-Review
+
+The `living_paper/` module provides bidirectional claim-evidence traceability and a **pre-review** workflow for engaging with contested claims before submission.
+
+### The Insight
+
+When the system surfaces challenges to your claims, engaging with them productively **before** external review:
+- Strengthens defensible claims
+- Surfaces new findings you missed
+- Preempts obvious reviewer objections
+- Creates an audit trail of principled reasoning
+
+This is a feature, not a bug. It's adversarial collaboration with yourself.
+
+### Quant/Qual Adjudication Rules
+
+When adjudicating contested claims:
+
+1. **Quant claims = ground truth** — only challengeable by other quant evidence
+2. **Qual perceptions contradicting quant** → reclassify as "illustrates mistaken beliefs"
+3. **Mechanism claims** → can be challenged by qual, BUT quant patterns can rule out mechanisms
+
+**Example**: Manager says "workers don't care" (apathy), but quant shows retention *increases* as automation approaches and *diverges* by automation type post-implementation. Apathy can't explain the pattern → sensemaking mechanism survives.
+
+### Usage
+
+```bash
+# Generate pre-review report of contested claims
+python living_paper/lp.py prereview --out prereview_report.md
+
+# Visualize claim health across papers
+python living_paper/visualize.py
+```
+
+See `living_paper/PREREVIEW.md` for the full adjudication methodology.
+
+### Why This Isn't P-Hacking
+
+| P-Hacking | Pre-Review |
+|-----------|------------|
+| Change data to fit story | Quant data is fixed ground truth |
+| Hide disconfirming evidence | Surface and engage with challenges |
+| Undocumented post-hoc rationalization | Full audit trail with reasoning |
+
+---
+
 ## What This Doesn't Do
 
 - Collect data for you

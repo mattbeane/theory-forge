@@ -3,7 +3,7 @@
 
 **Matt Beane, UC Santa Barbara**
 **November 2025**
-
+https://github.com/mattbeane/paper-mining-agent-suite
 ---
 
 ## The Setup
@@ -43,7 +43,7 @@ This document explains how.
 The tweet that sparked this focused on exploratory data analysis—letting AI run regressions and make graphs. That's useful, but it undersells what's possible.
 
 The real power for qualitative researchers is in the *full pipeline*:
-1. Exploring data you haven't touched in years
+1. Exploring data (maybe you haven't touched it in years)
 2. Generating multiple theoretical framings
 3. Finding the "sensitizing literature" that explains your patterns
 4. Integrating qualitative evidence with quantitative findings
@@ -108,7 +108,7 @@ That inversion became the paper: "Why Workers *Stay* in Anticipation of Uncertai
 
 **This is the crucial step that transforms description into contribution.**
 
-You've found a robust empirical pattern that violates an established theoretical prediction. Now you need a *second* literature—a "sensitizing" or "interpretive" lens—that explains the heterogeneity in your data.
+You've found a robust empirical pattern that violates an established theoretical prediction. Now you need a *second* literature—a "sensitizing" or "interpretive" lens—that helps to explain the heterogeneity in your data.
 
 **The pattern**:
 1. Primary theory makes a prediction (e.g., "misfit leads to withdrawal")
@@ -219,7 +219,7 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 
 **Why this matters**: The AI that helped you build the paper has seen your reasoning. A different system—with different strengths—provides fresh eyes.
 
-**My approach**: I used Claude Code (Opus) for generation and analysis. I sent verification briefs to ChatGPT Pro (o1/reasoning mode) for deep adversarial review.
+**My approach**: I used Claude Code (Opus) for generation and analysis. I sent verification briefs to ChatGPT Pro (reasoning mode) for deep adversarial review.
 
 **What goes in a verification brief**:
 
@@ -276,8 +276,8 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 **What you do**: Catch what reviewers would catch before they catch it.
 
 **Common issues I caught**:
-- Program name not anonymized (GROW → ACHIEVE)
-- Site names not anonymized (Gallatin → Gallifrey)
+- Program name not anonymized (XXXX → ACHIEVE)
+- Site names not anonymized (XXXXXX → Gallifrey)
 - Claims about what workers "want" when we only have revealed preferences
 - Vague sample sizes ("60+ interviews" → "77 interviews with 47 unique informants")
 
