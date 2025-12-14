@@ -34,7 +34,7 @@ Download from [claude.ai/download](https://claude.ai/download). Claude Desktop n
 ### 2. Clone this repo
 
 ```bash
-git clone https://github.com/[your-username]/paper-mining-agents.git
+git clone https://github.com/mattbeane/paper-mining-agent-suite.git
 ```
 
 ### 3. Point Claude at your project
@@ -241,6 +241,10 @@ Each frame preserves your empirical work (data exploration, patterns) while givi
 The `/verify-claims` agent produces a self-contained package (ZIP file) you should send to a *different* AI system or a skeptical colleague. The model that helped you build the analysis shouldn't be the only one checking it.
 
 Use `/package-verification` to automatically create the ZIP with checksums and reviewer instructions.
+
+### State Tracking
+
+The `state.json` file tracks your progress through the pipeline. See [`docs/STATE_SCHEMA.md`](docs/STATE_SCHEMA.md) for the full schema and details on what's deterministic vs model-dependent.
 
 ### Quality Gates
 
