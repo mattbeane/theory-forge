@@ -44,6 +44,12 @@ analysis/living_paper/lp_private.sqlite
 analysis/living_paper/exports/replication_package/WITNESS_ONLY/
 analysis/living_paper/exports/replication_package/CONTROLLED/
 
+# Entity redaction config (reveals PII mappings)
+# Keep entities_example.yaml for documentation, but users should create entities.yaml
+entities.yaml
+**/entities.yaml
+!living_paper/entities_example.yaml
+
 # Real paper examples and submissions (not for public repo)
 Qual Mgt Paper Writing Standard/
 submission letters/

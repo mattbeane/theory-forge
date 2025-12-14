@@ -119,10 +119,19 @@ Stores all claims with:
 ```
 claim_id: string (unique)
 claim_text: string
-claim_type: enum [empirical, theoretical, methodological, definitional]
+claim_type: enum [empirical, theoretical, methodological, definitional, boundary_condition]
 confidence: float [0-1]
 status: enum [draft, verified, published, retracted, updated]
+verification_status: enum [unverified, author_verified, external_verified]
 parent_claim: claim_id | null (for claim hierarchies)
+frame_id: string | null (for theoretical framing)
+
+# Prevalence metadata (V0.5 - ethnographic authority context)
+informant_coverage: string | null  # e.g., "12/47 informants", "widespread"
+contradicting_count: int           # count of contradicting evidence (0 = none found)
+saturation_note: string | null     # e.g., "Pattern consistent across all sites"
+prevalence_basis: enum [representative, illustrative, singular, aggregate]
+
 created_at: timestamp
 modified_at: timestamp
 modification_history: []{timestamp, old_text, new_text, reason}
@@ -491,7 +500,21 @@ If building this incrementally, start with:
 
 See `living_paper/PREREVIEW.md` for the full methodology.
 
-### V0.5: Manuscript Generation
+### V0.5: Reviewer Interface & Export Package
+- Interactive web reviewer interface (`reviewer_app.py`)
+- Static HTML export for non-technical reviewers (`export-html`, `export-package`)
+- PII redaction system for entity protection (`redact.py`, `entities.yaml`)
+- Prevalence metadata for ethnographic claims (informant coverage, contradicting counts, saturation notes)
+- Reviewer packages with double-click launchers for Mac/Windows
+- localStorage-based progress saving, downloadable verification reports
+- Value: External verification without exposing protected data; accessible to non-technical reviewers
+
+**New Commands**:
+- `lp.py export-html --paper PAPER_ID --out FILE` - Static HTML reviewer
+- `lp.py export-package --paper PAPER_ID --out FOLDER` - Complete reviewer package with launchers
+- `lp.py migrate-redact --entities entities.yaml` - Apply redaction to existing records
+
+### V0.6: Manuscript Generation
 - Generate standard academic output from claim graph
 - Evidence links become citations/quotes
 - Value: Living paper becomes practical writing tool
@@ -522,3 +545,96 @@ This spec is an invitation to explore what that infrastructure could look like.
 2. Identify minimum viable version worth building
 3. Find a pilot project (ideally with non-sensitive data for V0.1-V0.3)
 4. Build incrementally, learning what actually helps vs. what's theoretically nice
+
+---
+
+## References
+
+This spec draws on several streams of work on transparency, reproducibility, and replicability in qualitative research:
+
+### Foundational Frameworks
+
+**Aguinis, H., & Solarino, A. M. (2019).** Transparency and replicability in qualitative research: The case of interviews with elite informants. *Strategic Management Journal*, 40(8), 1291-1315.
+https://sms.onlinelibrary.wiley.com/doi/10.1002/smj.3015
+
+- Analyzed 52 SMJ articles; none met 12 transparency criteria
+- Offers behaviorally-anchored rating scales for transparency evaluation
+- Criteria cover research design, measurement, data analysis, data disclosure
+
+**Aguinis, H., et al. (2025).** Transparency, reproducibility, and replicability in human resource management research. *Personnel Review*.
+https://www.emerald.com/insight/content/doi/10.1108/pr-10-2024-0946/full/html
+
+- Introduces TRRUST framework (Transparency, Replicability, Reproducibility, Unified ontology, Shared culture of science, Trust and values)
+- 25 actionable recommendations including data sharing, pre-registration, sensitivity analyses
+
+### Annotation and Verification Systems
+
+**Qualitative Data Repository (QDR).** Annotation for Transparent Inquiry (ATI).
+https://qdr.syr.edu/ati
+
+- Digital annotations linking claims to evidence excerpts
+- Data Overview (~1,000 words) + passage-level annotations
+- Elements: citation, source excerpt (100-150 words), translation, analytic note, data source link
+
+**QDR Guide to ATI.**
+https://qdr.syr.edu/ati/guide-ati
+
+- Specifies Data Overview requirements: data generation context, procedures, selection rationale, gaps, analysis methodology
+- Analytic notes explain HOW evidence supports claims (interpretive reasoning)
+
+**Moravcsik, A.** Active Citation framework.
+https://qdr.syr.edu/content/guide-active-citation
+
+- Pioneered three dimensions: data transparency, analytic transparency, production transparency
+- System of digitally-enabled citations linked to annotated source excerpts
+
+### Journal Verification Policies
+
+**American Journal of Political Science.** Our Experience with the AJPS Transparency and Verification Process for Qualitative Research (2019).
+https://ajps.org/2019/05/09/our-experience-with-the-ajps-transparency-and-verification-process-for-qualitative-research/
+
+- QDR reviews materials, generates report: "supported," "partially supported," "not documented/referenced"
+- Authors revise based on report; improves quality and aligns claims with evidence
+
+### Data Sharing Barriers and Solutions
+
+**Childs, S., et al. (2022).** Barriers and facilitators to qualitative data sharing in the United States: A survey of qualitative researchers. *PLOS ONE*.
+https://pmc.ncbi.nlm.nih.gov/articles/PMC8719660/
+
+- Four barrier categories: scientific quality, permission, confidentiality, researcher burden
+- Deductive disclosure risk: participants may recognize themselves even with pseudonyms
+- Ethnographic field notes present special challenges
+
+**Turcotte-Tremblay, A. M., & Mc Sween-Cadieux, E. (2018).** A reflection on the challenge of protecting confidentiality while preserving analytical rigor in qualitative data sharing. *Qualitative Health Research*.
+https://pmc.ncbi.nlm.nih.gov/articles/PMC2805454/
+
+- "Internal confidentiality" violations: study participants recognize each other
+- Graded access systems recommended
+
+### Qualitative Open Science
+
+**Haven, T., & Van Grootel, D. (2019).** What does reproducibility mean for qualitative research?
+https://openworking.wordpress.com/2019/02/11/what-does-reproducibility-mean-for-qualitative-research/
+
+- Argues quality should be judged by transparency of process, not reproducibility of findings
+- Distinguishes production transparency from analytic transparency
+
+**Kapiszewski, D., & Karcher, S. (2021).** Rethinking Transparency and Rigor from a Qualitative Open Science Perspective. *Journal of Trial & Error*.
+https://journal.trialanderror.org/pub/rethinking-transparency/release/1
+
+- Recommends positionality statements, reflexivity practices, thick description, audit trails
+- Data papers as supplementary methodology publications
+- Preregistration should document "why" (theoretical framework) not just "what"
+
+### Review Articles
+
+**Open science interventions to improve reproducibility and replicability of research: a scoping review (2025).** *PMC*.
+https://pmc.ncbi.nlm.nih.gov/articles/PMC11979971/
+
+- Studies on reproducibility peaked 2022-2023
+- Growing intervention studies across disciplines
+
+**Is replication possible in qualitative research? A response to Makel et al. (2024).** *Educational Research and Evaluation*.
+https://www.tandfonline.com/doi/full/10.1080/13803611.2024.2314526
+
+- Calls for nuanced appraisal of replication compatibility with qualitative epistemology/ontology

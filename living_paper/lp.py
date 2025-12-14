@@ -7,11 +7,11 @@ Private store: lp_private.sqlite (protected pointers; gitignore)
 
 Commands:
   init
-  ingest --claims <claims.jsonl> --evidence <evidence.jsonl> --links <links.csv>
+  ingest --claims <claims.jsonl> --evidence <evidence.jsonl> --links <links.csv> [--entities <entities.yaml>]
   lint
-  export --out <dir>
+  export --out <dir> [--entities <entities.yaml>]
 
-No external dependencies.
+Optional: --entities provides entity redaction for PII in free text fields.
 """
 from __future__ import annotations
 
@@ -25,6 +25,15 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Iterable, Optional, Tuple
+
+# Import redactor (optional - graceful degradation if not available)
+try:
+    from redact import EntityRedactor, RedactionStats
+    HAS_REDACTOR = True
+except ImportError:
+    HAS_REDACTOR = False
+    EntityRedactor = None
+    RedactionStats = None
 
 ISO = "%Y-%m-%dT%H:%M:%SZ"
 
@@ -90,7 +99,7 @@ def upsert_paper(db: sqlite3.Connection, paper_id: str, title: Optional[str] = N
     )
     db.commit()
 
-def ingest_claims(db: sqlite3.Connection, claims_path: Path) -> int:
+def ingest_claims(db: sqlite3.Connection, claims_path: Path, redactor: Optional[Any] = None, stats: Optional[Any] = None) -> int:
     n = 0
     with claims_path.open("r", encoding="utf-8") as f:
         for line in f:
@@ -103,6 +112,10 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path) -> int:
                 if k not in obj:
                     die(f"claims.jsonl missing '{k}' in line: {line[:200]}")
             upsert_paper(db, obj["paper_id"])
+
+            # Apply redaction if redactor provided
+            if redactor:
+                obj = redactor.redact_jsonl_record(obj, text_fields=['text'], stats=stats)
 
             # Map claim_type if needed (handle legacy values)
             claim_type = obj["claim_type"]
@@ -118,8 +131,9 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path) -> int:
                 """
                 INSERT INTO claim(claim_id,paper_id,claim_type,text,confidence,status,
                                   verification_status,verification_mode,parent_claim_id,frame_id,
+                                  informant_coverage,contradicting_count,saturation_note,prevalence_basis,
                                   created_at,updated_at)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
                 ON CONFLICT(claim_id) DO UPDATE SET
                   paper_id=excluded.paper_id,
                   claim_type=excluded.claim_type,
@@ -130,6 +144,10 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path) -> int:
                   verification_mode=COALESCE(excluded.verification_mode, claim.verification_mode),
                   parent_claim_id=COALESCE(excluded.parent_claim_id, claim.parent_claim_id),
                   frame_id=COALESCE(excluded.frame_id, claim.frame_id),
+                  informant_coverage=COALESCE(excluded.informant_coverage, claim.informant_coverage),
+                  contradicting_count=COALESCE(excluded.contradicting_count, claim.contradicting_count),
+                  saturation_note=COALESCE(excluded.saturation_note, claim.saturation_note),
+                  prevalence_basis=COALESCE(excluded.prevalence_basis, claim.prevalence_basis),
                   updated_at=excluded.updated_at
                 """,
                 (
@@ -143,6 +161,10 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path) -> int:
                     obj.get("verification_mode","public_provenance"),
                     obj.get("parent_claim_id"),
                     obj.get("frame_id"),
+                    obj.get("informant_coverage"),
+                    obj.get("contradicting_count", 0),
+                    obj.get("saturation_note"),
+                    obj.get("prevalence_basis"),
                     now(),
                     now(),
                 ),
@@ -151,7 +173,7 @@ def ingest_claims(db: sqlite3.Connection, claims_path: Path) -> int:
     db.commit()
     return n
 
-def ingest_evidence(db: sqlite3.Connection, evidence_path: Path) -> int:
+def ingest_evidence(db: sqlite3.Connection, evidence_path: Path, redactor: Optional[Any] = None, stats: Optional[Any] = None) -> int:
     n = 0
     with evidence_path.open("r", encoding="utf-8") as f:
         for line in f:
@@ -164,6 +186,11 @@ def ingest_evidence(db: sqlite3.Connection, evidence_path: Path) -> int:
                 if k not in obj:
                     die(f"evidence.jsonl missing '{k}' in line: {line[:200]}")
             upsert_paper(db, obj["paper_id"])
+
+            # Apply redaction if redactor provided
+            if redactor:
+                obj = redactor.redact_jsonl_record(obj, text_fields=['summary'], stats=stats)
+
             meta = obj.get("meta", {})
             if not isinstance(meta, dict):
                 die("evidence.meta must be an object/dict")
@@ -194,7 +221,7 @@ def ingest_evidence(db: sqlite3.Connection, evidence_path: Path) -> int:
     db.commit()
     return n
 
-def ingest_links(db: sqlite3.Connection, links_path: Path) -> int:
+def ingest_links(db: sqlite3.Connection, links_path: Path, redactor: Optional[Any] = None, stats: Optional[Any] = None) -> int:
     n = 0
     with links_path.open("r", encoding="utf-8", newline="") as f:
         r = csv.DictReader(f)
@@ -202,6 +229,11 @@ def ingest_links(db: sqlite3.Connection, links_path: Path) -> int:
             for k in ["claim_id","evidence_id","relation"]:
                 if not row.get(k):
                     die(f"links.csv missing {k} in row: {row}")
+            # Apply redaction to note field if redactor provided
+            note = row.get("note")
+            if redactor and note:
+                note = redactor.redact(note, stats)
+
             # Weight is now a text enum: central, supporting, peripheral
             weight = row.get("weight", "supporting")
             if weight not in ("central", "supporting", "peripheral"):
@@ -211,7 +243,7 @@ def ingest_links(db: sqlite3.Connection, links_path: Path) -> int:
                 INSERT OR REPLACE INTO claim_evidence_link(claim_id,evidence_id,relation,weight,note,created_at)
                 VALUES (?,?,?,?,?,?)
                 """,
-                (row["claim_id"], row["evidence_id"], row["relation"], weight, row.get("note"), now()),
+                (row["claim_id"], row["evidence_id"], row["relation"], weight, note, now()),
             )
             n += 1
     db.commit()
@@ -229,11 +261,28 @@ def ingest_cmd(args: argparse.Namespace) -> None:
     if not evidence_p.exists(): die(f"evidence file not found: {evidence_p}")
     if not links_p.exists(): die(f"links file not found: {links_p}")
 
-    nc = ingest_claims(db, claims_p)
-    ne = ingest_evidence(db, evidence_p)
-    nl = ingest_links(db, links_p)
+    # Set up redactor if entities file provided
+    redactor = None
+    stats = None
+    if hasattr(args, 'entities') and args.entities:
+        if not HAS_REDACTOR:
+            die("Entity redaction requested but redact.py not available. Check import errors.")
+        entities_p = Path(args.entities).resolve()
+        if not entities_p.exists():
+            die(f"entities file not found: {entities_p}")
+        redactor = EntityRedactor(entities_path=entities_p)
+        stats = RedactionStats()
+        print(f"[living_paper] entity redaction enabled from: {entities_p}")
+
+    nc = ingest_claims(db, claims_p, redactor, stats)
+    ne = ingest_evidence(db, evidence_p, redactor, stats)
+    nl = ingest_links(db, links_p, redactor, stats)
 
     print(f"[living_paper] ingested: {nc} claims, {ne} evidence items, {nl} links into {pub_path}")
+
+    # Report redaction stats if any
+    if stats and stats.total_redactions > 0:
+        print(f"[living_paper] redacted {stats.total_redactions} entities across categories: {dict(stats.by_category)}")
 
 def lint_cmd(args: argparse.Namespace) -> None:
     pub_path, _ = db_paths()
@@ -283,6 +332,17 @@ def export_cmd(args: argparse.Namespace) -> None:
     pub_path, _ = db_paths()
     db = connect(pub_path)
 
+    # Set up redactor if entities file provided
+    redactor = None
+    if hasattr(args, 'entities') and args.entities:
+        if not HAS_REDACTOR:
+            die("Entity redaction requested but redact.py not available.")
+        entities_p = Path(args.entities).resolve()
+        if not entities_p.exists():
+            die(f"entities file not found: {entities_p}")
+        redactor = EntityRedactor(entities_path=entities_p)
+        print(f"[living_paper] export redaction enabled from: {entities_p}")
+
     # quote_provenance.csv:
     # evidence items where evidence_type == 'quote' and sensitivity_tier == PUBLIC
     # Flatten common metadata keys if present.
@@ -330,8 +390,11 @@ def export_cmd(args: argparse.Namespace) -> None:
     with summ_path.open("w", encoding="utf-8") as f:
         f.write("# Evidence summary (auto-generated)\n\n")
         for c in claims:
+            claim_text = c["text"].strip()
+            if redactor:
+                claim_text = redactor.redact(claim_text)
             f.write(f"## {c['claim_id']} ({c['claim_type']})\n\n")
-            f.write(c["text"].strip() + "\n\n")
+            f.write(claim_text + "\n\n")
             links = db.execute("""
               SELECT l.relation, l.weight, e.evidence_id, e.evidence_type, e.summary
               FROM claim_evidence_link l
@@ -343,7 +406,10 @@ def export_cmd(args: argparse.Namespace) -> None:
                 f.write("_No linked evidence._\n\n")
                 continue
             for l in links:
-                f.write(f"- **{l['relation']}** ({l['evidence_type']}) `{l['evidence_id']}`: {l['summary']}\n")
+                summary = l['summary']
+                if redactor:
+                    summary = redactor.redact(summary)
+                f.write(f"- **{l['relation']}** ({l['evidence_type']}) `{l['evidence_id']}`: {summary}\n")
             f.write("\n")
 
     print(f"[living_paper] exported:\n  {csv_path}\n  {summ_path}")
@@ -355,6 +421,17 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
 
     pub_path, _ = db_paths()
     db = connect(pub_path)
+
+    # Set up redactor if entities file provided
+    redactor = None
+    if hasattr(args, 'entities') and args.entities:
+        if not HAS_REDACTOR:
+            die("Entity redaction requested but redact.py not available.")
+        entities_p = Path(args.entities).resolve()
+        if not entities_p.exists():
+            die(f"entities file not found: {entities_p}")
+        redactor = EntityRedactor(entities_path=entities_p)
+        print(f"[living_paper] verify-export redaction enabled from: {entities_p}")
 
     # 1. Claims manifest with verification status
     claims = db.execute("""
@@ -376,11 +453,14 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
               GROUP BY relation
             """, (c["claim_id"],)).fetchall()
 
+            claim_text = c["text"]
+            if redactor:
+                claim_text = redactor.redact(claim_text)
             claims_data.append({
                 "claim_id": c["claim_id"],
                 "paper_id": c["paper_id"],
                 "claim_type": c["claim_type"],
-                "text": c["text"],
+                "text": claim_text,
                 "confidence": c["confidence"],
                 "status": c["status"],
                 "verification_status": c["verification_status"],
@@ -401,11 +481,14 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
     with evidence_manifest.open("w", encoding="utf-8") as f:
         evidence_data = []
         for e in evidence:
+            summary = e["summary"] if e["sensitivity_tier"] == "PUBLIC" else "[CONTROLLED]"
+            if redactor and e["sensitivity_tier"] == "PUBLIC":
+                summary = redactor.redact(summary)
             evidence_data.append({
                 "evidence_id": e["evidence_id"],
                 "paper_id": e["paper_id"],
                 "evidence_type": e["evidence_type"],
-                "summary": e["summary"] if e["sensitivity_tier"] == "PUBLIC" else "[CONTROLLED]",
+                "summary": summary,
                 "sensitivity_tier": e["sensitivity_tier"],
                 "meta": json.loads(e["meta_json"] or "{}"),
             })
@@ -438,14 +521,23 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
         for l in links:
             if l["claim_id"] != current_claim:
                 current_claim = l["claim_id"]
+                claim_text = l['claim_text']
+                if redactor:
+                    claim_text = redactor.redact(claim_text)
                 f.write(f"## {l['claim_id']}\n\n")
-                f.write(f"**Claim**: {l['claim_text']}\n\n")
+                f.write(f"**Claim**: {claim_text}\n\n")
 
+            evidence_summary = l['evidence_summary']
+            note = l['note']
+            if redactor:
+                evidence_summary = redactor.redact(evidence_summary)
+                if note:
+                    note = redactor.redact(note)
             status_icon = "✓" if l["verification_status"] == "external_verified" else "[ ]"
             f.write(f"- {status_icon} `{l['evidence_id']}` ({l['relation']}, {l['weight']})\n")
-            f.write(f"  - Summary: {l['evidence_summary']}\n")
-            if l["note"]:
-                f.write(f"  - Note: {l['note']}\n")
+            f.write(f"  - Summary: {evidence_summary}\n")
+            if note:
+                f.write(f"  - Note: {note}\n")
             if l["verified_by"]:
                 f.write(f"  - Verified by: {l['verified_by']} on {l['verified_at']}\n")
             f.write("\n")
@@ -473,16 +565,95 @@ def verify_export_cmd(args: argparse.Namespace) -> None:
             "generated_at": now(),
         }, f, indent=2)
 
+    # 5. AJPS-style verification report (supported/partial/not documented)
+    report_path = out / "verification_report.md"
+    with report_path.open("w", encoding="utf-8") as f:
+        f.write("# Verification Report\n\n")
+        f.write(f"Generated: {now()}\n\n")
+        f.write("Following QDR/AJPS verification methodology, each claim is categorized as:\n")
+        f.write("- **SUPPORTED**: Central evidence supports claim, no unresolved challenges\n")
+        f.write("- **PARTIALLY SUPPORTED**: Some support exists but with challenges or qualifications\n")
+        f.write("- **NOT DOCUMENTED**: Insufficient evidence found to support claim\n\n")
+        f.write("---\n\n")
+
+        supported, partial, not_documented = [], [], []
+        for c in claims_data:
+            ec = c["evidence_counts"]
+            supports = ec.get("supports", 0)
+            challenges = ec.get("challenges", 0)
+            qualifies = ec.get("qualifies", 0)
+            illustrates = ec.get("illustrates", 0)
+
+            total_evidence = supports + challenges + qualifies + illustrates
+            if total_evidence == 0:
+                not_documented.append(c)
+            elif challenges > supports or (supports == 0 and qualifies > 0):
+                partial.append(c)
+            elif challenges > 0 or qualifies > supports:
+                partial.append(c)
+            else:
+                supported.append(c)
+
+        f.write(f"## Summary\n\n")
+        f.write(f"| Status | Count | Percentage |\n")
+        f.write(f"|--------|-------|------------|\n")
+        total = len(claims_data)
+        f.write(f"| SUPPORTED | {len(supported)} | {100*len(supported)/total:.0f}% |\n")
+        f.write(f"| PARTIALLY SUPPORTED | {len(partial)} | {100*len(partial)/total:.0f}% |\n")
+        f.write(f"| NOT DOCUMENTED | {len(not_documented)} | {100*len(not_documented)/total:.0f}% |\n\n")
+
+        f.write("---\n\n## SUPPORTED Claims\n\n")
+        for c in supported:
+            f.write(f"### {c['claim_id']}\n")
+            f.write(f"**{c['text']}**\n")
+            f.write(f"- Confidence: {c['confidence']}\n")
+            f.write(f"- Evidence: {c['evidence_counts']}\n\n")
+
+        f.write("---\n\n## PARTIALLY SUPPORTED Claims\n\n")
+        for c in partial:
+            f.write(f"### {c['claim_id']}\n")
+            f.write(f"**{c['text']}**\n")
+            f.write(f"- Confidence: {c['confidence']}\n")
+            f.write(f"- Evidence: {c['evidence_counts']}\n")
+            f.write(f"- *Reason*: ")
+            ec = c["evidence_counts"]
+            if ec.get("challenges", 0) > ec.get("supports", 0):
+                f.write("More challenging than supporting evidence\n\n")
+            elif ec.get("challenges", 0) > 0:
+                f.write("Has challenging evidence requiring resolution\n\n")
+            else:
+                f.write("Primarily qualified rather than directly supported\n\n")
+
+        f.write("---\n\n## NOT DOCUMENTED Claims\n\n")
+        for c in not_documented:
+            f.write(f"### {c['claim_id']}\n")
+            f.write(f"**{c['text']}**\n")
+            f.write(f"- Confidence: {c['confidence']}\n")
+            f.write(f"- *Action needed*: Provide evidence or revise claim\n\n")
+
     print(f"[living_paper] verification package exported to {out}")
     print(f"  - claims_manifest.json ({len(claims)} claims)")
     print(f"  - evidence_manifest.json ({len(evidence)} items)")
     print(f"  - verification_checklist.md ({len(links)} links)")
+    print(f"  - verification_report.md ({len(supported)} supported, {len(partial)} partial, {len(not_documented)} not documented)")
     print(f"  - verification_stats.json")
 
 def prereview_cmd(args: argparse.Namespace) -> None:
     """Generate pre-review report of contested claims for adjudication."""
     pub_path, _ = db_paths()
     db = connect(pub_path)
+
+    # Set up redactor if entities file provided
+    redactor = None
+    if hasattr(args, 'entities') and args.entities:
+        entities_p = Path(args.entities)
+        if not entities_p.exists():
+            die(f"entities file not found: {entities_p}")
+        redactor = EntityRedactor(entities_path=entities_p)
+        print(f"[living_paper] redaction enabled from {entities_p}")
+
+    def redact(text: str) -> str:
+        return redactor.redact(text) if redactor and text else text
 
     # Find contested claims: those with challenges or low support ratio
     claims = db.execute("""
@@ -521,7 +692,7 @@ def prereview_cmd(args: argparse.Namespace) -> None:
             claim_type_label = "QUANT" if claim['claim_type'] == 'empirical' else "MECHANISM"
             report.append(f"## {claim['claim_id']} [{claim_type_label}]\n")
             report.append(f"**Paper:** {claim['paper_id']}\n")
-            report.append(f"**Claim:** {claim['text']}\n")
+            report.append(f"**Claim:** {redact(claim['text'])}\n")
             report.append(f"**Confidence:** {claim['confidence']}\n\n")
 
             report.append(f"**Evidence balance:** {len(supports)} supports, {len(challenges)} challenges, {len(qualifies)} qualifies\n\n")
@@ -529,13 +700,13 @@ def prereview_cmd(args: argparse.Namespace) -> None:
             if challenges:
                 report.append("### Challenges to address:\n")
                 for c in challenges:
-                    report.append(f"- [{c['weight']}] {c['note']}\n")
+                    report.append(f"- [{c['weight']}] {redact(c['note'])}\n")
                 report.append("\n")
 
             if qualifies:
                 report.append("### Qualifications:\n")
                 for q in qualifies:
-                    report.append(f"- [{q['weight']}] {q['note']}\n")
+                    report.append(f"- [{q['weight']}] {redact(q['note'])}\n")
                 report.append("\n")
 
             # Add adjudication prompts based on claim type
@@ -563,6 +734,498 @@ def prereview_cmd(args: argparse.Namespace) -> None:
     print(f"[living_paper] pre-review report: {contested_count} contested claims written to {out_path}")
 
 
+def migrate_redact_cmd(args: argparse.Namespace) -> None:
+    """Apply entity redaction to existing database records in-place."""
+    if not HAS_REDACTOR:
+        die("redact.py module required but not available")
+
+    entities_p = Path(args.entities)
+    if not entities_p.exists():
+        die(f"entities file not found: {entities_p}")
+
+    redactor = EntityRedactor(entities_path=entities_p)
+    stats = RedactionStats()
+
+    pub_path, _ = db_paths()
+    if not pub_path.exists():
+        die(f"database not found: {pub_path} — run 'lp.py init' first")
+
+    db = connect(pub_path)
+
+    # Redact claim text fields
+    claims = db.execute("SELECT claim_id, text FROM claim").fetchall()
+    claim_updates = 0
+    for c in claims:
+        original = c['text']
+        redacted = redactor.redact(original, stats)
+        if redacted != original:
+            db.execute("UPDATE claim SET text = ? WHERE claim_id = ?", (redacted, c['claim_id']))
+            claim_updates += 1
+
+    # Redact evidence summaries and analytic notes
+    evidence = db.execute("SELECT evidence_id, summary FROM evidence").fetchall()
+    evidence_updates = 0
+    for e in evidence:
+        original = e['summary'] or ''
+        redacted = redactor.redact(original, stats) if original else original
+        if redacted != original:
+            db.execute("UPDATE evidence SET summary = ? WHERE evidence_id = ?", (redacted, e['evidence_id']))
+            evidence_updates += 1
+
+    # Redact link notes and analytic notes
+    links = db.execute("SELECT claim_id, evidence_id, note, analytic_note FROM claim_evidence_link").fetchall()
+    link_updates = 0
+    for l in links:
+        note_orig = l['note'] or ''
+        analytic_orig = l['analytic_note'] or ''
+        note_redacted = redactor.redact(note_orig, stats) if note_orig else note_orig
+        analytic_redacted = redactor.redact(analytic_orig, stats) if analytic_orig else analytic_orig
+        if note_redacted != note_orig or analytic_redacted != analytic_orig:
+            db.execute("""
+                UPDATE claim_evidence_link SET note = ?, analytic_note = ?
+                WHERE claim_id = ? AND evidence_id = ?
+            """, (note_redacted, analytic_redacted, l['claim_id'], l['evidence_id']))
+            link_updates += 1
+
+    # Redact verification audit notes
+    audits = db.execute("SELECT rowid, notes FROM verification_audit WHERE notes IS NOT NULL").fetchall()
+    audit_updates = 0
+    for a in audits:
+        original = a['notes'] or ''
+        redacted = redactor.redact(original, stats) if original else original
+        if redacted != original:
+            db.execute("UPDATE verification_audit SET notes = ? WHERE rowid = ?", (redacted, a['rowid']))
+            audit_updates += 1
+
+    db.commit()
+
+    print(f"[living_paper] migrate-redact complete:")
+    print(f"  - {claim_updates}/{len(claims)} claims updated")
+    print(f"  - {evidence_updates}/{len(evidence)} evidence items updated")
+    print(f"  - {link_updates}/{len(links)} links updated")
+    print(f"  - {audit_updates}/{len(audits)} audit entries updated")
+    print(f"  - {stats.total_redactions} total entity replacements")
+
+    if args.verbose and stats.by_entity:
+        print("\n  By entity:")
+        for entity, count in sorted(stats.by_entity.items(), key=lambda x: -x[1]):
+            print(f"    - {entity}: {count}")
+
+
+def export_html_cmd(args: argparse.Namespace) -> None:
+    """Export a self-contained HTML reviewer interface (no server needed)."""
+    pub_path, _ = db_paths()
+    if not pub_path.exists():
+        die(f"database not found: {pub_path} — run 'lp.py init' first")
+
+    db = connect(pub_path)
+
+    # Set up redactor if entities file provided
+    redactor = None
+    if hasattr(args, 'entities') and args.entities:
+        if not HAS_REDACTOR:
+            die("Entity redaction requested but redact.py not available.")
+        entities_p = Path(args.entities).resolve()
+        if not entities_p.exists():
+            die(f"entities file not found: {entities_p}")
+        redactor = EntityRedactor(entities_path=entities_p)
+        print(f"[living_paper] html export redaction enabled from: {entities_p}")
+
+    def redact(text: str) -> str:
+        return redactor.redact(text) if redactor and text else (text or "")
+
+    # Gather all data
+    paper_id = args.paper
+    paper = db.execute("SELECT * FROM paper WHERE paper_id = ?", (paper_id,)).fetchone()
+    if not paper:
+        die(f"paper not found: {paper_id}")
+
+    claims = db.execute("""
+        SELECT claim_id, paper_id, claim_type, text, confidence, status,
+               verification_status, verified_by, verified_at,
+               informant_coverage, contradicting_count, saturation_note, prevalence_basis
+        FROM claim WHERE paper_id = ? ORDER BY claim_id
+    """, (paper_id,)).fetchall()
+
+    # Build claims data with evidence
+    claims_data = []
+    for c in claims:
+        links = db.execute("""
+            SELECT l.evidence_id, l.relation, l.weight, l.note, l.analytic_note,
+                   l.verification_status, l.verified_by, l.verified_at,
+                   e.summary, e.sensitivity_tier, e.evidence_type
+            FROM claim_evidence_link l
+            JOIN evidence e ON e.evidence_id = l.evidence_id
+            WHERE l.claim_id = ?
+            ORDER BY CASE l.weight WHEN 'central' THEN 1 WHEN 'supporting' THEN 2 ELSE 3 END, l.relation
+        """, (c['claim_id'],)).fetchall()
+
+        evidence_list = []
+        for l in links:
+            evidence_list.append({
+                'evidence_id': l['evidence_id'],
+                'relation': l['relation'],
+                'weight': l['weight'],
+                'note': redact(l['note']),
+                'analytic_note': redact(l['analytic_note']),
+                'verification_status': l['verification_status'],
+                'verified_by': l['verified_by'],
+                'verified_at': l['verified_at'],
+                'summary': redact(l['summary']) if l['sensitivity_tier'] == 'PUBLIC' else '[CONTROLLED]',
+                'sensitivity_tier': l['sensitivity_tier'],
+                'evidence_type': l['evidence_type']
+            })
+
+        # Compute support status
+        supports = sum(1 for l in links if l['relation'] == 'supports')
+        challenges = sum(1 for l in links if l['relation'] == 'challenges')
+        if challenges > supports:
+            support_status = 'contested'
+        elif challenges > 0:
+            support_status = 'partial'
+        elif supports > 0:
+            support_status = 'supported'
+        else:
+            support_status = 'undocumented'
+
+        claims_data.append({
+            'claim_id': c['claim_id'],
+            'claim_type': c['claim_type'],
+            'text': redact(c['text']),
+            'confidence': c['confidence'],
+            'verification_status': c['verification_status'],
+            'informant_coverage': c['informant_coverage'],
+            'contradicting_count': c['contradicting_count'],
+            'saturation_note': c['saturation_note'],
+            'prevalence_basis': c['prevalence_basis'],
+            'support_status': support_status,
+            'evidence': evidence_list
+        })
+
+    # Generate HTML
+    data_json = json.dumps({'paper_id': paper_id, 'title': paper['title'], 'claims': claims_data, 'generated_at': now()})
+
+    html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review: {paper_id}</title>
+    <style>
+        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }}
+        .container {{ max-width: 1000px; margin: 0 auto; padding: 20px; }}
+        header {{ background: #1a1a2e; color: white; padding: 20px; margin-bottom: 20px; }}
+        header h1 {{ font-size: 1.3rem; font-weight: 500; }}
+        header p {{ opacity: 0.8; font-size: 0.85rem; margin-top: 5px; }}
+        .reviewer-bar {{ background: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }}
+        .reviewer-bar input {{ padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; }}
+        .reviewer-bar button {{ padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }}
+        .btn-primary {{ background: #1a1a2e; color: white; }}
+        .btn-success {{ background: #4caf50; color: white; }}
+        .claim-card {{ background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 15px; overflow: hidden; }}
+        .claim-header {{ padding: 12px 16px; border-bottom: 1px solid #eee; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }}
+        .claim-id {{ font-family: monospace; font-size: 0.75rem; color: #666; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }}
+        .claim-type {{ font-size: 0.65rem; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: #e0e0e0; }}
+        .claim-type.empirical {{ background: #e3f2fd; color: #1565c0; }}
+        .claim-type.theoretical {{ background: #f3e5f5; color: #7b1fa2; }}
+        .status-badge {{ font-size: 0.65rem; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }}
+        .status-supported {{ background: #c8e6c9; color: #2e7d32; }}
+        .status-partial {{ background: #fff3e0; color: #ef6c00; }}
+        .status-contested {{ background: #ffcdd2; color: #c62828; }}
+        .status-undocumented {{ background: #e0e0e0; color: #616161; }}
+        .claim-body {{ padding: 12px 16px; }}
+        .claim-text {{ font-size: 0.95rem; margin-bottom: 10px; }}
+        .prevalence {{ padding: 8px 10px; background: #f8f9fa; border-radius: 4px; font-size: 0.75rem; color: #555; margin-bottom: 10px; }}
+        .evidence-list {{ padding: 0 16px 16px; }}
+        .evidence-item {{ padding: 10px; margin-bottom: 8px; background: #fafafa; border-radius: 6px; border-left: 3px solid #ccc; }}
+        .evidence-item.supports {{ border-left-color: #4caf50; }}
+        .evidence-item.challenges {{ border-left-color: #f44336; }}
+        .evidence-item.qualifies {{ border-left-color: #ff9800; }}
+        .evidence-header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }}
+        .evidence-id {{ font-family: monospace; font-size: 0.7rem; color: #666; }}
+        .evidence-relation {{ font-size: 0.6rem; text-transform: uppercase; padding: 2px 5px; border-radius: 3px; background: #e0e0e0; }}
+        .evidence-summary {{ font-size: 0.85rem; color: #444; }}
+        .note-input {{ width: 100%; margin-top: 8px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.8rem; resize: vertical; min-height: 50px; }}
+        .verify-controls {{ display: flex; gap: 6px; margin-top: 8px; }}
+        .verify-btn {{ padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem; }}
+        .verify-btn.verified {{ background: #4caf50; color: white; }}
+        .verify-btn.author {{ background: #ff9800; color: white; }}
+        .verify-btn.unverified {{ background: #9e9e9e; color: white; }}
+        .verify-btn.active {{ box-shadow: 0 0 0 2px #333; }}
+        .stats {{ display: flex; gap: 15px; font-size: 0.85rem; color: #666; margin-bottom: 15px; }}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Verification Review: {paper_id}</h1>
+            <p>Offline reviewer interface - your progress is saved locally</p>
+        </div>
+    </header>
+    <div class="container">
+        <div class="reviewer-bar">
+            <label>Your name: <input type="text" id="reviewer-name" placeholder="Reviewer name"></label>
+            <button class="btn-success" onclick="generateReport()">📄 Generate Report</button>
+            <button class="btn-primary" onclick="exportData()">💾 Export Data</button>
+            <span id="save-status" style="font-size: 0.8rem; color: #666;"></span>
+        </div>
+        <div class="stats" id="stats"></div>
+        <div id="claims"></div>
+    </div>
+    <script>
+    const DATA = {data_json};
+    const STORAGE_KEY = 'lp_review_' + DATA.paper_id;
+
+    // Load saved state
+    let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{{"verifications":{{}},"notes":{{}}}}');
+    let reviewerName = localStorage.getItem('reviewerName') || '';
+    document.getElementById('reviewer-name').value = reviewerName;
+    document.getElementById('reviewer-name').addEventListener('change', e => {{
+        reviewerName = e.target.value;
+        localStorage.setItem('reviewerName', reviewerName);
+    }});
+
+    function saveState() {{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        document.getElementById('save-status').textContent = 'Saved ' + new Date().toLocaleTimeString();
+    }}
+
+    function setVerification(claimId, evidenceId, status) {{
+        const key = claimId + ':' + evidenceId;
+        state.verifications[key] = {{ status, reviewer: reviewerName, at: new Date().toISOString() }};
+        saveState();
+        render();
+    }}
+
+    function updateNote(claimId, evidenceId, note) {{
+        const key = claimId + ':' + evidenceId;
+        state.notes[key] = note;
+        saveState();
+    }}
+
+    function render() {{
+        let verified = 0, author = 0, unverified = 0;
+        let html = '';
+        DATA.claims.forEach(c => {{
+            html += `<div class="claim-card">
+                <div class="claim-header">
+                    <span class="claim-id">${{c.claim_id}}</span>
+                    <span class="claim-type ${{c.claim_type}}">${{c.claim_type}}</span>
+                    <span class="status-badge status-${{c.support_status}}">${{c.support_status}}</span>
+                </div>
+                <div class="claim-body">
+                    <p class="claim-text">${{c.text}}</p>
+                    ${{(c.informant_coverage || c.saturation_note || c.prevalence_basis) ? `
+                    <div class="prevalence">
+                        <strong>Prevalence:</strong>
+                        ${{c.informant_coverage ? '📊 ' + c.informant_coverage : ''}}
+                        ${{c.prevalence_basis ? ' [' + c.prevalence_basis + ']' : ''}}
+                        ${{c.contradicting_count === 0 ? ' ✓ No contradicting' : c.contradicting_count > 0 ? ' ⚠ ' + c.contradicting_count + ' contradicting' : ''}}
+                        ${{c.saturation_note ? '<br><em>' + c.saturation_note + '</em>' : ''}}
+                    </div>` : ''}}
+                </div>
+                <div class="evidence-list">
+                    <strong style="font-size: 0.8rem; color: #666;">Evidence (${{c.evidence.length}})</strong>
+                    ${{c.evidence.map(e => {{
+                        const key = c.claim_id + ':' + e.evidence_id;
+                        const v = state.verifications[key] || {{}};
+                        const note = state.notes[key] || e.analytic_note || '';
+                        if (v.status === 'external_verified') verified++;
+                        else if (v.status === 'author_verified') author++;
+                        else unverified++;
+                        return `<div class="evidence-item ${{e.relation}}">
+                            <div class="evidence-header">
+                                <span class="evidence-id">${{e.evidence_id}}</span>
+                                <span><span class="evidence-relation">${{e.relation}}</span> <span class="evidence-relation">${{e.weight}}</span></span>
+                            </div>
+                            <p class="evidence-summary">${{e.summary}}</p>
+                            ${{e.note ? '<p style="font-size:0.75rem;color:#666;margin-top:4px;">Note: ' + e.note + '</p>' : ''}}
+                            <textarea class="note-input" placeholder="Your analytic note..." onchange="updateNote('${{c.claim_id}}','${{e.evidence_id}}',this.value)">${{note}}</textarea>
+                            <div class="verify-controls">
+                                <button class="verify-btn verified ${{v.status==='external_verified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','external_verified')">✓ Verified</button>
+                                <button class="verify-btn author ${{v.status==='author_verified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','author_verified')">? Author Only</button>
+                                <button class="verify-btn unverified ${{v.status==='unverified'?'active':''}}" onclick="setVerification('${{c.claim_id}}','${{e.evidence_id}}','unverified')">✗ Not Verified</button>
+                            </div>
+                        </div>`;
+                    }}).join('')}}
+                </div>
+            </div>`;
+        }});
+        document.getElementById('claims').innerHTML = html;
+        document.getElementById('stats').innerHTML = `
+            <span>Verified: ${{verified}}</span>
+            <span>Author Only: ${{author}}</span>
+            <span>Not Verified: ${{unverified}}</span>
+            <span>Total Links: ${{verified + author + unverified}}</span>
+        `;
+    }}
+
+    function generateReport() {{
+        let report = '# Verification Report: ' + DATA.paper_id + '\\n\\n';
+        report += 'Generated: ' + new Date().toISOString() + '\\n';
+        report += 'Reviewer: ' + (reviewerName || 'anonymous') + '\\n\\n';
+
+        let verified = 0, author = 0, unverified = 0;
+        DATA.claims.forEach(c => {{
+            c.evidence.forEach(e => {{
+                const key = c.claim_id + ':' + e.evidence_id;
+                const v = state.verifications[key] || {{}};
+                if (v.status === 'external_verified') verified++;
+                else if (v.status === 'author_verified') author++;
+                else unverified++;
+            }});
+        }});
+
+        report += '## Summary\\n\\n';
+        report += '- Verified: ' + verified + '\\n';
+        report += '- Author Only: ' + author + '\\n';
+        report += '- Not Verified: ' + unverified + '\\n\\n';
+
+        report += '## Claims Detail\\n\\n';
+        DATA.claims.forEach(c => {{
+            report += '### ' + c.claim_id + '\\n';
+            report += '**' + c.text + '**\\n\\n';
+            c.evidence.forEach(e => {{
+                const key = c.claim_id + ':' + e.evidence_id;
+                const v = state.verifications[key] || {{}};
+                const note = state.notes[key] || '';
+                const icon = v.status === 'external_verified' ? '[V]' : v.status === 'author_verified' ? '[A]' : '[ ]';
+                report += '- ' + icon + ' ' + e.evidence_id + ' (' + e.relation + ')\\n';
+                if (note) report += '  - *Note:* ' + note + '\\n';
+            }});
+            report += '\\n';
+        }});
+
+        const blob = new Blob([report], {{ type: 'text/markdown' }});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'verification_report_' + DATA.paper_id + '_' + new Date().toISOString().slice(0,10) + '.md';
+        a.click();
+        URL.revokeObjectURL(url);
+    }}
+
+    function exportData() {{
+        const exportObj = {{ paper_id: DATA.paper_id, reviewer: reviewerName, exported_at: new Date().toISOString(), verifications: state.verifications, notes: state.notes }};
+        const blob = new Blob([JSON.stringify(exportObj, null, 2)], {{ type: 'application/json' }});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'review_data_' + DATA.paper_id + '_' + new Date().toISOString().slice(0,10) + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }}
+
+    render();
+    </script>
+</body>
+</html>'''
+
+    out_path = Path(args.out)
+    out_path.write_text(html, encoding='utf-8')
+    print(f"[living_paper] static HTML reviewer exported: {out_path}")
+    print(f"  - {len(claims_data)} claims, {sum(len(c['evidence']) for c in claims_data)} evidence links")
+    print(f"  - Open in any browser, no server needed")
+    print(f"  - Reviewer progress saved in browser localStorage")
+
+
+def export_package_cmd(args: argparse.Namespace) -> None:
+    """Export a reviewer package folder with HTML, launchers, and README."""
+    import shutil
+    import stat
+
+    pub_path, _ = db_paths()
+    if not pub_path.exists():
+        die(f"database not found: {pub_path} — run 'lp.py init' first")
+
+    paper_id = args.paper
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # First generate the HTML using export_html_cmd logic
+    html_path = out_dir / "review.html"
+
+    # Create a mock args object for export_html_cmd
+    class HtmlArgs:
+        pass
+    html_args = HtmlArgs()
+    html_args.paper = paper_id
+    html_args.out = str(html_path)
+    html_args.entities = getattr(args, 'entities', None)
+
+    export_html_cmd(html_args)
+
+    # Create README.txt
+    readme = f"""LIVING PAPER VERIFICATION REVIEW
+================================
+
+Paper: {paper_id}
+
+HOW TO USE THIS REVIEW INTERFACE
+--------------------------------
+
+1. OPEN THE REVIEW
+   - Double-click "Open Review" (Mac) or "Open Review.bat" (Windows)
+   - Or just open "review.html" directly in your web browser
+
+2. DO YOUR REVIEW
+   - Enter your name at the top
+   - For each claim-evidence link, click one of:
+     - "Verified" = you independently confirm this evidence supports the claim
+     - "Author Only" = evidence exists but you cannot independently verify
+     - "Not Verified" = you have concerns about this link
+   - Add notes in the text boxes as needed
+
+3. GENERATE YOUR REPORT
+   - Click the green "Generate Report" button at the top
+   - A markdown file will download automatically
+   - Send this file back to the author(s)
+
+YOUR PROGRESS IS AUTO-SAVED
+---------------------------
+Your work is saved in your browser's local storage. You can close
+the browser and come back later - your progress will still be there.
+
+If you need to review on a different computer, use "Export Data"
+to save your progress as a JSON file.
+
+QUESTIONS?
+----------
+Contact the paper author(s) if you have any questions about
+the verification process.
+
+"""
+    readme_path = out_dir / "README.txt"
+    readme_path.write_text(readme, encoding='utf-8')
+
+    # Create Mac launcher (.command file)
+    mac_launcher = f'''#!/bin/bash
+# Open the Living Paper review interface
+cd "$(dirname "$0")"
+open review.html
+'''
+    mac_path = out_dir / "Open Review.command"
+    mac_path.write_text(mac_launcher, encoding='utf-8')
+    # Make executable
+    mac_path.chmod(mac_path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+    # Create Windows launcher (.bat file)
+    win_launcher = '''@echo off
+REM Open the Living Paper review interface
+start "" "%~dp0review.html"
+'''
+    win_path = out_dir / "Open Review.bat"
+    win_path.write_text(win_launcher, encoding='utf-8')
+
+    print(f"[living_paper] reviewer package created: {out_dir}/")
+    print(f"  - review.html        (the review interface)")
+    print(f"  - README.txt         (instructions for reviewers)")
+    print(f"  - Open Review.command (Mac launcher)")
+    print(f"  - Open Review.bat    (Windows launcher)")
+    print(f"\nShare this folder with reviewers - they just double-click to start.")
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="lp", description="living_paper v0.1")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -573,17 +1236,35 @@ def build_parser() -> argparse.ArgumentParser:
     ing.add_argument("--claims", required=True)
     ing.add_argument("--evidence", required=True)
     ing.add_argument("--links", required=True)
+    ing.add_argument("--entities", help="entities.yaml for PII redaction (optional)")
 
     sub.add_parser("lint", help="run traceability checks")
 
     ex = sub.add_parser("export", help="export PUBLIC provenance + summaries")
     ex.add_argument("--out", required=True)
+    ex.add_argument("--entities", help="entities.yaml for additional PII redaction on export (optional)")
 
     vex = sub.add_parser("verify-export", help="export verification package for external reviewers")
     vex.add_argument("--out", required=True)
+    vex.add_argument("--entities", help="entities.yaml for additional PII redaction on export (optional)")
 
     pre = sub.add_parser("prereview", help="generate pre-review report of contested claims")
     pre.add_argument("--out", required=True)
+    pre.add_argument("--entities", help="entities.yaml for additional PII redaction on export (optional)")
+
+    mig = sub.add_parser("migrate-redact", help="apply entity redaction to existing DB records")
+    mig.add_argument("--entities", required=True, help="entities.yaml with entity→replacement mappings")
+    mig.add_argument("--verbose", "-v", action="store_true", help="show detailed redaction stats")
+
+    html = sub.add_parser("export-html", help="export self-contained HTML reviewer (no server)")
+    html.add_argument("--paper", required=True, help="paper_id to export")
+    html.add_argument("--out", required=True, help="output HTML file path")
+    html.add_argument("--entities", help="entities.yaml for PII redaction (optional)")
+
+    pkg = sub.add_parser("export-package", help="export reviewer package folder (HTML + launchers + README)")
+    pkg.add_argument("--paper", required=True, help="paper_id to export")
+    pkg.add_argument("--out", required=True, help="output folder path")
+    pkg.add_argument("--entities", help="entities.yaml for PII redaction (optional)")
 
     return p
 
@@ -601,6 +1282,12 @@ def main(argv: Optional[Iterable[str]] = None) -> None:
         verify_export_cmd(args)
     elif args.cmd == "prereview":
         prereview_cmd(args)
+    elif args.cmd == "migrate-redact":
+        migrate_redact_cmd(args)
+    elif args.cmd == "export-html":
+        export_html_cmd(args)
+    elif args.cmd == "export-package":
+        export_package_cmd(args)
     else:
         die(f"unknown command: {args.cmd}")
 
