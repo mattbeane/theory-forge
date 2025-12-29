@@ -440,7 +440,7 @@ See [`nguyen-welch-comparison.md`](nguyen-welch-comparison.md) for a detailed an
 
 ## Origin
 
-This workflow was developed by Matt Beane (UC Santa Barbara) after using Claude Code to produce three papers from dormant datasets in 5 days. The full story is in `docs/FROM_DATA_TO_PAPERS_TUTORIAL.md`.
+This workflow was developed by Matt Beane (UC Santa Barbara) after using Claude Code to produce three papers from dormant datasets in 5 days. Full story available upon request.
 
 ---
 
