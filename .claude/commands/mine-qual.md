@@ -11,12 +11,14 @@ Before starting:
    - `workflow.find_lens.status === "completed"`
 3. Check current frame number and use frame-aware output paths
 4. If in frame > 1, output to `analysis/framing/frame-[N]/qualitative/`
+5. Check if consensus mode is enabled: `state.json` → `consensus.stages.mine_qual.enabled`
 
 After completing:
 1. Update `state.json`:
    - Set `workflow.mine_qual.status` to "completed"
    - Set `workflow.mine_qual.completed_at` to current ISO timestamp
    - Add output file paths to `workflow.mine_qual.outputs`
+   - If consensus mode: add `workflow.mine_qual.consensus_result` with quote stability summary
    - Update `updated_at` timestamp
 2. Append entry to `DECISION_LOG.md`
 
@@ -109,14 +111,24 @@ Create `analysis/qualitative/QUAL_EVIDENCE_REPORT.md`:
 
 > "[Quote]"
 > — [Informant ID], [Role], [Context]
+> **Stability**: Appeared in 14/15 runs (93%) — HIGH ✓
 
 > "[Quote]"
 > — [Informant ID], [Role], [Context]
+> **Stability**: Appeared in 11/15 runs (73%) — MEDIUM ~
 
 **Challenging evidence**:
 
 > "[Quote]"
 > — [Informant ID], [Role], [Context]
+> **Stability**: Appeared in 12/15 runs (80%) — HIGH ✓
+
+**⚠️ Low-stability quotes** (if consensus enabled):
+
+> "[Quote that only appeared in a few runs]"
+> — [Informant ID], [Role], [Context]
+> **Stability**: Appeared in 5/15 runs (33%) — LOW ⚠️
+> *Warning: This quote may be cherry-picked. 67% of runs did not surface it. Consider dropping or noting as illustrative only.*
 
 **Assessment**: [Supported / Challenged / Mixed]
 
@@ -193,6 +205,65 @@ Themes that emerged but weren't in original hypotheses:
 3. [What we can't conclude from this evidence]
 ```
 
+---
+
+## Consensus Mode
+
+If `state.json` has `consensus.stages.mine_qual.enabled = true`:
+
+### How It Works
+
+1. **Run qualitative mining N times** (default: 15, configurable in state.json)
+2. **Track which quotes appear in each run**
+3. **Compute quote stability**:
+   - Appearances / N runs = stability percentage
+   - ≥75%: HIGH stability — include confidently
+   - 50-74%: MEDIUM stability — note in paper, still usable
+   - <50%: LOW stability — possible cherry-picking, review carefully
+4. **Flag low-stability quotes** in output
+
+### Why Quote Stability Matters
+
+Single-run extraction: "Here are the best quotes supporting the mechanism"
+- Different run → different quotes
+- Cherry-picking risk: did you find what you wanted to find?
+- Reviewers can't verify quote selection
+
+Consensus extraction: "Quote X appeared in 14/15 runs (93% stability)"
+- Reproducible: quote selection is consistent
+- Defensible: high-stability quotes are robust to prompt variation
+- Honest: low-stability quotes flagged as potentially cherry-picked
+
+### Quote Stability Categories
+
+| Stability | Appearance Rate | Meaning | Recommendation |
+|-----------|-----------------|---------|----------------|
+| HIGH ✓ | ≥75% | Quote robustly emerges | Include with confidence |
+| MEDIUM ~ | 50-74% | Quote appears often | Include, note it's one of several |
+| LOW ⚠️ | <50% | Quote is inconsistent | Review: drop, or note as illustrative |
+
+### Running Consensus Analysis
+
+```python
+from lib.consensus import ConsensusEngine, extract_quotes, get_stage_n
+
+engine = ConsensusEngine(provider="anthropic")
+n = get_stage_n("mine_qual")  # Default: 15
+
+result = await engine.run_with_consensus(
+    system_prompt="[qual mining system prompt]",
+    user_prompt="[qual data + hypotheses]",
+    n=n,
+    extract_quotes_fn=extract_quotes,
+)
+
+# Result contains:
+# - result.quotes: List of QuoteConsensus objects with appearance_rate, stability
+# - result.flagged_items: List of LOW stability warnings
+```
+
+---
+
 ## After You're Done
 
 Tell the user:
@@ -200,7 +271,9 @@ Tell the user:
 - What disconfirming evidence exists
 - Any unexpected findings that might enrich the story
 - The best quotes for the paper
+- **If consensus enabled**: quote stability summary and any flagged quotes
 
 Then suggest they review and, when ready, run `/smith-frames` to generate theoretical framings (if not already done).
 
 Tip: Run `/status` anytime to see overall workflow progress.
+Tip: Run `/consensus-config` to enable/disable consensus mode or adjust settings.

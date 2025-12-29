@@ -61,7 +61,7 @@ The user may specify:
 
    ```json
    {
-     "version": "1.0.0",
+     "version": "1.1.0",
      "project_name": "[name]",
      "created_at": "[ISO timestamp]",
      "updated_at": "[ISO timestamp]",
@@ -75,7 +75,8 @@ The user may specify:
        "hunt_patterns": {
          "status": "pending",
          "completed_at": null,
-         "outputs": []
+         "outputs": [],
+         "consensus_result": null
        },
        "find_theory": {
          "status": "pending",
@@ -90,7 +91,8 @@ The user may specify:
        "mine_qual": {
          "status": "pending",
          "completed_at": null,
-         "outputs": []
+         "outputs": [],
+         "consensus_result": null
        },
        "smith_frames": {
          "status": "pending",
@@ -108,7 +110,8 @@ The user may specify:
        "verify_claims": {
          "status": "pending",
          "completed_at": null,
-         "outputs": []
+         "outputs": [],
+         "consensus_result": null
        },
        "draft_paper": {
          "status": "pending",
@@ -125,6 +128,23 @@ The user may specify:
          "status": "active"
        }
      },
+     "consensus": {
+       "enabled": false,
+       "default_n": 10,
+       "stages": {
+         "hunt_patterns": { "n": 25, "enabled": true },
+         "mine_qual": { "n": 15, "enabled": true },
+         "verify_claims": { "n": 10, "enabled": true }
+       },
+       "thresholds": {
+         "high_stability_cv": 0.10,
+         "medium_stability_cv": 0.25,
+         "quote_high_stability": 0.75,
+         "quote_medium_stability": 0.50
+       },
+       "provider": "anthropic",
+       "model": "claude-sonnet-4-20250514"
+     },
      "decisions": [],
      "metadata": {
        "target_journal": null,
@@ -133,6 +153,8 @@ The user may specify:
      }
    }
    ```
+
+   **Note**: Consensus mode is disabled by default. Run `/consensus-config enable` when preparing for peer review.
 
 4. **Create project_config.yaml**
 

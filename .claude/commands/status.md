@@ -4,7 +4,7 @@ You are the STATUS agent. Your job is to give a quick overview of project progre
 
 ## Your Task
 
-Read project state and display a clear status report.
+Read project state, display a clear status report, and generate an HTML dashboard.
 
 ## Steps
 
@@ -17,9 +17,21 @@ Read project state and display a clear status report.
 
 2. **Read state.json**
 
-   Load current project state.
+   Load current project state, including consensus configuration.
 
-3. **Generate status report**
+3. **Check consensus results**
+
+   If consensus mode is enabled and stages have been run:
+   - Read `workflow.<stage>.consensus_result` for stability summaries
+   - Display HIGH/MEDIUM/LOW counts
+   - Flag any LOW stability items with ⚠️
+
+4. **Generate status report** (terminal output)
+
+5. **Generate HTML dashboard**
+
+   Write `dashboard.html` to project root with visual status.
+   Tell user: "Dashboard updated: open dashboard.html in your browser"
 
 ## Output Format
 
@@ -75,6 +87,24 @@ NEXT STEP
 After that: /find-lens → /mine-qual → /smith-frames → /verify-claims → /draft-paper
 
 ─────────────────────────────────────────────────────────────────────
+CONSENSUS MODE
+─────────────────────────────────────────────────────────────────────
+
+  Status: [ENABLED / DISABLED]
+
+  Stage Settings:
+    hunt-patterns:   n=25, enabled ✓
+    mine-qual:       n=15, enabled ✓
+    verify-claims:   n=10, enabled ✓
+
+  Last Run Stability (if available):
+    PATTERN_REPORT:   4 HIGH, 1 MEDIUM, 0 LOW
+    QUAL_EVIDENCE:    12 HIGH, 5 MEDIUM, 2 LOW ⚠️
+    VERIFICATION:     3 DEFENSIBLE, 1 MOSTLY DEF.
+
+  Run /consensus-config to modify settings.
+
+─────────────────────────────────────────────────────────────────────
 QUICK COMMANDS
 ─────────────────────────────────────────────────────────────────────
 
@@ -83,6 +113,7 @@ QUICK COMMANDS
   /new-frame compare  Compare frames side-by-side
   /switch-project     Switch to different paper (multi-project)
   /export             Generate manuscript in different formats
+  /consensus-config   Configure consensus mode settings
 
 ```
 
@@ -157,3 +188,217 @@ If outputs exist but are older than their inputs:
       └─ data/quant/: modified 1 day ago
       └─ Consider re-running /hunt-patterns
 ```
+
+---
+
+## HTML Dashboard Generation
+
+After displaying terminal output, generate `dashboard.html` in the project root.
+
+**Template:**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paper Mining Dashboard - [PROJECT_NAME]</title>
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --card: #16213e;
+      --accent: #0f3460;
+      --text: #eee;
+      --muted: #888;
+      --success: #4ecca3;
+      --warning: #ffc107;
+      --danger: #e74c3c;
+      --info: #3498db;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { margin-bottom: 0.5rem; }
+    .subtitle { color: var(--muted); margin-bottom: 2rem; }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .card h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 0.5rem;
+    }
+    .progress-bar {
+      background: var(--accent);
+      border-radius: 8px;
+      height: 12px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, var(--info), var(--success));
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+    .progress-text { color: var(--muted); font-size: 0.9rem; }
+    .stages { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+    .stage {
+      background: var(--accent);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .stage-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .stage-icon.completed { background: var(--success); }
+    .stage-icon.in-progress { background: var(--info); }
+    .stage-icon.pending { background: var(--muted); opacity: 0.5; }
+    .stage-icon.blocked { background: var(--danger); }
+    .stage-name { font-weight: 500; }
+    .stage-status { font-size: 0.8rem; color: var(--muted); }
+    .frame-info { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .frame-item { }
+    .frame-label { color: var(--muted); font-size: 0.8rem; }
+    .frame-value { font-size: 1.1rem; margin-top: 0.25rem; }
+    .consensus-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .consensus-badge.enabled { background: var(--success); color: #000; }
+    .consensus-badge.disabled { background: var(--muted); }
+    .stability-row { display: flex; gap: 1rem; margin-top: 0.5rem; }
+    .stability-item { font-size: 0.9rem; }
+    .stability-item.high { color: var(--success); }
+    .stability-item.medium { color: var(--warning); }
+    .stability-item.low { color: var(--danger); }
+    .next-step {
+      background: linear-gradient(135deg, var(--info), var(--accent));
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+    }
+    .next-step code {
+      background: rgba(0,0,0,0.3);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .updated { color: var(--muted); font-size: 0.8rem; text-align: center; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📄 [PROJECT_NAME]</h1>
+    <p class="subtitle">Frame [FRAME_NUM] · Updated [UPDATED_TIME]</p>
+
+    <div class="card">
+      <h2>Workflow Progress</h2>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: [PROGRESS_PCT]%;"></div>
+      </div>
+      <p class="progress-text">[COMPLETED_COUNT]/8 stages complete ([PROGRESS_PCT]%)</p>
+
+      <div class="stages" style="margin-top: 1rem;">
+        <!-- Repeat for each stage -->
+        <div class="stage">
+          <div class="stage-icon [STATUS_CLASS]">[ICON]</div>
+          <div>
+            <div class="stage-name">[STAGE_NAME]</div>
+            <div class="stage-status">[STATUS_TEXT]</div>
+          </div>
+        </div>
+        <!-- End repeat -->
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Current Frame</h2>
+      <div class="frame-info">
+        <div class="frame-item">
+          <div class="frame-label">Theory</div>
+          <div class="frame-value">[THEORY_NAME]</div>
+        </div>
+        <div class="frame-item">
+          <div class="frame-label">Lens</div>
+          <div class="frame-value">[LENS_NAME]</div>
+        </div>
+        <div class="frame-item">
+          <div class="frame-label">Framing</div>
+          <div class="frame-value">[FRAMING_NAME]</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Consensus Mode</h2>
+      <span class="consensus-badge [CONSENSUS_CLASS]">[CONSENSUS_STATUS]</span>
+      <!-- If enabled, show stability summary -->
+      <div class="stability-row">
+        <span class="stability-item high">✓ [HIGH_COUNT] HIGH</span>
+        <span class="stability-item medium">~ [MED_COUNT] MEDIUM</span>
+        <span class="stability-item low">⚠ [LOW_COUNT] LOW</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Next Step</h2>
+      <div class="next-step">
+        → Run <code>[NEXT_COMMAND]</code> [NEXT_DESCRIPTION]
+      </div>
+    </div>
+
+    <p class="updated">Refresh this page after running commands in Claude Code</p>
+  </div>
+</body>
+</html>
+```
+
+**Generation instructions:**
+
+1. Read `state.json` and extract all values
+2. Replace placeholders in template:
+   - `[PROJECT_NAME]` → `state.project_name`
+   - `[FRAME_NUM]` → `state.current_frame`
+   - `[UPDATED_TIME]` → relative time from `state.updated_at`
+   - `[PROGRESS_PCT]` → (completed stages / 8) × 100
+   - `[COMPLETED_COUNT]` → count of completed stages
+   - For each stage: `[STATUS_CLASS]`, `[ICON]`, `[STAGE_NAME]`, `[STATUS_TEXT]`
+   - `[THEORY_NAME]`, `[LENS_NAME]`, `[FRAMING_NAME]` → from current frame
+   - `[CONSENSUS_CLASS]` → "enabled" or "disabled"
+   - `[CONSENSUS_STATUS]` → "ENABLED" or "DISABLED"
+   - `[HIGH_COUNT]`, `[MED_COUNT]`, `[LOW_COUNT]` → from consensus results
+   - `[NEXT_COMMAND]`, `[NEXT_DESCRIPTION]` → next uncompleted stage
+3. Write to `dashboard.html` in project root
+4. Tell user: "Dashboard updated → open dashboard.html in browser"
+
+**Stage icons:**
+- completed: ✓
+- in_progress: →
+- pending: ○
+- blocked: !

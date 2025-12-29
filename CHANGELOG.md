@@ -8,6 +8,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+#### Statistical Consensus Mode
+- **`/consensus-config`** - Configure statistical consensus settings for defensible analysis
+- **`lib/consensus/`** - Python library for N-run execution with statistical aggregation
+  - `engine.py` - Async execution engine supporting Anthropic and OpenAI
+  - `extractors.py` - Metric and quote extraction from LLM responses
+  - `stability.py` - CV calculation, confidence intervals, stability ratings
+  - `config.py` - Default thresholds and per-stage configuration
+- **Consensus-enabled stages**:
+  - `/hunt-patterns` - Effect sizes with confidence intervals (n=25 default)
+  - `/mine-qual` - Quote stability tracking (n=15 default)
+  - `/verify-claims` - Claim defensibility ratings (n=10 default)
+- **Stability ratings**: HIGH (CV<10%), MEDIUM (CV 10-25%), LOW (CV>25%)
+- **Quote stability**: Tracks appearance rate across N runs to catch cherry-picking
+- State schema updated to v1.1.0 with `consensus` configuration block
+- Output formats enhanced with stability tables and flagged items
+
 #### State Persistence & Project Management
 - **`/init-project`** - Initialize new paper projects with full directory structure and `state.json` tracking
 - **`/switch-project`** - Switch between papers in multi-project workspaces

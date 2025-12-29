@@ -11,6 +11,7 @@ Before starting:
    - `workflow.smith_frames.status === "completed"`
    - `workflow.audit_claims.status === "completed"` ← **REQUIRED**
 3. Check current frame number for context
+4. Check if consensus mode is enabled: `state.json` → `consensus.stages.verify_claims.enabled`
 
 **CRITICAL**: If `audit_claims` has not been run, STOP and tell the user:
 
@@ -43,6 +44,7 @@ After completing:
    - Set `workflow.verify_claims.status` to "completed"
    - Set `workflow.verify_claims.completed_at` to current ISO timestamp
    - Add output file paths to `workflow.verify_claims.outputs`
+   - If consensus mode: add `workflow.verify_claims.consensus_result` with claim stability
    - Update `updated_at` timestamp
 2. Append entry to `DECISION_LOG.md`
 
@@ -152,6 +154,17 @@ This package contains all claims, code, and data references needed to verify the
 **Statement**: "[Exact claim as it will appear in paper]"
 
 **Expected value**: [e.g., β = 0.21, p < 0.001]
+
+**Consensus verification** (if enabled):
+| Metric | Mean | SD | 95% CI | CV | Stability |
+|--------|------|-----|--------|-----|-----------|
+| β | 0.208 | 0.015 | [0.195, 0.221] | 7% | HIGH ✓ |
+
+**Cross-run agreement** (n=10 runs):
+- Direction consistent: 10/10 (100%) ✓
+- Significance consistent: 10/10 (100%) ✓
+- Value range: [0.19, 0.23]
+- **Verdict**: DEFENSIBLE — A skeptical reviewer running this analysis would reach the same conclusion.
 
 **Data source**: [Filename, relevant variables]
 
@@ -377,6 +390,57 @@ If lint passes, the claim-evidence graph is complete. If it fails, it will tell 
 
 ---
 
+## Consensus Mode
+
+If `state.json` has `consensus.stages.verify_claims.enabled = true`:
+
+### How It Works
+
+1. **Run verification N times** (default: 10, configurable in state.json)
+2. **For each claim, check consistency across runs**:
+   - Extracted value (mean, SD, CI)
+   - Direction of effect (positive/negative)
+   - Statistical significance (p < threshold)
+   - Qualitative conclusions
+3. **Rate claim defensibility**:
+   - DEFENSIBLE: CV < 10%, direction consistent 100%, significance consistent 100%
+   - MOSTLY DEFENSIBLE: CV 10-25%, direction consistent ≥90%
+   - NOT DEFENSIBLE: CV > 25% or inconsistent direction/significance
+
+### Defensibility Ratings
+
+| Rating | Criteria | Meaning |
+|--------|----------|---------|
+| DEFENSIBLE ✓ | CV < 10%, 100% agreement | Safe to cite in paper |
+| MOSTLY DEFENSIBLE ~ | CV 10-25%, ≥90% agreement | Cite with noted uncertainty |
+| NOT DEFENSIBLE ⚠️ | CV > 25% or inconsistent | Do not cite without investigation |
+
+### What Gets Flagged
+
+- **Inconsistent direction**: Run 7 found positive effect, Run 3 found negative
+- **Inconsistent significance**: Some runs p < 0.05, others p > 0.05
+- **High variance**: CV > 25% suggests data ambiguity
+- **Boundary cases**: Effect hovers around significance threshold
+
+### Verification Package with Consensus
+
+When consensus is enabled, VERIFICATION_BRIEF.md includes:
+
+```markdown
+## Consensus Verification Summary
+
+| Claim | Mean Value | CV | Direction | Significance | Defensibility |
+|-------|------------|-----|-----------|--------------|---------------|
+| 1 | β=0.21±0.02 | 7% | 10/10 ✓ | 10/10 ✓ | DEFENSIBLE |
+| 2 | OR=2.3±0.5 | 18% | 10/10 ✓ | 9/10 ~ | MOSTLY DEF. |
+| 3 | diff=8±6 | 42% | 7/10 ⚠️ | 6/10 ⚠️ | NOT DEFENSIBLE |
+
+**Overall**: 1 DEFENSIBLE, 1 MOSTLY DEFENSIBLE, 1 NOT DEFENSIBLE
+
+**Action required**: Claim 3 needs investigation before including in paper.
+```
+---
+
 ## After You're Done
 
 Report to the user:
@@ -389,6 +453,7 @@ Report to the user:
    - Number of claims documented
    - Number of evidence items (supporting vs challenging)
    - Any HIGH CONCERN claims from audit
+   - **If consensus enabled**: defensibility ratings for each claim
 
 3. **Living Paper status**:
    - Whether `lp lint` passed
@@ -402,3 +467,4 @@ Report to the user:
 **IMPORTANT**: The system that built the analysis should NOT be the only verifier. External review catches blind spots.
 
 Tip: Run `/status` anytime to see overall workflow progress.
+Tip: Run `/consensus-config` to enable/disable consensus mode or adjust settings.

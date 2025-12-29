@@ -121,6 +121,7 @@ Then follow the workflow, invoking each agent when ready.
 | `/new-frame` | Start fresh theoretical iteration | When reframing |
 | `/new-frame list` | View all frame attempts | Reviewing progress |
 | `/new-frame compare` | Compare framings side-by-side | Choosing direction |
+| `/consensus-config` | Configure statistical consensus settings | Before final analysis |
 
 ### Output & Integration
 
@@ -276,6 +277,35 @@ The early check prevents you from investing in theory development for a non-puzz
 
 See `Zuckerman_UP_2008_Tips_For_Writers.pdf` in this repo for the original memo.
 
+### Statistical Consensus Mode
+
+For peer-review-ready analysis, enable **consensus mode**. This runs LLM-dependent stages multiple times and computes statistical aggregates:
+
+```
+/consensus-config enable
+```
+
+**What consensus mode provides:**
+
+| Stage | Single-Run Output | Consensus Output |
+|-------|-------------------|------------------|
+| `/hunt-patterns` | β = 0.21 | β = 0.21 (±0.02 SD, 95% CI: [0.18, 0.24], n=25) |
+| `/mine-qual` | "Here's a supporting quote" | Quote appeared in 14/15 runs (93% stability) |
+| `/verify-claims` | "Claim verified" | 10/10 runs confirmed direction & significance |
+
+**Stability ratings:**
+- **HIGH** (CV < 10%): Defensible for peer review
+- **MEDIUM** (CV 10-25%): Include with noted uncertainty
+- **LOW** (CV > 25%): Flag for investigation—data may be ambiguous
+
+**Why this matters:**
+- Single-run analysis is non-reproducible (different prompt → different answer)
+- Consensus analysis shows confidence: "We ran this 25 times and got consistent results"
+- LOW stability reveals ambiguity rather than hiding it
+- Quote stability catches cherry-picking
+
+Configure with `/consensus-config`. See `lib/consensus/` for the Python implementation.
+
 ---
 
 ## Requirements
@@ -283,6 +313,20 @@ See `Zuckerman_UP_2008_Tips_For_Writers.pdf` in this repo for the original memo.
 - Claude Desktop (includes Claude Code)
 - Your data in accessible files (CSV, Excel, text files for interviews)
 - Domain expertise (this accelerates your work; it doesn't replace your judgment)
+- **For consensus mode**: Python 3.9+ with `anthropic` or `openai` package installed
+
+---
+
+## Visual Dashboard
+
+Running `/status` generates a `dashboard.html` file in your project root. Open it in any browser for a visual overview:
+
+- Workflow progress with stage cards
+- Current frame info (theory, lens, framing)
+- Consensus mode status and stability summary
+- Next step guidance
+
+The dashboard auto-updates each time you run `/status`. Just refresh your browser after running commands.
 
 ---
 
