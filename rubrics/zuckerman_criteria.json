@@ -1,0 +1,339 @@
+{
+  "id": "zuckerman_criteria",
+  "name": "Zuckerman's 10 Tips for Academic Papers",
+  "document_type": "academic_paper",
+  "total_points": 50,
+  "description": "Evaluation rubric based on Ezra W. Zuckerman's 'Tips to Article-Writers' (MIT Sloan, 2008). Assesses whether a paper framing is compelling, well-motivated, and avoids common academic writing pitfalls.",
+  "criteria": [
+    {
+      "id": "motivate_paper",
+      "name": "1. Motivate the Paper",
+      "max_points": 5,
+      "description": "The first question you must answer is why readers should read your paper. The introduction must be exciting—it must motivate readers to keep reading.",
+      "evidence_guidance": "Look for: opening paragraphs that hook the reader, clear promise of what will be learned, excitement about the contribution. Check whether the intro creates anticipation or feels like obligatory setup. Quote the first 2-3 paragraphs to assess whether they're genuinely motivating.",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Introduction is genuinely exciting and motivating. Opening paragraphs immediately hook the reader and create anticipation. Clear promise of new insights that makes readers want to continue."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Introduction provides motivation but could be more exciting. Promise of contribution is present but not immediately clear. Reader would continue but not with strong anticipation."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Introduction is dutiful but not motivating. Opens with standard academic throat-clearing. No clear hook or promise of exciting insights."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "Introduction fails to motivate. Opens with literature review or jargon. No excitement or promise of new insights."
+        }
+      ]
+    },
+    {
+      "id": "know_audience",
+      "name": "2. Know Your Audience",
+      "max_points": 5,
+      "description": "Choose whether you're aiming for a 'row' audience (phenomenon-focused) or a 'column' audience (theory-focused). Don't try to motivate both simultaneously.",
+      "evidence_guidance": "Look for: consistent framing toward either phenomenon people (row) or theory people (column). Check whether the paper tries to appeal to both audiences with conflicting motivations. Assess clarity of target journal/community.",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Clear choice of row OR column audience with consistent framing throughout. Motivation aligns perfectly with target community's interests. No hedging or attempts to please both audiences simultaneously."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Primary audience is identifiable but some hedging toward secondary audience. Mostly consistent framing with occasional appeals to the other community."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Audience is unclear or paper tries to appeal to both row and column simultaneously. Motivation switches between phenomenon-focus and theory-focus."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "No clear audience. Paper tries to be all things to all people. Motivation is generic and doesn't connect with any specific community's interests."
+        }
+      ]
+    },
+    {
+      "id": "substantive_motivation",
+      "name": "3. Use Substantive Motivations",
+      "max_points": 5,
+      "description": "Aesthetic motivations appeal to readers' preferences for certain kinds of theory regardless of explanatory power. Don't expect readers to like a paper simply because it displays their tribe's colors.",
+      "evidence_guidance": "Look for: motivation based on explaining real-world phenomena vs. motivation based on theoretical preferences or tribal affiliations. Check for language like 'we need more interpretive/cultural/economic/etc. approaches' without substantive justification.",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Motivation is entirely substantive—focused on explaining phenomena or solving real-world puzzles. Approach is justified by what it can explain, not by tribal preferences."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Primarily substantive motivation with minor aesthetic elements. Some tribal signaling but approach is still justified by explanatory power."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Significant aesthetic motivation. Paper appeals to preferences for certain theory types without strong substantive justification."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "Entirely aesthetic motivation. Paper is justified by theoretical preferences or tribal affiliations rather than explanatory power."
+        }
+      ]
+    },
+    {
+      "id": "frame_around_dv",
+      "name": "4. Frame Around the Dependent Variable",
+      "max_points": 5,
+      "description": "The dependent variable is a question; independent variables are answers. Start with the question/puzzle, not an answer.",
+      "evidence_guidance": "Look for: opening that poses a question/puzzle vs. opening that proposes a theory/answer. Check whether the paper starts with 'Why does X happen?' vs. 'Theory Y explains things.'",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Paper clearly starts with a question/puzzle about a pattern in the world (the DV). The pattern to be explained is established before explanations (IVs) are introduced."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Paper eventually frames around the DV but not immediately. Some back-and-forth between question and answer in the opening."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Paper starts with theory/answer rather than question. DV is unclear or buried. Focus is on promoting a particular explanation."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "Paper entirely frames around IVs (explanations) rather than DV (pattern). No clear question is posed. Theory is the starting point."
+        }
+      ]
+    },
+    {
+      "id": "puzzle_in_world",
+      "name": "5. Frame Around a Puzzle in the World",
+      "max_points": 5,
+      "description": "Start with the puzzle. Just because a literature 'has not examined' some phenomenon doesn't mean you should—the phenomenon is only interesting if it poses a puzzle for existing ways of viewing the world.",
+      "evidence_guidance": "Look for: framing around a real-world puzzle vs. 'literature gap' framing. Check for language like 'prior research has not examined X' without explaining why X is puzzling.",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Paper clearly frames around a real-world puzzle—something that contradicts expectations or challenges existing understanding. The puzzle exists in the world, not just in the literature."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Paper identifies a puzzle but it's not entirely clear or compelling. Some elements of real-world puzzle mixed with literature-gap framing."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Paper primarily frames around a literature gap rather than a world puzzle. Language like 'we know little about X' dominates."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "Entirely literature-gap framing. No real-world puzzle. Motivation is purely 'this hasn't been studied.'"
+        }
+      ]
+    },
+    {
+      "id": "few_hypotheses",
+      "name": "6. One Hypothesis (or Few Tightly Related)",
+      "max_points": 5,
+      "description": "If people remember a paper at all, they'll remember it for one idea. No use stuffing in a zillion ideas.",
+      "evidence_guidance": "Look for: number of hypotheses/propositions and their relationship. Check whether hypotheses are tightly connected to a single core idea or whether they're loosely related 'kitchen sink' claims.",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "One hypothesis or 2-3 tightly related hypotheses that articulate a single memorable idea. Clear what invalidating any hypothesis means for the core claim."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "3-5 hypotheses that are mostly related but could be tighter. Core idea is present but somewhat diluted by multiple claims."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Many hypotheses (6+) with unclear relationships. Kitchen-sink approach where multiple loosely related ideas are tested."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "Excessive hypotheses (10+) with no clear organizing idea. Paper tries to test everything possible."
+        }
+      ]
+    },
+    {
+      "id": "compelling_null",
+      "name": "7. Build Up the Null Hypothesis",
+      "max_points": 5,
+      "description": "A paper won't be interesting unless there's a compelling null hypothesis. If there's no interesting alternative to your argument, why would anyone care?",
+      "evidence_guidance": "Look for: how alternative explanations are presented. Check whether alternatives are built up as genuinely compelling vs. quickly dismissed as obviously wrong. Note any straw-manning.",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Null hypothesis is presented as genuinely compelling. Alternative explanations are built up fairly and would convince a smart reader. Paper shows why smart people believe the null before challenging it."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Null hypothesis is present and somewhat compelling but could be built up more strongly. Alternatives are presented fairly but not developed fully."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Null hypothesis is weak or straw-manned. Alternatives are quickly dismissed or presented uncharitably."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "No real null hypothesis or pure straw-manning. Alternatives are either absent or presented as obviously stupid."
+        }
+      ]
+    },
+    {
+      "id": "save_null",
+      "name": "8. Save the Null",
+      "max_points": 5,
+      "description": "Since the null is compelling, it must be right under certain conditions. Your job is to explain to readers that they were right to believe X about the world, but since X doesn't hold under certain conditions, they should shift to belief X'.",
+      "evidence_guidance": "Look for: explanation of when/where the null hypothesis holds vs. doesn't hold. Check whether paper explains boundary conditions for existing beliefs.",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Paper explicitly saves the null by explaining when it's right vs. wrong. Clear articulation of boundary conditions. Reader feels respected—existing beliefs are valid under certain conditions."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Some saving of the null but could be more explicit. Boundary conditions are implied but not clearly articulated."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Little effort to save the null. Paper implies existing beliefs are simply wrong rather than contextually valid."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "No attempt to save the null. Paper presents existing beliefs as entirely wrong. No boundary conditions specified."
+        }
+      ]
+    },
+    {
+      "id": "orient_reader",
+      "name": "9. Orient the Reader",
+      "max_points": 5,
+      "description": "Readers need to know at all times how any sentence fits into the paper's narrative arc. The arc should start with a question/puzzle in the first paragraphs and lead to the main finding.",
+      "evidence_guidance": "Look for: clear roadmap of the paper's arc. Check whether reader knows at any point how current content connects to the puzzle→finding narrative. Assess use of signposting and transitions.",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Clear narrative arc from puzzle to finding throughout. Excellent signposting and transitions. Reader always knows where they are and how current content serves the arc."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Generally clear arc with occasional confusion. Most sections are well-signposted but some connections could be clearer."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Arc is unclear or poorly signposted. Reader often doesn't know how current content relates to the main narrative."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "No clear arc. Reader is lost. No signposting or roadmap. Sections feel disconnected."
+        }
+      ]
+    },
+    {
+      "id": "no_lit_reviews",
+      "name": "10. Never Write Literature Reviews",
+      "max_points": 5,
+      "description": "Review literature not as an end in itself but to show what's compelling but flawed about existing answers. Research that doesn't pertain to that objective can remain unmentioned.",
+      "evidence_guidance": "Look for: purpose of literature discussion. Check whether literature is reviewed comprehensively (as end in itself) vs. selectively (to show compelling-but-flawed alternatives).",
+      "rating_levels": [
+        {
+          "name": "Strong",
+          "min_points": 5,
+          "max_points": 5,
+          "description": "Literature is reviewed selectively and purposefully—only to show what's compelling but flawed about existing answers. Every citation serves the puzzle→finding arc."
+        },
+        {
+          "name": "Moderate",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Literature is mostly purposeful with some excess coverage. Core citations clearly support the puzzle but some peripheral work is included."
+        },
+        {
+          "name": "Weak",
+          "min_points": 1,
+          "max_points": 2,
+          "description": "Significant literature review elements. Theory section attempts comprehensive coverage. Many citations don't clearly serve the puzzle."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 0,
+          "description": "Full-blown literature review. Citations are included for completeness rather than purpose. No clear connection between literature and the puzzle."
+        }
+      ]
+    }
+  ]
+}

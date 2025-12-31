@@ -1,0 +1,205 @@
+{
+  "id": "paper_quality",
+  "name": "Academic Paper Quality Rubric",
+  "document_type": "paper_draft",
+  "total_points": 50,
+  "description": "Evaluates academic paper drafts across five core dimensions: argument clarity, evidence quality, theoretical grounding, contribution significance, and prose quality. Designed for social science research papers.",
+  "context": "You are an expert academic reviewer evaluating a draft paper for a top-tier social science journal. Your task is to assess the paper rigorously but fairly, identifying both strengths and weaknesses. Focus on substantive issues rather than minor stylistic concerns. Provide specific evidence from the text to support your ratings.",
+  "criteria": [
+    {
+      "id": "argument_clarity",
+      "name": "Argument Clarity",
+      "max_points": 10,
+      "description": "Is the central argument clear, coherent, and well-structured throughout the paper?",
+      "evidence_guidance": "Look for: (1) A clear, specific thesis or main claim stated early in the paper, (2) Logical progression from premises to conclusion, (3) Consistent argument thread maintained across sections, (4) Clear articulation of how findings support the main claim, (5) Absence of contradictory or muddled reasoning. Quote specific passages that demonstrate clarity or confusion.",
+      "rating_levels": [
+        {
+          "name": "Excellent",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "The central argument is crystal clear from the opening paragraphs and maintained consistently throughout. Each section builds logically toward the main claim. The reader never loses sight of what the paper is arguing. The argument is specific enough to be falsifiable yet broad enough to be significant."
+        },
+        {
+          "name": "Good",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "The argument is clear and generally well-maintained, but may have minor lapses in clarity or logical flow. Some sections may drift slightly from the main thread before returning. The core claim is identifiable but could be stated more precisely or forcefully."
+        },
+        {
+          "name": "Adequate",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "The argument is present but sometimes vague or inconsistent. The reader may need to work to identify the central claim. Some sections seem tangential to the main argument. The logical structure is present but could be tightened significantly."
+        },
+        {
+          "name": "Weak",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "The argument is unclear, overly complex, or shifts substantially across sections. The reader struggles to identify what the paper is claiming. Multiple competing claims appear without clear prioritization. Logical gaps are present."
+        },
+        {
+          "name": "Unacceptable",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "No clear central argument is discernible, or the paper contradicts itself fundamentally. The reader cannot determine what the paper is trying to establish."
+        }
+      ]
+    },
+    {
+      "id": "evidence_quality",
+      "name": "Evidence Quality",
+      "max_points": 10,
+      "description": "Is the evidence appropriate, sufficient, well-integrated, and convincingly presented?",
+      "evidence_guidance": "Look for: (1) Appropriate data or evidence for the type of claim being made, (2) Sufficient quantity and diversity of evidence, (3) Evidence that directly addresses the central claims rather than peripheral issues, (4) Thoughtful interpretation and analysis of evidence (not just presentation), (5) Acknowledgment of contrary evidence or alternative interpretations, (6) Clear chain from evidence to claim. Note specific examples of strong or weak evidence use.",
+      "rating_levels": [
+        {
+          "name": "Excellent",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "Evidence is highly appropriate for the claims being made. Sufficient quantity and diversity of evidence to be convincing. Evidence is thoughtfully analyzed rather than simply presented. Alternative interpretations are addressed. The evidentiary chain from data to conclusion is clear and compelling. Both confirming and disconfirming evidence are acknowledged."
+        },
+        {
+          "name": "Good",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "Evidence is appropriate and generally sufficient. Most major claims are well-supported. Evidence is analyzed reasonably well, though some opportunities for deeper interpretation are missed. Some alternative explanations may be underexplored. The connection between evidence and claims is clear in most cases."
+        },
+        {
+          "name": "Adequate",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "Evidence is present but may be insufficient for some claims, or not ideally suited to the argument. Some claims rest on thin evidence. Analysis may be superficial in places. Evidence is sometimes presented without adequate interpretation. Important alternative explanations may be ignored."
+        },
+        {
+          "name": "Weak",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Evidence is sparse, inappropriate for the claims, or poorly analyzed. Major claims lack adequate support. Evidence may be cherry-picked or presented selectively. Little engagement with alternative interpretations. The connection between evidence and conclusions is often unclear or unconvincing."
+        },
+        {
+          "name": "Unacceptable",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "Little to no credible evidence is presented, or evidence fundamentally contradicts the claims being made. Evidence is misrepresented or misinterpreted in ways that undermine the paper's credibility."
+        }
+      ]
+    },
+    {
+      "id": "theoretical_grounding",
+      "name": "Theoretical Grounding",
+      "max_points": 10,
+      "description": "Is the theoretical framework sound, appropriately applied, and well-integrated with the empirical work?",
+      "evidence_guidance": "Look for: (1) Clear articulation of the theoretical framework being used, (2) Appropriate choice of theory for the phenomenon being studied, (3) Accurate representation of theoretical concepts, (4) Meaningful engagement with relevant theoretical debates (not just citation), (5) Clear connection between theory and empirical analysis, (6) Theoretical contribution (refinement, extension, or challenge to existing theory). Assess whether theory is used instrumentally to advance understanding or merely decoratively.",
+      "rating_levels": [
+        {
+          "name": "Excellent",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "Theoretical framework is clearly articulated and highly appropriate for the phenomenon. Theory is engaged meaningfully, not just cited. Concepts are used precisely and accurately. The connection between theoretical framework and empirical analysis is tight and mutually reinforcing. The paper makes a clear theoretical contribution by refining, extending, or challenging existing theory in substantive ways."
+        },
+        {
+          "name": "Good",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "Theoretical framework is appropriate and clearly stated. Most theoretical concepts are used accurately. Theory and empirics are generally well-connected, though some opportunities for deeper integration are missed. The paper makes a modest theoretical contribution or applies existing theory in a novel context."
+        },
+        {
+          "name": "Adequate",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "Theoretical framework is present but may be somewhat generic or loosely connected to the empirical work. Some theoretical concepts may be used imprecisely. Theory section may read as obligatory rather than integral. Theoretical contribution is unclear or minor. Literature engagement is more descriptive than analytical."
+        },
+        {
+          "name": "Weak",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Theoretical framework is weak, poorly articulated, or inappropriate for the phenomenon. Theory is cited but not meaningfully engaged. Concepts are used vaguely or incorrectly. Disconnect between theoretical framing and empirical analysis. No clear theoretical contribution. Literature review is superficial or reads as a laundry list."
+        },
+        {
+          "name": "Unacceptable",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "No coherent theoretical framework, or theory is fundamentally misunderstood or misapplied. The paper shows lack of engagement with relevant theoretical debates or misrepresents key theoretical positions."
+        }
+      ]
+    },
+    {
+      "id": "contribution_significance",
+      "name": "Contribution Significance",
+      "max_points": 10,
+      "description": "Does the paper make a meaningful and clear contribution to scholarly knowledge?",
+      "evidence_guidance": "Look for: (1) Clear articulation of what is new or surprising about this work, (2) Contribution that matters to a scholarly audience (not just filling a gap), (3) Advancement beyond existing knowledge in non-trivial ways, (4) Potential to influence how scholars think about the phenomenon, (5) Balance between novelty and grounding in existing work, (6) Clear statement of implications for theory, research, or practice. Distinguish between incremental refinements and significant advances.",
+      "rating_levels": [
+        {
+          "name": "Excellent",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "The contribution is substantial, clearly articulated, and genuinely advances scholarly understanding. The paper reveals something new and important about the phenomenon that challenges or significantly extends existing thinking. The findings are likely to influence future research and theorizing. The contribution is non-obvious and non-trivial. Implications are significant and well-developed."
+        },
+        {
+          "name": "Good",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "The contribution is clear and meaningful, though perhaps more incremental than transformative. The paper adds genuine value to existing knowledge in ways that will interest specialists. Some aspects of the contribution are novel and important. Implications are clearly stated though may not be groundbreaking."
+        },
+        {
+          "name": "Adequate",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "The contribution is present but modest or not fully articulated. The paper fills a gap but it's not entirely clear why the gap matters. Some advancement beyond existing work but largely incremental. Contribution may be more empirical than theoretical. Implications are stated but may be limited or predictable."
+        },
+        {
+          "name": "Weak",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "The contribution is unclear, trivial, or merely descriptive. The paper may fill a gap but provides little new understanding. Findings are either unsurprising or poorly connected to larger scholarly conversations. Contribution is framed primarily as 'no one has looked at X' rather than 'here's what we learn about an important puzzle.' Implications are weak or missing."
+        },
+        {
+          "name": "Unacceptable",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "No discernible scholarly contribution, or the alleged contribution is not actually new. The paper may simply replicate existing knowledge or make claims that are already well-established. No clear value added to scholarly conversation."
+        }
+      ]
+    },
+    {
+      "id": "prose_quality",
+      "name": "Prose Quality",
+      "max_points": 10,
+      "description": "Is the writing clear, precise, well-organized, and appropriate for an academic audience?",
+      "evidence_guidance": "Look for: (1) Clear, direct prose that communicates ideas efficiently, (2) Precise word choice and accurate terminology, (3) Logical organization within and across sections, (4) Effective transitions between ideas, (5) Appropriate tone and style for academic writing, (6) Minimal grammatical or mechanical errors, (7) Absence of jargon overload or unnecessary complexity, (8) Readability without sacrificing precision. Note specific examples of strong or weak writing.",
+      "rating_levels": [
+        {
+          "name": "Excellent",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "The writing is exceptionally clear, precise, and engaging. Complex ideas are communicated efficiently without unnecessary jargon. Organization is logical and seamless. Transitions guide the reader smoothly between ideas. Prose is professional and polished with minimal errors. The paper is a pleasure to read despite its scholarly rigor."
+        },
+        {
+          "name": "Good",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "The writing is clear and professional with only minor issues. Organization is logical though some transitions could be smoother. Prose is generally precise though occasional wordiness or unclear phrasing appears. Few grammatical errors. The paper reads well overall and communicates ideas effectively."
+        },
+        {
+          "name": "Adequate",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "The writing is serviceable but could be significantly improved. Some passages are unclear or overly complex. Organization is present but may be uneven. Transitions are sometimes abrupt or missing. Moderate number of grammatical or stylistic issues. Some unnecessary jargon or awkward phrasing. The paper requires effort to read but is ultimately comprehensible."
+        },
+        {
+          "name": "Weak",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "The writing is frequently unclear, disorganized, or difficult to follow. Numerous grammatical or mechanical errors. Poor organization makes the argument hard to track. Transitions are weak or absent. Excessive jargon obscures rather than clarifies. The paper requires substantial editing for clarity and flow."
+        },
+        {
+          "name": "Unacceptable",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "The writing is so unclear or error-ridden that it significantly impedes comprehension. Poor organization makes the paper very difficult to follow. Fundamental issues with grammar, clarity, or coherence. The paper requires major rewriting."
+        }
+      ]
+    }
+  ]
+}

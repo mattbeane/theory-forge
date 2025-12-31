@@ -55,9 +55,39 @@ Starting from the data inventory, systematically search for patterns that are:
 
 4. **Deep dive on top 3 patterns**
    For the most promising findings:
-   - Run additional robustness checks
+   - Run additional robustness checks with **adaptive stopping**
    - Explore heterogeneity (does effect vary by X?)
    - Document the analysis code
+
+## Adaptive Robustness Testing (RASC Protocol)
+
+**RASC = "Robustness Agreement Stops Computing"**
+
+When testing pattern robustness, use adaptive stopping to save computation/cost while maintaining rigor:
+
+### Default Strategy
+- Plan 5-7 robustness checks per pattern (different controls, specifications, subsamples)
+- Run minimum of 3 checks before considering early stop
+
+### Early Stop Criteria
+Stop after 3 checks if **ALL** conditions met:
+1. **Effect direction agreement**: All checks agree on sign (positive/negative/null)
+2. **Magnitude consistency**: Effect sizes within 20% of each other
+3. **Significance band agreement**: p-values in same band (all <.001, all <.01, all >.05, etc.)
+
+### Continue to Full Suite If:
+- Any check disagrees on direction
+- Effect magnitude varies >20% across checks
+- p-values cross significance thresholds
+- Early checks suggest heterogeneity worth exploring
+
+### Confidence Levels
+- **High**: 3/3 early stop checks unanimous, all p<.01
+- **Medium**: Full 5-7 checks with majority agreement
+- **Low**: Checks disagree on significance or direction
+
+### Cost Savings
+Early stopping typically saves 40-60% of analysis tokens when patterns are clear-cut. Ambiguous patterns that require full suite are exactly the ones worth deeper investigation.
 
 ## Output Format
 
@@ -68,10 +98,16 @@ Create `analysis/patterns/PATTERN_REPORT.md`:
 
 ## Candidates Tested
 
-| # | Pattern | Effect Size | p-value | Survives Controls? | Interest |
-|---|---------|-------------|---------|-------------------|----------|
-| 1 | [description] | β=X | p=X | Yes/No | High/Med/Low |
-| 2 | ... | ... | ... | ... | ... |
+| # | Pattern | Effect | p-value | Checks | Confidence | Interest |
+|---|---------|--------|---------|--------|------------|----------|
+| 1 | [description] | β=X | p=X | 3/7 ✓ | High | High/Med/Low |
+| 2 | [description] | β=X | p=X | 7/7 | Medium | High/Med/Low |
+| 3 | ... | ... | ... | ... | ... | ... |
+
+**Checks column legend**:
+- "3/7 ✓" = Early stopped after 3 unanimous checks (RASC triggered)
+- "7/7" = Ran full robustness suite (ambiguous, required deeper testing)
+- "5/7 ✓" = Early stopped after 5 checks (needed more than min 3 for confidence)
 
 ## Killed Findings
 
@@ -99,10 +135,11 @@ These looked promising but didn't survive:
 
 *Based on N=25 runs. Stability: HIGH (CV<10%), MEDIUM (CV 10-25%), LOW (CV>25%)*
 
-**Robustness**:
+**Robustness** (3/7 checks, early stop):
 - Base model: [result]
 - With [control]: [result]
 - With [control]: [result]
+- RASC triggered: All checks agree on positive effect (β=0.18-0.22), p<.001
 
 **Heterogeneity**: [Does effect vary? By what?]
 
@@ -127,6 +164,13 @@ Patterns where the effect varies by subgroup—these often become the paper:
 
 1. [Finding X is strong for group A but weak for group B]
 2. [etc.]
+
+## Cost Efficiency Report
+
+**Tokens saved via RASC**:
+- X patterns triggered early stop (3-5 checks instead of 7)
+- Estimated savings: ~Y tokens (~Z% reduction)
+- Clear-cut findings identified faster, ambiguous patterns got full scrutiny
 
 ## Recommendation
 
@@ -210,6 +254,7 @@ Tell the user:
 - Which patterns survived and which died
 - Which findings violate theoretical predictions (most valuable)
 - Where you found heterogeneity
+- How many patterns triggered RASC early stop (efficiency wins)
 - **If consensus enabled**: stability summary and any flagged metrics
 
 Then suggest they review and select which finding(s) to pursue. When ready, run `/find-theory` to identify the established theory being violated.

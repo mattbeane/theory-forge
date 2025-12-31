@@ -1,0 +1,165 @@
+{
+  "id": "claim_verification",
+  "name": "Claim Verification Rubric",
+  "document_type": "research_claim",
+  "total_points": 40,
+  "description": "Rubric for verifying research claims in paper-mining-agents output. Evaluates evidentiary support, logical soundness, hedging appropriateness, and counter-evidence consideration.",
+  "criteria": [
+    {
+      "id": "evidentiary_support",
+      "name": "Evidentiary Support",
+      "max_points": 10,
+      "description": "Is the claim supported by sufficient, high-quality evidence?",
+      "evidence_guidance": "Look for: (1) quantity of evidence supporting the claim, (2) quality and credibility of sources, (3) directness of support (does the evidence directly support the claim or require inferential leaps?), (4) diversity of evidence types (interviews, observations, documents), (5) specificity of evidence (concrete examples vs. vague generalizations).",
+      "rating_levels": [
+        {
+          "name": "Overwhelming",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "Multiple high-quality evidence items directly support the claim. Evidence is specific, diverse, and comes from credible sources. No major gaps in support."
+        },
+        {
+          "name": "Strong",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "Good evidence supports the claim with minor gaps. Most evidence is direct and specific, though some may require small inferential steps."
+        },
+        {
+          "name": "Adequate",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "Some evidence supports the claim but may be limited in quantity, diversity, or directness. Key evidence exists but gaps are present."
+        },
+        {
+          "name": "Weak",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Limited evidence with significant gaps. Evidence may be indirect, vague, or require substantial inferential leaps to support the claim."
+        },
+        {
+          "name": "Absent",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "Little to no evidence supports the claim. Evidence is missing, irrelevant, or so weak as to provide minimal support."
+        }
+      ]
+    },
+    {
+      "id": "logical_soundness",
+      "name": "Logical Soundness",
+      "max_points": 10,
+      "description": "Is the reasoning from evidence to claim logically valid?",
+      "evidence_guidance": "Look for: (1) clear logical steps connecting evidence to claim, (2) avoidance of logical fallacies (hasty generalization, post hoc reasoning, circular logic), (3) appropriate scope (does the claim match the evidence scope?), (4) appropriate qualifications (are limitations acknowledged?), (5) alternative explanations considered and ruled out.",
+      "rating_levels": [
+        {
+          "name": "Airtight",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "Reasoning is logically sound with clear steps from evidence to claim. No logical fallacies. Alternative explanations addressed. Claim scope matches evidence scope."
+        },
+        {
+          "name": "Sound",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "Reasoning is generally sound with minor gaps. Most logical steps are clear. Few if any logical fallacies. Claim scope mostly appropriate."
+        },
+        {
+          "name": "Reasonable",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "Reasoning is plausible but has some gaps or weak points. May contain minor logical issues or slight overclaims relative to evidence."
+        },
+        {
+          "name": "Questionable",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Reasoning contains significant logical gaps or fallacies. Claim may substantially overreach evidence. Alternative explanations not adequately addressed."
+        },
+        {
+          "name": "Fallacious",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "Reasoning is seriously flawed with major logical fallacies or leaps. Claim does not logically follow from evidence."
+        }
+      ]
+    },
+    {
+      "id": "hedging_appropriateness",
+      "name": "Hedging Appropriateness",
+      "max_points": 10,
+      "description": "Are claims appropriately hedged given the strength and nature of the evidence?",
+      "evidence_guidance": "Look for: (1) epistemic markers matching evidence strength ('suggests' vs. 'demonstrates' vs. 'proves'), (2) appropriate use of modal verbs ('may', 'might', 'appears to'), (3) acknowledgment of uncertainty where present, (4) avoidance of overclaiming (stating definitive conclusions from limited evidence), (5) avoidance of under-claiming (excessive hedging when evidence is strong). Well-calibrated claims use stronger language when evidence is overwhelming and weaker language when evidence is suggestive.",
+      "rating_levels": [
+        {
+          "name": "Perfectly Calibrated",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "Claim language perfectly matches evidence strength. Strong evidence gets confident language; suggestive evidence gets appropriately hedged language. No overclaiming or excessive hedging."
+        },
+        {
+          "name": "Well-Hedged",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "Claim is appropriately hedged with minor calibration issues. Generally good match between evidence strength and claim confidence."
+        },
+        {
+          "name": "Adequate",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "Claim has some hedging issues but not egregious. May slightly over- or under-claim relative to evidence, but within reasonable bounds."
+        },
+        {
+          "name": "Poorly Calibrated",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Claim is significantly over- or under-hedged. Language suggests much stronger/weaker conclusions than evidence warrants."
+        },
+        {
+          "name": "Grossly Miscalibrated",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "Claim is grossly over- or under-stated. Definitive language used for weak evidence, or excessive hedging for strong evidence."
+        }
+      ]
+    },
+    {
+      "id": "counter_evidence_consideration",
+      "name": "Counter-Evidence Consideration",
+      "max_points": 10,
+      "description": "Does the claim adequately address counter-evidence and alternative explanations?",
+      "evidence_guidance": "Look for: (1) acknowledgment of evidence that challenges or contradicts the claim, (2) engagement with alternative interpretations of the same evidence, (3) explanation of why counter-evidence doesn't invalidate the claim (if applicable), (4) appropriate scope limitations to avoid contradictory evidence, (5) intellectual honesty about what the evidence does and doesn't show. Strong claims engage with counter-evidence rather than ignoring it.",
+      "rating_levels": [
+        {
+          "name": "Thorough",
+          "min_points": 9,
+          "max_points": 10,
+          "description": "Counter-evidence is thoroughly acknowledged and addressed. Alternative explanations are considered and engaged. Claim is appropriately scoped to avoid contradictory evidence. High intellectual honesty."
+        },
+        {
+          "name": "Good",
+          "min_points": 7,
+          "max_points": 8,
+          "description": "Major counter-evidence is acknowledged and addressed. Some alternative explanations considered. Minor gaps in engagement with challenges."
+        },
+        {
+          "name": "Partial",
+          "min_points": 5,
+          "max_points": 6,
+          "description": "Some counter-evidence acknowledged but engagement is limited. May miss important alternative explanations or contradictory evidence."
+        },
+        {
+          "name": "Minimal",
+          "min_points": 3,
+          "max_points": 4,
+          "description": "Little acknowledgment of counter-evidence. Alternative explanations largely ignored. Claim may be presented more definitively than warranted given challenges."
+        },
+        {
+          "name": "Ignored",
+          "min_points": 0,
+          "max_points": 2,
+          "description": "Counter-evidence is ignored or dismissed without engagement. Alternative explanations not considered. One-sided presentation."
+        }
+      ]
+    }
+  ]
+}
