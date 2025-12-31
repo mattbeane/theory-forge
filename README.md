@@ -101,7 +101,7 @@ Then follow the workflow, invoking each agent when ready.
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
 | `/explore-data` | Initial data reconnaissance | Start here |
-| `/hunt-patterns` | Find robust empirical patterns | After exploration |
+| `/hunt-patterns` | Find robust empirical patterns (with RASC adaptive stopping) | After exploration |
 | `/eval-zuckerman-lite` | **Early puzzle check**: Is this a puzzle? Is the null compelling? | After patterns, BEFORE theory |
 | `/find-theory` | Identify theory being violated | After puzzle check passes |
 | `/find-lens` | Find sensitizing/interpretive literature | After identifying theory |
@@ -127,6 +127,7 @@ Then follow the workflow, invoking each agent when ready.
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
+| `/eval-paper-quality` | Systematic quality scoring (rubric-eval) | After drafting |
 | `/export [format]` | Convert to LaTeX, Word, PDF, HTML | After drafting |
 | `/package-verification` | Create ZIP for external review | After verification |
 | `/import-refs [source]` | Import references from BibTeX, Zotero, DOI | Literature gathering |
@@ -314,6 +315,7 @@ Configure with `/consensus-config`. See `lib/consensus/` for the Python implemen
 - Your data in accessible files (CSV, Excel, text files for interviews)
 - Domain expertise (this accelerates your work; it doesn't replace your judgment)
 - **For consensus mode**: Python 3.9+ with `anthropic` or `openai` package installed
+- **For systematic scoring**: `pip install rubric-eval` + `ANTHROPIC_API_KEY` (optional but recommended)
 
 ---
 
@@ -332,43 +334,7 @@ The dashboard auto-updates each time you run `/status`. Just refresh your browse
 
 ## Style Enforcer Module
 
-The `style_enforcer/` module provides automated validation and generation for qualitative management papers targeting ASQ, Organization Science, and Management Science.
-
-### The Problem
-
-LLMs draw on economics/strategy papers (hypothesis-test structure), generic academic voice (passive, hedged), and bullet points. They don't naturally produce the management theory-building register without continuous constraint enforcement.
-
-### Key Features
-
-```python
-from style_enforcer import StyleValidator, ManuscriptOrchestrator
-
-# Validate existing text
-validator = StyleValidator()
-result = validator.validate(manuscript_text)
-
-if result.hard_violation_count > 0:
-    for v in result.violations:
-        print(f"{v.type.value}: {v.message}")
-```
-
-**Hard Rules (always enforced):**
-- No bullet points—ever
-- No numbered lists—convert to prose
-- Contributions as narrative (not "This paper makes three contributions: First...")
-
-**Soft Rules (flagged if severe):**
-- Passive voice <30%
-- Hedging density
-- Orphaned statistics (must interpret within 2 sentences)
-- Quote setup and length
-
-**v2 Hallucination Prevention:**
-- `DataInventory`: Scans available data files
-- `StatisticsValidator`: Flags unverified statistical claims
-- `SectionSanityChecker`: Section-level validation (methods accuracy, figures)
-
-See `style_enforcer/README.md` for full documentation.
+Automated validation for qualitative management papers (ASQ, Org Science, Management Science). Enforces hard rules (no bullets, no numbered lists) and soft rules (passive voice, hedging, quote setup). See `style_enforcer/README.md` for details.
 
 ---
 
@@ -423,18 +389,6 @@ See the [Living Paper repo](https://github.com/mattbeane/living-paper) for full 
 - Make judgment calls about what's interesting
 - Know your field's genre conventions (you do)
 - Guarantee publication (nothing does)
-
----
-
-## Comparison with Critiques of GenAI in Qualitative Research
-
-Nguyen & Welch (2025) published a rigorous critique of GenAI use in qualitative data analysis, arguing that LLMs are fundamentally unsuited for this work due to epistemic risks including hallucination, unreliability, and anthropomorphic fallacies.
-
-Their critique targets a specific use case—LLMs as *autonomous* coding/analysis tools that replace human interpretation. This workflow takes a structurally different approach: the human remains the theorist and interpreter; the LLM accelerates search and enforces structure.
-
-See [`nguyen-welch-comparison.md`](nguyen-welch-comparison.md) for a detailed analysis of how this workflow relates to their critique.
-
-**Citation**: Nguyen, D. C., & Welch, C. (2025). Generative artificial intelligence in qualitative data analysis: Analyzing—or just chatting? *Organizational Research Methods, 29*(1), 3–39. https://doi.org/10.1177/10944281251377154
 
 ---
 
