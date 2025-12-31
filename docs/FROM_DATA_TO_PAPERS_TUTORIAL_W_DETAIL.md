@@ -1,8 +1,8 @@
-# From Dormant Data to Submittable Papers in 5 Days
+# From Dormant Data to Submittable Papers in 3 Weeks
 ## A Qualitative Researcher's Guide to AI-Assisted Paper Development
 
 **Matt Beane, UC Santa Barbara**
-**November 2025**
+**December 2025**
 https://github.com/mattbeane/paper-mining-agent-suite
 ---
 
@@ -27,12 +27,27 @@ In late November 2025, I saw a tweet from Aniket Panjwani suggesting that coding
 - 68,000+ worker-month observations on a performance incentive program from 4 facilities
 - 77 interviews with 47 informants (operations managers, supervisors, HR leaders, senior executives)
 
-**What I produced in 5 days of part-time work:**
-- **Paper 1**: "Option Cultivation: Why Workers Stay in Anticipation of Uncertain Automation" (targeting ASQ). Uses Company X data: temp/FT exit records, productivity data, automation timelines, and the full qualitative dataset (351 interviews and 718 hours of observation across 12 sites).
-- **Paper 2**: "Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities" (targeting Management Science). Uses Company X data: daily operational data, separation records, automation timelines, and a subset of interviews focused on network planning (69 interviews with 26 informants including network directors, operations executives, and site managers).
-- **Paper 3**: "When Misfit Motivates: Work Orientation and Responses to Performance Pay in Warehouse Work" (targeting ASQ or Management Science). Uses Company Y data: 68K+ worker-month observations and 77 interviews with 47 informants.
+*Company Z (AI robotics vendor study):*
+- 145 interviews from a 3-year field study
+- 17 months of ethnographic observation
+- 33 million records of human-robot interaction telemetry
+
+**What I produced in ~3 weeks of part-time work:**
+
+- **Paper 1**: "Wait and See: Why Temporary Workers Don't Flee Impending Automation" (targeting ASQ). Uses Company X data: temp exit records, productivity data, automation timelines, and the full qualitative dataset. Core finding: voluntary resignations *decline* 18-19 pp as automation approaches—workers stay to make sense of uncertainty.
+
+- **Paper 2**: "Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities" (targeting Management Science). Uses Company X data: daily operational data, separation records, automation timelines, and interviews focused on network planning. Core finding: firms solve the exploration-exploitation dilemma *spatially*—pilot nodes explore, optimization nodes exploit.
+
+- **Paper 3**: "When Misfit Motivates: Work Orientation and Responses to Performance Pay in Warehouse Work" (targeting ASQ or Management Science). Uses Company Y data: 68K+ worker-month observations and 77 interviews. Core finding: work orientation moderates whether P-E misfit triggers withdrawal or intensified effort.
+
+- **Paper 4**: "Developmental Uncertainty: When Coordination Demands Enable Occupational Mobility Across Status Boundaries" (targeting ASQ). Uses Company Z data: 145 interviews, 17 months observation, 33M telemetry records. Core finding: uncertainty drives cross-boundary coordination that enables skill transfer—76% of early-phase drivers advanced to professional roles; the window closes as uncertainty is consumed.
 
 Each paper went through 5-8 complete reframings. The final versions have expanded literature reviews, quantitative analyses with robustness checks, integrated qualitative evidence, figures, online appendices, and are formatted for target journals. They've been stress-tested by a second AI system acting as adversarial pre-reviewer.
+
+**But that's not all.** The process of developing these papers led me to build infrastructure—reusable tools that formalize the workflow:
+
+- **[paper-mining-agent-suite](https://github.com/mattbeane/paper-mining-agent-suite)**: A structured Claude Code workflow with agents for each phase (explore, patterns, theory, lens, mining, framing, audit, verification, drafting)
+- **[Living Paper](https://github.com/mattbeane/living-paper)**: A verification layer that links claims to evidence without exposing protected data—generates reviewer packages that journal reviewers can inspect directly
 
 This document explains how.
 
@@ -49,14 +64,17 @@ The real power for qualitative researchers is in the *full pipeline*:
 4. Integrating qualitative evidence with quantitative findings
 5. Iterating through framings until something robust and novel emerges
 6. Producing journal-ready manuscripts
+7. **NEW: Creating verifiable claim-evidence links for reviewers**
 
 None of this requires you to be a methods expert. It requires you to be a *domain expert*—which you already are.
 
 ---
 
-## The 9-Phase Process
+## The 9-Phase Process (Now Codified as Agents)
 
-### Phase 1: Data Exploration
+Each phase below now has a corresponding slash command in the paper-mining-agent-suite. You can use the workflow manually (as I did initially) or use the structured agents.
+
+### Phase 1: Data Exploration (`/explore-data`)
 
 **What you do**: Point the AI at your data files and ask "what's here?"
 
@@ -75,14 +93,11 @@ None of this requires you to be a methods expert. It requires you to be a *domai
 
 ---
 
-### Phase 2: Hypothesis Generation & Initial Framing
+### Phase 2: Pattern Hunting (`/hunt-patterns`)
 
-**What you do**: Ask "what paper could we write with this?"
+**What you do**: Ask "what patterns exist across these variables?"
 
-**What happens**: The AI proposes multiple possible framings. You evaluate them based on:
-- Is the finding robust to obvious confounds?
-- Is it theoretically interesting?
-- Does it violate an established prediction?
+**What happens**: The AI looks for relationships, clusters, anomalies that might not be obvious from univariate exploration.
 
 **Critical insight**: Your first framing will almost certainly be wrong. That's fine. The goal is to generate options, not commit.
 
@@ -92,19 +107,33 @@ My first framing for Paper 1 was "Automation causes turnover among temp workers.
 
 That inversion became the paper: "Why Workers *Stay* in Anticipation of Uncertain Automation."
 
-**Frame shift count across 3 papers**: 18 total
+**Frame shift count across 4 papers**: 23+ total
 
 | Paper | Frame Shifts | Final Title |
 |-------|--------------|-------------|
-| Paper 1 | 5 | Option Cultivation: Why Workers Stay in Anticipation of Uncertain Automation |
+| Paper 1 | 5 | Wait and See: Why Temporary Workers Don't Flee Impending Automation |
 | Paper 2 | 8 | Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities |
 | Paper 3 | 5 | When Misfit Motivates: Work Orientation and Responses to Performance Pay |
+| Paper 4 | 5+ | Developmental Uncertainty: When Coordination Demands Enable Occupational Mobility |
 
 **Your role**: Evaluator. Kill framings that don't survive scrutiny. Recognize when an inversion is more interesting than the original hypothesis.
 
 ---
 
-### Phase 3: Finding the Sensitizing Literature
+### Phase 3: Early Puzzle Check (`/check-puzzle-lite`)
+
+**What you do**: Before investing in theory-building, verify you have something worth pursuing.
+
+**Zuckerman criteria** (adapted for early-stage work):
+1. Does the finding violate an established theoretical prediction?
+2. Is the empirical pattern robust to obvious confounds?
+3. Is there enough "there there" to warrant full development?
+
+This gate prevents sunk-cost theory-building on findings that won't survive review.
+
+---
+
+### Phase 4: Finding the Sensitizing Literature (`/find-theory`, `/find-lens`)
 
 **This is the crucial step that transforms description into contribution.**
 
@@ -122,9 +151,9 @@ You've found a robust empirical pattern that violates an established theoretical
 **Paper 1**:
 - Primary theory: Labor economics predicts workers exit when automation threatens jobs
 - Violation: Workers stayed; turnover *decreased* before automation
-- Sensitizing question: "Why do some workers stay while others flee?"
-- Sensitizing literature: Real options theory (Dixit & Pindyck)
-- Extension: Workers don't just *hold* options—they *cultivate* them through engagement
+- Sensitizing question: "Why stay when you can easily leave?"
+- Sensitizing literature: Real options theory + Sensemaking
+- Extension: Anticipatory sensemaking—workers stay to understand before acting
 
 **Paper 3**:
 - Primary theory: P-E fit theory predicts misfit → withdrawal
@@ -133,12 +162,12 @@ You've found a robust empirical pattern that violates an established theoretical
 - Sensitizing literature: Work orientation (Wrzesniewski) + Career anchors (Schein)
 - Extension: Orientation moderates the misfit-response relationship
 
-**My own prior work** (for comparison):
-- Primary theory: Skill development through deliberate practice
-- Violation: Some surgical trainees skilled up fast despite no formal practice time
-- Sensitizing question: "How are they learning without practice?"
-- Sensitizing literature: Deviance / workarounds
-- Extension: "Shadow learning"—unsanctioned practice explains skill variance
+**Paper 4**:
+- Primary theory: Status boundaries are defended; cross-status contact rarely benefits nonprofessionals
+- Violation: 76% of early drivers advanced to professional roles; 19% to roles requiring credentials they lacked
+- Sensitizing question: "Why did early workers develop but later workers didn't?"
+- Sensitizing literature: Contingency theory (Thompson, Galbraith, Lawrence & Lorsch)
+- Extension: Developmental uncertainty—uncertainty forces cross-boundary coordination that enables skill transfer
 
 **How to prompt for this**:
 
@@ -148,42 +177,11 @@ You've found a robust empirical pattern that violates an established theoretical
 
 ---
 
-### Phase 4: Literature Positioning & Genre Requirements
+### Phase 5: Qualitative Mining (`/mine-qual`)
 
-**What you do**: Ensure the literature review positions your contribution properly and meets journal expectations.
+**What you do**: Search your interview data for specific mechanisms.
 
-**Two problems to solve**:
-
-**Problem 1: The "two scholars" trap**
-
-Early drafts often anchor on a small number of foundational papers. Reviewers will notice. You need to show you know the field is vibrant and ongoing.
-
-**Example prompt**:
-> "The lit review is anchored on just Wrzesniewski (1997) and Schein (1978). We need to show this is a vibrant, long-standing field. Find recent work—especially anything from the last 5 years that updates or challenges these frameworks."
-
-**Problem 2: Genre requirements**
-
-Different journals have different expectations:
-- **Management Science**: ~10,000 words, heavy quantitative emphasis
-- **ASQ**: Mixed-methods welcome, theory-building expected
-- **AMJ**: Clear hypotheses, robustness checks, practical implications
-
-**Example prompt**:
-> "Expand this to full Management Science length. That means ~10,000 words, detailed methods section, multiple robustness checks, and extended discussion of boundary conditions."
-
-**Your role**: Editor. You know what top journals expect because you've published in them (or read enough to internalize the genre).
-
----
-
-### Phase 5: Quantitative-Qualitative Integration
-
-**This is where qualitative researchers have a massive advantage.**
-
-Most AI-assisted data analysis stops at quantitative patterns. But if you have interview data, you can do something more powerful: show the *mechanisms* behind the patterns.
-
-**The key**: Don't ask for summaries. Ask for *specific evidence* for *specific mechanisms*.
-
-**Example prompt** (actual prompt I used):
+**Example prompt** (actual prompt I used for Paper 3):
 
 ```
 ### HIGH PRIORITY: Why Do Seasonal Workers Respond More?
@@ -213,7 +211,36 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 
 ---
 
-### Phase 6: External Verification
+### Phase 6: Claim Framing (`/smith-frames`)
+
+**What you do**: Iterate on how to frame your contribution.
+
+Each paper needs:
+- A clear violation of established theory
+- An explanation of why the violation occurs
+- Theoretical mechanisms connecting evidence to claims
+- Boundary conditions
+
+---
+
+### Phase 7: Claim Audit (`/audit-claims`)
+
+**What you do**: Systematically search your raw data for supporting AND challenging evidence for each claim.
+
+**This is new and critical.** The biggest risk of AI-assisted paper development is that you (and the AI) convince yourselves of a story that isn't grounded in the data.
+
+The audit phase:
+1. Takes each claim in your manuscript
+2. Searches the raw data for evidence
+3. Documents supporting evidence with quotes/data
+4. **Actively searches for challenging evidence**
+5. Flags high-concern claims
+
+Output: Living Paper-compatible files (claims.jsonl, evidence.jsonl, links.csv)
+
+---
+
+### Phase 8: External Verification (`/verify-claims`)
 
 **What you do**: Send verification packages to a *different* AI system for adversarial review.
 
@@ -221,78 +248,26 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
 
 **My approach**: I used Claude Code (Opus) for generation and analysis. I sent verification briefs to ChatGPT Pro (reasoning mode) for deep adversarial review.
 
-**What goes in a verification brief**:
+**NEW: Automated Living Paper Integration**
 
-```markdown
-### Claim 1: Pre-Treatment Anticipation Effect
+When you run `/verify-claims`, it now automatically:
+1. Ingests your claims/evidence into the Living Paper database
+2. Runs verification checks
+3. Generates a reviewer package
 
-**Statement**: Voluntary resignations decrease in the 6 months before automation.
+The reviewer package is a folder with standalone HTML files. Reviewers can double-click to open—no CLI needed on their end. They see:
+- Your claims
+- The evidence supporting each claim
+- Any challenging evidence
+- Contradiction badges highlighting tensions
 
-**Expected results**:
-- Robot facilities: 40.0% → 21.7% = -18.3 pp (p<0.001)
-- Sorter facilities: 22.4% → 3.3% = -19.1 pp (p<0.001)
-
-**Data files**: `Temp Exit Data.csv`, `Project Listing.xlsx`
-
-**Verification code**:
-[Full Python script that reproduces the analysis]
-
-**Questions for verification**:
-1. Do these numbers replicate?
-2. Is the statistical approach appropriate?
-3. What confounds might we be missing?
-4. Does the theoretical interpretation fit the empirical pattern?
-```
-
-**Your role**: Quality control. You're simulating peer review before submission.
+This creates a "trustless verification" mechanism: reviewers can audit the structure of your argument without seeing raw PII.
 
 ---
 
-### Phase 7: Iterative Refinement
+### Phase 9: Drafting (`/draft-paper`)
 
-**What you do**: Kill framings that don't work; evolve those that do.
-
-**The pattern**:
-- Robustness check kills a finding → reframe around what *did* survive
-- Theory seems shallow → dig for deeper mechanism
-- Contribution unclear → sharpen the established prediction you're violating
-
-**Example (Paper 1)**:
-
-| Draft | Framing | Why It Died |
-|-------|---------|-------------|
-| 1 | "Automation causes turnover" | Didn't survive volume controls |
-| 2 | "Workers flee automation" | Data showed opposite |
-| 3 | "Anticipation Paradox" | Descriptive, not theoretical |
-| 4 | "Waiting for the Robots" | Still passive |
-| 5 | **"Option Cultivation"** | Active mechanism, real options extension |
-
-**Your role**: Intellectual integrity. You kill your darlings when the evidence doesn't support them.
-
----
-
-### Phase 8: Anonymization & Publishing Prep
-
-**What you do**: Catch what reviewers would catch before they catch it.
-
-**Common issues I caught**:
-- Program name not anonymized (XXXX → ACHIEVE)
-- Site names not anonymized (XXXXXX → Gallifrey)
-- Claims about what workers "want" when we only have revealed preferences
-- Vague sample sizes ("60+ interviews" → "77 interviews with 47 unique informants")
-
-**Example prompt**:
-> "Review this paper for anonymization failures, overclaims, and imprecise statistics. Flag anything a reviewer would catch."
-
-**Your role**: Pre-reviewer. You know what gets papers desk-rejected.
-
----
-
-### Phase 9: Submission-Ready Package (CRITICAL)
-
-**What you do**: Create complete submission materials including Online Appendices and replication packages.
-
-**Why this phase exists**: I learned the hard way that a "finished" paper isn't submission-ready. After an adversarial AI review revealed my robustness checks were *claims*, not actual analyses, I realized I needed a systematic finishing phase.
+**What you do**: Generate journal-formatted manuscripts.
 
 **What a submission-ready paper needs**:
 
@@ -311,27 +286,16 @@ Most AI-assisted data analysis stops at quantitative patterns. But if you have i
    - Generated outputs (figures, tables)
    - Data availability statement
 
-3. **Cross-references** in the main text pointing to appendices:
-   - "Full results in Online Appendix A"
-   - "Replication code in Online Appendix E"
-
-**Common gaps I found**:
-- Robustness checks described but never run
-- Figures referenced but not included
-- "Supplementary materials" mentioned but not created
-- N=1 subgroups treated statistically (should be case studies)
-- Pre-trend analysis claimed but no figure
-
-**Example prompt**:
-> "Check this paper for claims about robustness checks, figures, or supplementary materials. For each claim, verify that the actual analysis/figure/appendix exists. List any gaps."
-
-**Your role**: Quality assurance. The paper isn't done until the appendices are done.
+3. **Living Paper verification package** (new):
+   - claims.jsonl, evidence.jsonl, links.csv
+   - Reviewer HTML interface
+   - Can be submitted as supplementary materials or shared with reviewers
 
 ---
 
 ## The Professional Wisdom
 
-Over 5 days, I made dozens of judgment calls that shaped these papers. Here's what I was doing, distilled:
+Over 3 weeks, I made dozens of judgment calls that shaped these papers. Here's what I was doing, distilled:
 
 ### 1. "What interpretive lens helps explain the variation?"
 
@@ -347,7 +311,7 @@ The contribution comes from showing something the literature wouldn't expect—a
 
 ### 4. "Find the heterogeneity"
 
-All three papers benefited from looking *within* categories to find subgroups that behave differently. The aggregate effect often obscures the real story.
+All four papers benefited from looking *within* categories to find subgroups that behave differently. The aggregate effect often obscures the real story.
 
 ### 5. "We don't have data on that"
 
@@ -360,6 +324,10 @@ Genre awareness. Different journals want different things. I internalized those 
 ### 7. "Send it to [expensive AI] for review"
 
 Using a different AI system as adversarial pre-reviewer catches errors and forces precision. It's like asking a skeptical colleague to read your draft—except available at 2am.
+
+### 8. "Can we verify this?" (NEW)
+
+With Living Paper integration, every claim now traces to specific evidence. This isn't just for reviewers—it forces me to be honest with myself about what the data actually show.
 
 ---
 
@@ -375,7 +343,7 @@ This approach works best when you already have data—especially mixed-methods d
 
 ### 3. Tolerance for iteration
 
-18 frame shifts across 3 papers. You have to be willing to kill your darlings repeatedly when the evidence doesn't support them.
+23+ frame shifts across 4 papers. You have to be willing to kill your darlings repeatedly when the evidence doesn't support them.
 
 ### 4. Quality control instincts
 
@@ -403,18 +371,26 @@ What it *dramatically accelerates*:
 - Robustness checking
 - Qualitative-quantitative integration
 - Revision cycles
+- **Verification and audit trails**
 
 ---
 
 ## The Bottom Line
 
-I had data from two field studies that had been sitting dormant for 2-3 years. I hadn't touched them because the analysis-to-paper pipeline felt overwhelming. In 5 days of part-time work, I produced three submission-ready papers with full online appendices:
+I had data from three field studies that had been sitting dormant for 2-5 years. I hadn't touched them because the analysis-to-paper pipeline felt overwhelming. In ~3 weeks of part-time work, I produced four submission-ready papers with full online appendices:
 
-1. **Paper 1: "Option Cultivation"** (targeting ASQ) - Worker responses to uncertain automation. Uses Company X data: temp/FT exit records, productivity data, automation timelines, and the full qualitative dataset (351 interviews and 718 hours of observation across 12 sites). Complete with robustness checks, event-study figure, qualitative coding protocol, and replication package.
+1. **Paper 1: "Wait and See"** (targeting ASQ) - Workers stay to make sense of uncertain automation. Uses Company X data. Complete with event-study figures, robustness checks, and verification package.
 
-2. **Paper 2: "Learning to Automate"** (targeting Management Science) - How multi-site firms distribute exploration and exploitation across facilities. Uses Company X data: daily operational data, separation records, automation timelines, and a subset of interviews focused on network planning (69 interviews with 26 informants including network directors, operations executives, and site managers). Complete with 9 alternative threshold robustness checks, pre-trend analysis, placebo tests, event-study figures, independent qualitative role coding, and replication code.
+2. **Paper 2: "Learning to Automate"** (targeting Management Science) - Firms distribute exploration and exploitation across facilities. Uses Company X data. Complete with 9 alternative threshold robustness checks, pre-trend analysis, placebo tests, and replication code.
 
-3. **Paper 3: "When Misfit Motivates"** (targeting ASQ or Management Science) - How work orientation moderates whether person-environment misfit triggers withdrawal or intensified effort. Uses Company Y data: 68K+ worker-month observations and 77 interviews with 47 informants to reveal three distinct orientation types among contingent workers. Complete with worker fixed effects robustness, lead-lag tests, promotion prediction analysis, and engagement distribution analysis.
+3. **Paper 3: "When Misfit Motivates"** (targeting ASQ or Management Science) - Work orientation moderates P-E fit responses. Uses Company Y data. Complete with worker fixed effects robustness, lead-lag tests, and engagement distribution analysis.
+
+4. **Paper 4: "Developmental Uncertainty"** (targeting ASQ) - Uncertainty enables cross-status skill transfer—until it closes. Uses Company Z data. Complete with phase transition analysis using 33M telemetry records and career outcome tracking.
+
+**And I built tools for others to use:**
+
+- **paper-mining-agent-suite**: The workflow as structured agents
+- **Living Paper**: Verification infrastructure for qualitative research
 
 This isn't magic. It's leverage. The AI amplifies what you already know how to do. If you're a skilled qualitative researcher with dormant data, you can probably do something similar.
 
@@ -424,67 +400,81 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 
 ---
 
-## Appendix: The Tweet Thread That Started This
-
-Aniket Panjwani (@aniketapanjwani):
-
-> "If you're a social scientist you can save 100s of hours by using coding agents like Claude Code and Codex for all your exploratory data analysis.
->
-> Here's a beginner's guide:
->
-> 1. Describe your datasets/where they are on your file system
-> 2. Describe the research problem you're investigating
-> 3. Tell the coding agent what tools to use
-> 4. Ask it to create a plan of potential graphs, tables, regressions
-> 5. Have it implement each task in turn
-> 6. Marvel at the incredible results..."
-
-What I learned: This undersells it. The real power isn't graphs and regressions—it's the full paper development pipeline, especially for researchers with mixed-methods data and dormant datasets.
-
----
-
 ## Appendix: Full Frame Shift Log
 
-### Paper 1: Automation and Worker Behavior
+### Paper 1: Wait and See
 
 | # | Frame | Fate |
 |---|-------|------|
 | 1 | "Automation causes turnover among temp workers" | Killed: didn't survive volume controls |
 | 2 | "Workers flee approaching automation" | Killed: data showed opposite pattern |
 | 3 | "The Anticipation Paradox: Turnover declines before automation" | Evolved: too descriptive |
-| 4 | "Waiting for the Robots: Worker responses to approaching automation" | Evolved: passive framing |
-| 5 | **"Option Cultivation: Why Workers Stay in Anticipation of Uncertain Automation"** | Final: active mechanism, extends real options theory |
+| 4 | "Option Cultivation: Why Workers Stay" | Evolved: real options alone didn't explain mechanism |
+| 5 | **"Wait and See: Why Temporary Workers Don't Flee Impending Automation"** | Final: anticipatory sensemaking + real options, explains both staying AND technology moderation |
 
-### Paper 2: Automation and Facility Roles → Learning to Automate
+### Paper 2: Learning to Automate
 
 | # | Frame | Why It Shifted |
 |---|-------|----------------|
 | 1 | "Seasonal staffing and facility productivity" | Purely descriptive—no theoretical mechanism |
 | 2 | "Turnover contagion in warehouse operations" | One finding, not full story of what's happening |
-| 3 | "The Seasonal Paradox: How Flexible Staffing Both Enables and Undermines Productivity" | Staffing isn't the main story; automation is |
-| 4 | "Automation Architectures: Technology, Staffing, and Facility Roles" | Documents heterogeneity but still descriptive—"automation architectures" is a label, not a theory |
-| 5 | Tested Thompson (1967) buffering as theoretical lens | **Rejected by data**: Volume variance test showed expansion and efficiency nodes have identical CV (~0.59). Thompson buffering not supported. |
-| 6 | Searched qual data for intentional facility role differentiation | **Evidence found**: Gap exec quote "Gallatin develops, Fresno perfects"; PB interviews show tier-1 vs tier-2 site selection, pilot sites chosen for vendor proximity + lower stakes |
-| 7 | Tested facility size × automation interaction | **Statistically significant (p=0.001)**: Small facilities -4.8% PPH, large facilities -18.6% PPH. Supports coordination complexity mechanism from informant A1 |
-| 8 | **"Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities"** | **Final**: Anchored on organizational learning literature (March 1991, Tushman & O'Reilly ambidexterity, Argote knowledge transfer, Edmondson/Pisano technology implementation). Core insight: firms solve exploration-exploitation dilemma *spatially*—pilot sites explore, optimization sites exploit. Deliberate role assignment, not emergent. |
+| 3 | "The Seasonal Paradox" | Staffing isn't the main story; automation is |
+| 4 | "Automation Architectures" | Documents heterogeneity but still descriptive |
+| 5 | Tested Thompson (1967) buffering | **Rejected by data**: Volume variance test showed expansion and efficiency nodes have identical CV (~0.59) |
+| 6 | Searched qual data for intentional role differentiation | **Evidence found**: "Gallatin develops, Fresno perfects" |
+| 7 | Tested facility size × automation interaction | **Statistically significant (p=0.001)** |
+| 8 | **"Learning to Automate"** | **Final**: Spatial ambidexterity—firms solve exploration-exploitation dilemma across geography |
 
-**Key lesson from Paper 2**: The theoretical frame shifted THREE times after the initial descriptive version:
-1. First we tried Thompson buffering → data didn't support it
-2. Then we brought qual data to bear → found evidence of deliberate role assignment
-3. Then we searched for a LITERATURE (not a single paper) → org learning provided robust frame with 15+ canonical citations
-
-This illustrates why the `/find-lens` command now requires a literature body, not just one influential paper.
-
-### Paper 3: Incentive Pay Response
+### Paper 3: When Misfit Motivates
 
 | # | Frame | Fate |
 |---|-------|------|
 | 1 | "Incentive Misallocation: Why High-Responders Get Low Pay" | Killed: allocation isn't the puzzle |
-| 2 | "Motivational Leverage: How Situation Shapes Incentive Response" | Evolved: leverage is property of what? |
-| 3 | "Signaling to Escape: How Contingent Workers Use Performance Pay" | Evolved: only explains one subgroup |
+| 2 | "Motivational Leverage" | Evolved: leverage is property of what? |
+| 3 | "Signaling to Escape" | Evolved: only explains one subgroup |
 | 4 | "When Misfit Motivates" (draft 1) | Evolved: too broad |
-| 5 | **"When Misfit Motivates: Work Orientation and Responses to Performance Pay in Warehouse Work"** | Final: full theoretical mechanism |
+| 5 | **"When Misfit Motivates: Work Orientation and Responses to Performance Pay"** | Final: full theoretical mechanism with 3 orientation types |
+
+### Paper 4: Developmental Uncertainty
+
+| # | Frame | Fate |
+|---|-------|------|
+| 1 | "Ghost work and hidden AI labor" | Evolved: our case showed opposite—visibility and advancement |
+| 2 | "Cross-status learning in tech development" | Evolved: too generic |
+| 3 | "The closing window: Why timing matters for nonprofessional advancement" | Evolved: needed theoretical anchor |
+| 4 | "Uncertainty as enabler" | Evolved: needed to connect to contingency theory |
+| 5 | **"Developmental Uncertainty: When Coordination Demands Enable Occupational Mobility"** | Final: extends contingency theory to skill transfer and career mobility |
 
 ---
 
-*Document created November 2025. For questions: mattbeane@ucsb.edu*
+## Appendix: The Tools That Emerged
+
+### paper-mining-agent-suite
+
+**What it is**: A structured Claude Code workflow with slash commands for each phase.
+
+**Key features**:
+- Quality gates (warns if out of sequence)
+- Frame management (archive old frames, compare alternatives)
+- Style enforcement (ASQ/OrgSci/ManSci register)
+- State tracking (knows where you are in the pipeline)
+- Seamless Living Paper integration
+
+**Repo**: https://github.com/mattbeane/paper-mining-agent-suite
+
+### Living Paper
+
+**What it is**: A verification layer that links claims to evidence.
+
+**Key features**:
+- Bidirectional claim-evidence traceability
+- Three-tier access control (PUBLIC, CONTROLLED, WITNESS_ONLY)
+- Entity redaction for IRB compliance
+- Standalone HTML reviewer packages
+- No cloud dependencies—runs locally
+
+**Repo**: https://github.com/mattbeane/living-paper
+
+---
+
+*Document updated December 2025. For questions: mattbeane@ucsb.edu*

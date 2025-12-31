@@ -15,8 +15,20 @@ This is complementary to `/eval-zuckerman` which focuses on framing. This comman
 ## Prerequisites
 
 - A draft paper in PDF or markdown format
-- rubric-eval installed (`pip install rubric-eval`)
-- ANTHROPIC_API_KEY set in environment
+
+### Required: rubric-eval
+
+This command requires rubric-eval. Check if installed:
+```bash
+which rubric-eval
+```
+
+**If not found**, install it:
+```bash
+pip install rubric-eval
+```
+
+Also requires `ANTHROPIC_API_KEY` in environment for API calls.
 
 ## Inputs You Need
 

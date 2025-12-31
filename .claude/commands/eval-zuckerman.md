@@ -277,9 +277,9 @@ Create `analysis/framing/ZUCKERMAN_EVAL.md`:
 3. [Specific action]
 ```
 
-## Quantitative Scoring with rubric-eval (Optional)
+## Quantitative Scoring with rubric-eval
 
-For more systematic scoring with statistical confidence, use rubric-eval:
+For systematic scoring with statistical confidence, use rubric-eval.
 
 ### Step 1: Check for rubric-eval
 
@@ -287,7 +287,8 @@ For more systematic scoring with statistical confidence, use rubric-eval:
 which rubric-eval
 ```
 
-If not found, skip this section and use qualitative ratings above.
+**If not found**: Fall back to qualitative ratings (✓/⚠️/✗) above, and note to user:
+> "Install rubric-eval for quantitative scoring: `pip install rubric-eval`"
 
 ### Step 2: Run rubric-eval
 

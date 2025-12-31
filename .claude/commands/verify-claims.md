@@ -260,9 +260,9 @@ analysis/verification/
 └── VERIFICATION_PACKAGE.zip  ← Create this
 ```
 
-## Rubric-Based Scoring (Optional)
+## Rubric-Based Claim Scoring
 
-If rubric-eval is available, use it to score each claim systematically before packaging:
+Score each claim systematically before packaging using rubric-eval.
 
 ### Step 1: Check for rubric-eval
 
@@ -270,7 +270,8 @@ If rubric-eval is available, use it to score each claim systematically before pa
 which rubric-eval
 ```
 
-If not found, skip this section and proceed to ZIP packaging.
+**If not found**: Proceed to ZIP packaging without scores, and note to user:
+> "Install rubric-eval for per-claim quality scoring: `pip install rubric-eval`"
 
 ### Step 2: Prepare claims for evaluation
 
