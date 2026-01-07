@@ -45,6 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Verification & Export
 - **`/package-verification`** - Automatically create ZIP packages for external review
+- **`templates/PRESUBMISSION_REVIEW_INSTRUCTIONS.md`** - Detailed instructions for external reviewers to provide thorough, constructive feedback (Major Issues, Claim-by-Claim Assessment, Clarity Checks, Evidence Audit, Theory Stress Test, etc.)
 - Checksums for reproducibility verification
 - README generation for reviewers
 - **`/export [format]`** - Convert manuscripts to LaTeX, Word, PDF, HTML via pandoc

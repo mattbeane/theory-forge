@@ -244,6 +244,19 @@ The `/verify-claims` agent produces a self-contained package (ZIP file) you shou
 
 Use `/package-verification` to automatically create the ZIP with checksums and reviewer instructions.
 
+### Presubmission Review Instructions
+
+The package includes `PRESUBMISSION_REVIEW_INSTRUCTIONS.md`—a detailed guide that instructs external reviewers to provide **thorough, constructive, point-by-point feedback** comparable to a rigorous journal review. This ensures you get:
+
+- Specific claims flagged with concerns (with page/section references)
+- Alternative explanations that should be addressed
+- Clarity issues where readers might misinterpret your argument
+- Internal consistency checks (numbers, definitions, terminology)
+- A structured "skeptical reviewer" perspective
+- Prioritized action list
+
+The goal is to surface every issue before submission, while the feedback remains constructive and actionable. See `templates/PRESUBMISSION_REVIEW_INSTRUCTIONS.md` for the full instructions.
+
 ### State Tracking
 
 The `state.json` file tracks your progress through the pipeline. See [`docs/STATE_SCHEMA.md`](docs/STATE_SCHEMA.md) for the full schema and details on what's deterministic vs model-dependent.

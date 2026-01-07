@@ -33,6 +33,7 @@ Take the verification brief and supporting materials and package them into a rea
 
    ```
    analysis/verification/package/
+   ├── PRESUBMISSION_REVIEW_INSTRUCTIONS.md  (from templates/)
    ├── VERIFICATION_BRIEF.md
    ├── PATTERN_REPORT.md
    ├── FRAMING_OPTIONS.md
@@ -41,6 +42,8 @@ Take the verification brief and supporting materials and package them into a rea
    ├── README.md
    └── CHECKSUMS.md
    ```
+
+   **IMPORTANT**: Copy `templates/PRESUBMISSION_REVIEW_INSTRUCTIONS.md` into the package. This provides the external reviewer with detailed guidance for producing thorough, constructive feedback.
 
 3. **Generate README.md for reviewers**
 
@@ -70,6 +73,7 @@ Take the verification brief and supporting materials and package them into a rea
 
    | File | Description |
    |------|-------------|
+   | PRESUBMISSION_REVIEW_INSTRUCTIONS.md | Instructions for external reviewers |
    | VERIFICATION_BRIEF.md | Structured claims with code |
    | PATTERN_REPORT.md | Empirical patterns and robustness |
    | FRAMING_OPTIONS.md | Theoretical framing |
@@ -142,6 +146,7 @@ Take the verification brief and supporting materials and package them into a rea
 Package: analysis/verification/VERIFICATION_PACKAGE_2024-01-15.zip
 
 Contents:
+  ✓ PRESUBMISSION_REVIEW_INSTRUCTIONS.md
   ✓ VERIFICATION_BRIEF.md (12 claims documented)
   ✓ PATTERN_REPORT.md
   ✓ FRAMING_OPTIONS.md
@@ -161,6 +166,7 @@ NEXT STEPS
    - A skeptical colleague in your field
 
 2. Ask them to:
+   - Follow PRESUBMISSION_REVIEW_INSTRUCTIONS.md for a thorough review
    - Review each claim in VERIFICATION_BRIEF.md
    - Run the verification code if possible
    - Flag concerns about specifications or interpretations
