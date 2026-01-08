@@ -38,7 +38,7 @@ In late November 2025, I saw a tweet from Aniket Panjwani suggesting that coding
 
 - **Paper 2**: "Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities" (targeting Management Science). Uses Company X data: daily operational data, separation records, automation timelines, and interviews focused on network planning. Core finding: firms solve the exploration-exploitation dilemma *spatially*—pilot nodes explore, optimization nodes exploit.
 
-- **Paper 3**: "When Misfit Motivates: Work Orientation and Responses to Performance Pay in Warehouse Work" (targeting ASQ or Management Science). Uses Company Y data: 68K+ worker-month observations and 77 interviews. Core finding: work orientation moderates whether P-E misfit triggers withdrawal or intensified effort.
+- **Paper 3**: "When Misfit Motivates: Work Orientation and Responses to Performance Pay in Warehouse Work" (targeting ASQ or Management Science). Uses Company Y data: 55K+ worker-month observations and 77 interviews. Core finding: work orientation provides an interpretive lens for understanding when P-E misfit triggers intensified effort rather than withdrawal; firm's inverted incentive allocation suggests management is blind to these orientation-driven patterns.
 
 - **Paper 4**: "Developmental Uncertainty: When Coordination Demands Enable Occupational Mobility Across Status Boundaries" (targeting ASQ). Uses Company Z data: 145 interviews, 17 months observation, 33M telemetry records. Core finding: uncertainty drives cross-boundary coordination that enables skill transfer—76% of early-phase drivers advanced to professional roles; the window closes as uncertainty is consumed.
 
@@ -383,7 +383,7 @@ I had data from three field studies that had been sitting dormant for 2-5 years.
 
 2. **Paper 2: "Learning to Automate"** (targeting Management Science) - Firms distribute exploration and exploitation across facilities. Uses Company X data. Complete with 9 alternative threshold robustness checks, pre-trend analysis, placebo tests, and replication code.
 
-3. **Paper 3: "When Misfit Motivates"** (targeting ASQ or Management Science) - Work orientation moderates P-E fit responses. Uses Company Y data. Complete with worker fixed effects robustness, lead-lag tests, and engagement distribution analysis.
+3. **Paper 3: "When Misfit Motivates"** (targeting ASQ or Management Science) - Work orientation provides interpretive lens for when misfit motivates vs. demotivates; misallocation as evidence of firm blindness. Uses Company Y data. Complete with worker fixed effects robustness, lead-lag tests, engagement distribution analysis, and sensitivity analysis across specifications.
 
 4. **Paper 4: "Developmental Uncertainty"** (targeting ASQ) - Uncertainty enables cross-status skill transfer—until it closes. Uses Company Z data. Complete with phase transition analysis using 33M telemetry records and career outcome tracking.
 
@@ -424,6 +424,7 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 | 6 | Searched qual data for intentional role differentiation | **Evidence found**: "Gallatin develops, Fresno perfects" |
 | 7 | Tested facility size × automation interaction | **Statistically significant (p=0.001)** |
 | 8 | **"Learning to Automate"** | **Final**: Spatial ambidexterity—firms solve exploration-exploitation dilemma across geography |
+| 9 | Post-adversarial review feedback (Jan 2026) | Minor refinements: n=1 optimization facility acknowledged; role terminology footnote added; pre-trend narrative nuanced; seasonality controls with analysis; outlier sign flip made explicit; winsorizing added to event study |
 
 ### Paper 3: When Misfit Motivates
 
@@ -433,7 +434,8 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 | 2 | "Motivational Leverage" | Evolved: leverage is property of what? |
 | 3 | "Signaling to Escape" | Evolved: only explains one subgroup |
 | 4 | "When Misfit Motivates" (draft 1) | Evolved: too broad |
-| 5 | **"When Misfit Motivates: Work Orientation and Responses to Performance Pay"** | Final: full theoretical mechanism with 3 orientation types |
+| 5 | "When Misfit Motivates: Work Orientation Moderates Misfit Response" | Killed: reviewer feedback—orientation is never directly observed; "moderator" overstates causal claim |
+| 6 | **"When Misfit Motivates: Work Orientation as Interpretive Lens"** | Final (Jan 2026): Primary = misfit can motivate (P-E fit extension); orientation = interpretive lens for heterogeneity; misallocation = evidence firm is blind to patterns. Softened causal language throughout; "Propositions" → "Expected Patterns" |
 
 ### Paper 4: Developmental Uncertainty
 
