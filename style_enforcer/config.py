@@ -215,6 +215,134 @@ QUANT_FORWARD_MANSCI = ManuscriptConfig(
     total_quote_budget=(5, 10),  # Fewer quotes
 )
 
+def _qual_forward_sections() -> dict[str, SectionConfig]:
+    """Section configurations for qual-forward/inductive papers.
+
+    Key differences from quant-forward:
+    - Theory section sets up sensitizing concepts, NOT mechanism
+    - Findings section BUILDS theory progressively (findings = theory)
+    - Methods emphasizes embeddedness, first-person voice
+    - Extended quotes (60-120+ words) do heavy argumentative lifting
+    """
+    return {
+        "abstract": SectionConfig(
+            name="Abstract",
+            min_words=150,
+            max_words=300,  # Slightly longer for qual
+            quote_budget=(0, 0),
+            table_budget=(0, 0),
+            required_elements=[
+                "research_question",
+                "method_summary",
+                "phenomenon_naming",  # Must name the core concept
+                "contribution_preview",
+            ],
+            exemplar_key="abstract",
+        ),
+
+        "introduction": SectionConfig(
+            name="Introduction",
+            min_words=1200,
+            max_words=2200,  # Often longer for qual
+            quote_budget=(0, 1),  # Maybe one cold open
+            table_budget=(0, 0),
+            allow_cold_open=True,
+            required_elements=[
+                "puzzle_without_punchline",  # Puzzle but NOT mechanism reveal
+                "sensitizing_question",  # What we want to understand
+                "this_paper_does",
+                "contribution_preview_without_mechanism",  # Preview contribution type, not finding
+            ],
+            prohibited_elements=[
+                "mechanism_preview",  # DON'T reveal the theoretical finding
+                "hypothesis_language",
+            ],
+            exemplar_key="introduction",
+        ),
+
+        "theory": SectionConfig(
+            name="Theoretical Background / Prior Research",
+            min_words=2000,
+            max_words=3500,
+            quote_budget=(0, 1),
+            table_budget=(0, 1),
+            required_elements=[
+                "sensitizing_concepts",  # Lenses for analysis
+                "prior_work_engagement",  # What we know
+                "what_prior_work_assumes",  # Gaps/taken-for-granted
+                "research_question_refinement",
+            ],
+            prohibited_elements=[
+                "mechanism_explanation",  # Save for findings
+                "numbered_hypotheses_list",
+                "propositions",
+                "predictions",
+            ],
+            allow_hypothesis_language=False,  # Theory-building only
+            exemplar_key="theory",
+        ),
+
+        "methods": SectionConfig(
+            name="Research Setting and Methods",
+            min_words=1800,
+            max_words=3000,  # Often longer for qual
+            quote_budget=(0, 2),  # Sometimes quotes about method
+            table_budget=(0, 2),
+            required_elements=[
+                "rich_setting_description",  # Vivid context
+                "access_and_embeddedness",  # How researcher got in
+                "data_sources_narrative",  # Data described in narrative form
+                "analytical_approach_inductive",  # Abductive/grounded theory language
+            ],
+            # First-person voice is expected in qual methods
+            exemplar_key="methods",
+        ),
+
+        "findings": SectionConfig(
+            name="Findings",
+            min_words=4000,
+            max_words=7000,  # Often longest section - theory built here
+            quote_budget=(12, 25),  # Extended quotes do heavy lifting
+            table_budget=(0, 2),
+            figure_budget=(0, 2),
+            allow_cold_open=True,
+            allow_hypothesis_language=False,  # Theory-building language only
+            required_elements=[
+                "progressive_concept_development",  # Build theory through section
+                "phenomenon_naming",  # Name the emergent concept(s)
+                "evidence_concept_interleaving",  # Evidence and analysis woven together
+                "emergent_model",  # Full theoretical model by section end
+            ],
+            prohibited_elements=[
+                "quantitative_patterns_lead",  # Don't lead with numbers
+                "hypothesis_testing_language",
+            ],
+            exemplar_key="findings_qual",  # Use qual-specific exemplar
+        ),
+
+        "discussion": SectionConfig(
+            name="Discussion",
+            min_words=2500,
+            max_words=4000,  # Often longer for theoretical elaboration
+            quote_budget=(0, 1),
+            table_budget=(0, 1),
+            required_elements=[
+                "theoretical_contribution_narrative",  # Contribution as prose
+                "connection_to_sensitizing_concepts",  # How findings extend prior work
+                "boundary_conditions",
+                "implications",
+                "limitations",
+                "future_research",
+            ],
+            prohibited_elements=[
+                "contribution_list",  # Must be narrative
+                "three_contributions_format",
+            ],
+            exemplar_key="discussion",
+        ),
+    }
+
+
 QUAL_FORWARD_ASQ = ManuscriptConfig(
     paper_type=PaperType.QUAL_FORWARD,
     target_venue="Administrative Science Quarterly",
@@ -222,6 +350,7 @@ QUAL_FORWARD_ASQ = ManuscriptConfig(
     total_word_target=14000,
     total_quote_budget=(15, 25),  # More quotes
     total_table_budget=(1, 3),   # Fewer tables
+    sections=_qual_forward_sections(),  # Use qual-specific sections
 )
 
 

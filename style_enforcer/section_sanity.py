@@ -18,6 +18,7 @@ from typing import Optional
 from enum import Enum
 from pathlib import Path
 
+from .config import PaperType
 from .data_inventory import DataInventory, InventoryResult, DataType
 from .statistics_validator import StatisticsValidator, ValidationReport
 
@@ -98,8 +99,8 @@ class SectionSanityChecker:
         )
     """
 
-    # Required elements by section
-    REQUIRED_ELEMENTS = {
+    # Required elements by section - QUANT-FORWARD (default)
+    REQUIRED_ELEMENTS_QUANT = {
         "abstract": ["research question", "method", "finding", "contribution"],
         "introduction": ["hook", "gap", "contribution", "roadmap"],
         "theory": ["literature review", "theoretical framework", "mechanism"],
@@ -107,6 +108,23 @@ class SectionSanityChecker:
         "findings": ["main finding", "evidence", "mechanism"],
         "discussion": ["contribution", "implications", "limitations", "future research"],
     }
+
+    # Required elements by section - QUAL-FORWARD / INDUCTIVE
+    # Key differences:
+    # - Theory: sensitizing concepts, NOT mechanism preview
+    # - Findings: progressive concept development, phenomenon naming
+    # - Methods: embeddedness, access story
+    REQUIRED_ELEMENTS_QUAL = {
+        "abstract": ["research question", "method", "phenomenon naming", "contribution"],
+        "introduction": ["puzzle", "gap", "contribution preview", "roadmap"],
+        "theory": ["sensitizing concepts", "prior work", "what prior work assumes", "research question"],
+        "methods": ["setting", "access", "embeddedness", "data sources", "analysis approach"],
+        "findings": ["progressive development", "phenomenon naming", "evidence", "emergent model"],
+        "discussion": ["theoretical contribution", "connection to prior work", "implications", "limitations", "future research"],
+    }
+
+    # Backward compatibility alias
+    REQUIRED_ELEMENTS = REQUIRED_ELEMENTS_QUANT
 
     # Patterns for detecting placeholders left in text
     PLACEHOLDER_PATTERNS = [
@@ -124,10 +142,15 @@ class SectionSanityChecker:
     FIGURE_REF_PATTERN = re.compile(r'[Ff]igure\s+(\d+)')
     TABLE_REF_PATTERN = re.compile(r'[Tt]able\s+(\d+)')
 
-    def __init__(self):
-        """Initialize the sanity checker."""
+    def __init__(self, paper_type: PaperType = PaperType.QUANT_FORWARD):
+        """Initialize the sanity checker.
+
+        Args:
+            paper_type: QUAL_FORWARD or QUANT_FORWARD (affects required elements)
+        """
         self._placeholder_re = [re.compile(p, re.IGNORECASE) for p in self.PLACEHOLDER_PATTERNS]
         self._stats_validator = StatisticsValidator()
+        self.paper_type = paper_type
 
     def check_section(
         self,
@@ -405,11 +428,19 @@ class SectionSanityChecker:
         """Check for required section elements."""
         issues = []
 
-        required = self.REQUIRED_ELEMENTS.get(section_name.lower(), [])
+        # Select requirements based on paper type
+        if self.paper_type == PaperType.QUAL_FORWARD:
+            requirements = self.REQUIRED_ELEMENTS_QUAL
+        else:
+            requirements = self.REQUIRED_ELEMENTS_QUANT
+
+        required = requirements.get(section_name.lower(), [])
         text_lower = text.lower()
 
         # This is a heuristic check - look for keywords
+        # Includes both quant and qual-specific keywords
         element_keywords = {
+            # Common elements
             "research question": ["question", "ask", "investigate", "examine", "explore"],
             "method": ["method", "approach", "design", "collected", "analyzed"],
             "finding": ["find", "show", "reveal", "demonstrate", "evidence"],
@@ -420,13 +451,29 @@ class SectionSanityChecker:
             "literature review": ["literature", "prior", "research", "scholar"],
             "theoretical framework": ["theor", "framework", "mechanism", "predict"],
             "mechanism": ["mechanism", "process", "dynamic", "how", "why"],
-            "setting": ["setting", "site", "organization", "company", "warehouse"],
+            "setting": ["setting", "site", "organization", "company", "warehouse", "hospital", "factory"],
             "data collection": ["collect", "gather", "interview", "observe", "survey"],
             "analysis approach": ["analyz", "cod", "process", "approach"],
             "validity": ["valid", "reliable", "robust", "triangulat"],
             "implications": ["implic", "practitioner", "manager", "organization"],
             "limitations": ["limit", "caveat", "boundary", "caution"],
             "future research": ["future", "further", "additional research"],
+
+            # Qual-forward specific elements
+            "puzzle": ["puzzle", "surprising", "paradox", "counterintuit", "unexpected"],
+            "contribution preview": ["contribut", "extend", "shed light", "advance"],
+            "sensitizing concepts": ["prior", "literature", "concept", "lens", "framework", "approach"],
+            "prior work": ["prior", "literature", "research", "scholar", "studies"],
+            "what prior work assumes": ["assumes", "taken for granted", "overlook", "neglect", "ignore"],
+            "access": ["access", "gained entry", "negotiated", "introduced", "relationship"],
+            "embeddedness": ["embedded", "immersed", "spent", "months", "years", "observed", "participated"],
+            "data sources": ["interview", "observation", "archiv", "document", "field note"],
+            "progressive development": ["first", "second", "third", "phase", "stage", "began", "then", "subsequently"],
+            "phenomenon naming": ["term", "call", "label", "named", "concept", "phenomenon"],
+            "evidence": ["quote", "said", "explained", "described", "observed", "data", "evidence"],
+            "emergent model": ["model", "framework", "process", "dynamic", "mechanism", "explain"],
+            "theoretical contribution": ["contribut", "extend", "theory", "conceptual", "advance"],
+            "connection to prior work": ["prior", "literature", "extend", "build on", "contrast with"],
         }
 
         for element in required:
@@ -534,6 +581,7 @@ class SectionSanityChecker:
 def check_manuscript_sanity(
     sections: dict[str, str],
     paper_path: Optional[str] = None,
+    paper_type: PaperType = PaperType.QUANT_FORWARD,
 ) -> dict[str, SanityReport]:
     """
     Convenience function to check all sections of a manuscript.
@@ -541,11 +589,12 @@ def check_manuscript_sanity(
     Args:
         sections: Dict mapping section names to section text
         paper_path: Path to paper directory (for data/figures)
+        paper_type: QUAL_FORWARD or QUANT_FORWARD (affects required elements)
 
     Returns:
         Dict mapping section names to SanityReports
     """
-    checker = SectionSanityChecker()
+    checker = SectionSanityChecker(paper_type=paper_type)
     reports = {}
 
     # Set up paths

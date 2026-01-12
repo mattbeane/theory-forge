@@ -27,6 +27,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
+from .config import PaperType
+
 
 class ViolationType(Enum):
     """Types of style violations."""
@@ -41,6 +43,12 @@ class ViolationType(Enum):
     ORPHANED_RESULT = "orphaned_result"
     QUOTE_WITHOUT_SETUP = "quote_without_setup"
     LONG_QUOTE = "long_quote"
+
+    # Qual-forward specific violations (genre-dependent)
+    HYPOTHESIS_LANGUAGE_IN_QUAL = "hypothesis_language_in_qual"
+    MECHANISM_PREVIEW_IN_THEORY = "mechanism_preview_in_theory"
+    QUOTE_WITHOUT_FOLLOWTHROUGH = "quote_without_followthrough"
+    FINDINGS_NOT_PROGRESSIVE = "findings_not_progressive"
 
 
 class Severity(Enum):
@@ -144,11 +152,57 @@ class StyleValidator:
         r'contributions?\s+(are|include)\s*:',
     ]
 
+    # ==========================================================================
+    # QUAL-FORWARD SPECIFIC PATTERNS
+    # These are used when paper_type is QUAL_FORWARD
+    # ==========================================================================
+
+    # Hypothesis-testing language (inappropriate for inductive papers)
+    HYPOTHESIS_LANGUAGE_PATTERNS = [
+        r'\b[Hh]ypothesis\s+\d',  # H1, H2, etc.
+        r'\b[Hh]\d\s*(:|is)',  # H1:, H1 is supported
+        r'\b(support|confirm|validate|test)\s+(the\s+)?(hypothesis|prediction|proposition)',
+        r'\b(as\s+predicted|as\s+hypothesized|consistent\s+with\s+our\s+prediction)',
+        r'\bwe\s+predict(ed)?\s+that\b',
+        r'\bour\s+findings\s+(support|confirm|validate)\b',
+        r'\bthe\s+results\s+(support|confirm|validate)\s+[Hh]\d',
+    ]
+
+    # Mechanism preview language (inappropriate in intro/theory for qual papers)
+    MECHANISM_PREVIEW_PATTERNS = [
+        r'\bwe\s+(find|show|demonstrate|argue)\s+that\s+\w+\s+(leads?\s+to|causes?|produces?)',
+        r'\bour\s+analysis\s+(reveals?|shows?)\s+that',
+        r'\bthe\s+mechanism\s+(is|involves?|works?)',
+        r'\bthis\s+(occurs?|happens?)\s+because',
+        r'\bwe\s+theorize\s+that\s+\w+\s+(leads?\s+to|results?\s+in)',
+    ]
+
+    # Theory-building language (expected in qual papers)
+    THEORY_BUILDING_LANGUAGE = [
+        r'\bI\s+found\s+that\b',
+        r'\bthis\s+suggests\s+that\b',
+        r'\bthe\s+data\s+(reveal|suggest|indicate)',
+        r'\bemerged?\s+from\s+(the\s+)?data',
+        r'\binductively\b',
+        r'\bgrounded\s+(in|theory)\b',
+        r'\b(named|labeled|termed)\s+this\s+(phenomenon|concept|dynamic)',
+    ]
+
+    # Progressive concept development indicators
+    PROGRESSIVE_CONCEPT_INDICATORS = [
+        r'\bfirst\b.*\bsecond\b.*\bthird\b',  # Ordinal progression
+        r'\bbegan\s+by\b.*\bthen\b',
+        r'\binitially\b.*\bsubsequently\b',
+        r'\bphase\s+\d\b',
+        r'\bstage\s+\d\b',
+    ]
+
     def __init__(
         self,
         passive_threshold: float = 0.30,
         hedge_threshold: float = 0.20,
         max_quote_words: int = 80,
+        paper_type: PaperType = PaperType.QUANT_FORWARD,
     ):
         """
         Initialize validator with thresholds.
@@ -157,10 +211,16 @@ class StyleValidator:
             passive_threshold: Max fraction of sentences that can be passive
             hedge_threshold: Max fraction of sentences with hedging
             max_quote_words: Maximum words in a block quote
+            paper_type: QUAL_FORWARD or QUANT_FORWARD (affects which rules apply)
         """
         self.passive_threshold = passive_threshold
         self.hedge_threshold = hedge_threshold
         self.max_quote_words = max_quote_words
+        self.paper_type = paper_type
+
+        # For qual-forward papers, allow longer quotes (they do heavy lifting)
+        if paper_type == PaperType.QUAL_FORWARD:
+            self.max_quote_words = 120
 
         # Compile patterns for efficiency
         self._passive_re = [re.compile(p, re.IGNORECASE) for p in self.PASSIVE_PATTERNS]
@@ -170,12 +230,18 @@ class StyleValidator:
         self._contrib_re = [re.compile(p, re.IGNORECASE) for p in self.CONTRIBUTION_LIST_PATTERNS]
         self._latex_list_re = [re.compile(p) for p in self.LATEX_LIST_PATTERNS]
 
+        # Compile qual-forward specific patterns
+        self._hypothesis_re = [re.compile(p, re.IGNORECASE) for p in self.HYPOTHESIS_LANGUAGE_PATTERNS]
+        self._mechanism_preview_re = [re.compile(p, re.IGNORECASE) for p in self.MECHANISM_PREVIEW_PATTERNS]
+        self._theory_building_re = [re.compile(p, re.IGNORECASE) for p in self.THEORY_BUILDING_LANGUAGE]
+
     def validate(
         self,
         text: str,
         is_cold_open: bool = False,
         is_section_open: bool = False,
         following_text: Optional[str] = None,
+        section_name: Optional[str] = None,
     ) -> ValidationResult:
         """
         Validate a paragraph against style rules.
@@ -185,24 +251,31 @@ class StyleValidator:
             is_cold_open: Whether this is the paper's opening (quote exempt from setup rule)
             is_section_open: Whether this opens a section (quote may be exempt)
             following_text: Text that follows, for checking interpretation of stats
+            section_name: Name of section (e.g., "theory", "findings") for context-aware checks
 
         Returns:
             ValidationResult with any violations found
         """
         violations = []
 
-        # HARD RULES
+        # HARD RULES (apply to all paper types)
         violations.extend(self._check_bullets(text))
         violations.extend(self._check_numbered_lists(text))
         violations.extend(self._check_latex_lists(text))
         violations.extend(self._check_contribution_lists(text))
 
-        # SOFT RULES
+        # SOFT RULES (apply to all paper types)
         violations.extend(self._check_passive_voice(text))
         violations.extend(self._check_hedging(text))
         violations.extend(self._check_orphaned_results(text, following_text))
         violations.extend(self._check_quote_setup(text, is_cold_open, is_section_open))
         violations.extend(self._check_quote_length(text))
+
+        # QUAL-FORWARD SPECIFIC RULES
+        if self.paper_type == PaperType.QUAL_FORWARD:
+            violations.extend(self._check_hypothesis_language(text, section_name))
+            violations.extend(self._check_mechanism_preview(text, section_name))
+            violations.extend(self._check_quote_followthrough(text))
 
         hard_count = sum(1 for v in violations if v.severity == Severity.HARD)
         soft_count = sum(1 for v in violations if v.severity == Severity.SOFT)
@@ -499,13 +572,150 @@ class StyleValidator:
         sentences = re.split(r'(?<=[.!?])\s+', text)
         return [s.strip() for s in sentences if s.strip()]
 
+    # ==========================================================================
+    # QUAL-FORWARD SPECIFIC CHECKS
+    # ==========================================================================
+
+    def _check_hypothesis_language(
+        self,
+        text: str,
+        section_name: Optional[str] = None,
+    ) -> list[Violation]:
+        """
+        Check for hypothesis-testing language inappropriate in inductive papers.
+
+        In qual-forward/inductive papers:
+        - Hypothesis-testing language is NEVER appropriate
+        - Theory is BUILT in findings, not tested
+        - Language like "H1 is supported" contradicts inductive logic
+        """
+        violations = []
+
+        for pattern in self._hypothesis_re:
+            match = pattern.search(text)
+            if match:
+                violations.append(Violation(
+                    type=ViolationType.HYPOTHESIS_LANGUAGE_IN_QUAL,
+                    severity=Severity.HARD,
+                    message="Hypothesis-testing language detected in inductive paper.",
+                    location=match.group(0),
+                    suggestion="Use theory-building language instead: 'I found that...', "
+                              "'This suggests...', 'The data reveal...'. "
+                              "Inductive papers BUILD theory through findings, not test hypotheses.",
+                ))
+
+        return violations
+
+    def _check_mechanism_preview(
+        self,
+        text: str,
+        section_name: Optional[str] = None,
+    ) -> list[Violation]:
+        """
+        Check for mechanism preview in intro/theory sections.
+
+        In qual-forward papers:
+        - Intro/Theory should set up PUZZLE and SENSITIZING CONCEPTS
+        - The mechanism (the "punchline") should be held for FINDINGS
+        - Previewing the mechanism undermines the inductive logic
+        """
+        violations = []
+
+        # Only flag in intro and theory sections
+        if section_name and section_name.lower() not in ['introduction', 'intro', 'theory', 'theoretical']:
+            return []
+
+        for pattern in self._mechanism_preview_re:
+            match = pattern.search(text)
+            if match:
+                violations.append(Violation(
+                    type=ViolationType.MECHANISM_PREVIEW_IN_THEORY,
+                    severity=Severity.SOFT,
+                    message="Mechanism preview detected in intro/theory section.",
+                    location=match.group(0),
+                    suggestion="In inductive papers, hold the mechanism for findings. "
+                              "Intro/theory should set up the PUZZLE and SENSITIZING CONCEPTS, "
+                              "not reveal what you found. The reader should be hooked by "
+                              "WHAT happened, not told WHY until findings.",
+                ))
+
+        return violations
+
+    def _check_quote_followthrough(self, text: str) -> list[Violation]:
+        """
+        Check that quotes have analytical follow-through, not just setup.
+
+        In qual-forward papers, quotes do heavy argumentative lifting.
+        Pattern should be: Setup → Quote → FURTHER DEVELOPMENT
+        Not just: Setup → Quote → Next topic
+        """
+        violations = []
+
+        # Find quotes
+        quote_pattern = r'["""]([^"""]{50,})["""]'
+        quotes = list(re.finditer(quote_pattern, text, re.DOTALL))
+
+        if not quotes:
+            return []
+
+        for match in quotes:
+            # Get text after the quote (next 150 chars or to end)
+            after_start = match.end()
+            after_text = text[after_start:after_start + 150].strip()
+
+            # Check for analytical follow-through
+            followthrough_patterns = [
+                r'^[^.]*\b(this|these|that|such)\s+\w+\s+(show|reveal|illustrate|demonstrate|suggest|indicate)',
+                r'^[^.]*\b(in\s+other\s+words)',
+                r'^[^.]*\b(here\s+we\s+see)',
+                r'^[^.]*\b(this\s+captures|this\s+illustrates)',
+                r'^[^.]*\b(the\s+\w+\s+(here|evident))',
+            ]
+
+            has_followthrough = any(
+                re.search(p, after_text, re.IGNORECASE)
+                for p in followthrough_patterns
+            )
+
+            # Also check if it just moves to next topic (weak pattern)
+            next_topic_patterns = [
+                r'^[^.]{0,30}\.\s*[A-Z]',  # Very short sentence then new topic
+                r'^\s*$',  # Nothing after
+            ]
+
+            is_orphaned = any(
+                re.search(p, after_text[:50])
+                for p in next_topic_patterns
+            )
+
+            if is_orphaned and not has_followthrough:
+                quote_preview = match.group(0)[:50] + "..."
+                violations.append(Violation(
+                    type=ViolationType.QUOTE_WITHOUT_FOLLOWTHROUGH,
+                    severity=Severity.SOFT,
+                    message="Quote may lack analytical follow-through.",
+                    location=quote_preview,
+                    suggestion="After each quote, continue the analytical work. "
+                              "Don't just move to the next topic. Pattern: "
+                              "Setup → Quote → 'This illustrates how...' or 'Here we see...'",
+                ))
+
+        return violations
+
 
 # Convenience function for quick validation
 def validate_paragraph(
     text: str,
     is_cold_open: bool = False,
     is_section_open: bool = False,
+    paper_type: PaperType = PaperType.QUANT_FORWARD,
+    section_name: Optional[str] = None,
 ) -> ValidationResult:
     """Convenience function for quick paragraph validation."""
-    validator = StyleValidator()
-    return validator.validate(text, is_cold_open, is_section_open)
+    validator = StyleValidator(paper_type=paper_type)
+    return validator.validate(
+        text,
+        is_cold_open,
+        is_section_open,
+        section_name=section_name,
+    )

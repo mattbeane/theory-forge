@@ -1,0 +1,252 @@
+{
+  "name": "Inductive Theory-Building Paper Criteria",
+  "version": "0.2",
+  "description": "Criteria for evaluating inductive theory-building papers for ASQ/OrgSci. Includes ethnographic, grounded theory, and MULTIMETHOD papers where theory emerges from fieldwork (even if supplemented by rudimentary quantitative analysis). Key principle: FINDINGS = THEORY. The theoretical contribution emerges progressively through evidence-rich findings sections, NOT previewed in theory/background.",
+  "max_score": 50,
+  "genre_flexibility": {
+    "note": "This rubric accommodates multimethod papers that combine ethnographic fieldwork with descriptive statistics, simple correlations, or supplementary quantitative analysis. The key distinguishing feature is HOW theory is developed (inductively through findings) not WHETHER quant data is present.",
+    "examples_of_acceptable_quant": [
+      "Descriptive statistics on sample characteristics",
+      "Simple t-tests or correlations to establish patterns",
+      "Quantitative archival data to triangulate observations",
+      "Time-stamped behavioral data alongside ethnographic notes"
+    ],
+    "what_makes_it_inductive": "Theory emerges from progressive concept development in findings, not from hypothesis testing"
+  },
+  "criteria": [
+    {
+      "id": 1,
+      "name": "Puzzle Without Punchline",
+      "description": "Introduction frames a compelling empirical puzzle but does NOT reveal the theoretical answer. The reader should be hooked by WHAT happened (or didn't happen), not told WHY.",
+      "weight": 5,
+      "levels": {
+        "5": "Crystal clear puzzle. Reader knows exactly what's surprising/unexplained. Theory is NOT previewed - only the question is posed.",
+        "4": "Strong puzzle framing with minor leakage of theoretical mechanism.",
+        "3": "Puzzle is present but partially obscured by theoretical preview.",
+        "2": "Puzzle is weak OR theoretical mechanism is substantially revealed in intro.",
+        "1": "No clear puzzle, or intro reads like a quant paper with mechanism preview."
+      },
+      "examples": {
+        "good": "Shadow Learning intro: Frames the dilemma of learning in communities of practice, asks 'what do trainees do when approved means fail?' Does NOT reveal 'shadow learning' concept.",
+        "bad": "Hedging with Talent: Intro previews the entire selection mechanism in theory section before findings."
+      }
+    },
+    {
+      "id": 2,
+      "name": "Sensitizing Concepts (Not Mechanism)",
+      "description": "Theory/Background section sets up analytical lenses and engages prior literature WITHOUT proposing the study's core theoretical contribution. Should establish 'what we might look for' not 'what we'll find.'",
+      "weight": 5,
+      "levels": {
+        "5": "Rich engagement with prior work. Establishes sensitizing concepts. Explicitly identifies what prior work assumes/takes for granted. Does NOT reveal mechanism.",
+        "4": "Good literature engagement with minor mechanism leakage.",
+        "3": "Literature review present but either thin or previews too much of the finding.",
+        "2": "Theory section reads like quant paper - proposes hypotheses or fully reveals mechanism.",
+        "1": "Theory section is literature review that doesn't serve the puzzle, or is hypothesis-testing framed."
+      },
+      "examples": {
+        "good": "Shadow Learning: Discusses legitimate peripheral participation as 'the given' in prior work, then asks what happens when it's not given.",
+        "bad": "Theory section that says 'We propose that X leads to Y through mechanism Z' before presenting any evidence."
+      }
+    },
+    {
+      "id": 3,
+      "name": "Progressive Theory Building in Findings",
+      "description": "Findings section progressively BUILDS the theoretical contribution through emergent concepts. Each major finding introduces a named concept, develops it with evidence, and links to the next.",
+      "weight": 10,
+      "levels": {
+        "5": "Findings are organized around emergent concepts (named phenomena). Each builds on prior. Evidence and conceptual development interleave. Full model emerges by section end.",
+        "4": "Good progressive structure with minor gaps in concept development or linking.",
+        "3": "Concepts are present but structure is more 'test results' than progressive theory building.",
+        "2": "Findings present data but don't build concepts progressively.",
+        "1": "Findings read like quant results section - patterns reported, not concepts developed."
+      },
+      "examples": {
+        "good": "Shadow Learning: 'Premature Specialization' → 'Abstract Rehearsal' → 'Undersupervised Struggle' - each named, each developed, each builds on prior. Beane 2023: 'Dividing' → 'Adjusting' → 'Making Do' phases.",
+        "bad": "Findings that just report: 'We found X. We also found Y. Additionally, Z.'"
+      },
+      "multimethod_note": "In multimethod papers, quantitative evidence can SUPPORT progressive theory building (e.g., 'Surgeons who had the most experience performed an increasing percentage of procedures via the older robot' supports the 'making do' concept). The key is whether quant data is used to BUILD concepts or merely to TEST hypotheses."
+    },
+    {
+      "id": 4,
+      "name": "Evidence-Concept Interleaving",
+      "description": "Evidence (quotes, observations) is tightly integrated with conceptual development. Pattern: Analytical claim → Evidence → Further development → Evidence → Synthesis.",
+      "weight": 5,
+      "levels": {
+        "5": "Quotes and observations are seamlessly woven into analytical prose. Each piece of evidence advances the argument. Analysis continues after evidence.",
+        "4": "Good integration with occasional orphaned evidence or underdeveloped analysis.",
+        "3": "Evidence present but not fully integrated - either 'quote dump' or thin analytical framing.",
+        "2": "Evidence and analysis are separated rather than interleaved.",
+        "1": "Evidence is illustrative only, not constitutive of the argument."
+      },
+      "examples": {
+        "good": "Shadow Learning: 'Successful learners cited this kind of premature, intensive exposure as crucial...' [evidence] '...These activities violated norms on two fronts...' [development]",
+        "bad": "Here is what informant A said. Here is what informant B said. These quotes show X."
+      }
+    },
+    {
+      "id": 5,
+      "name": "Rich Setting Description",
+      "description": "Methods section provides rich contextual detail about the research setting, access, embeddedness, and the researcher's relationship to the field.",
+      "weight": 5,
+      "levels": {
+        "5": "Vivid setting description. Reader can picture the context. Access story is clear. Researcher embeddedness is evident.",
+        "4": "Good setting detail with minor gaps in context or access story.",
+        "3": "Setting described but thin - reads like 'we studied organization X' without depth.",
+        "2": "Minimal setting description.",
+        "1": "Setting is barely mentioned or described in purely abstract terms."
+      },
+      "examples": {
+        "good": "Shadow Learning: 'Three of these were world-renowned teaching institutions... employed hundreds of physicians and thousands of nurses...'",
+        "bad": "We conducted an ethnographic study at a logistics company."
+      }
+    },
+    {
+      "id": 6,
+      "name": "Researcher Embeddedness",
+      "description": "Methods section conveys researcher's proximity to the phenomenon. For ethnographic work, emphasizes 'being there'. For multimethod work, shows how fieldwork grounded the analysis even if supplemented by archival/quantitative data.",
+      "weight": 3,
+      "levels": {
+        "5": "Clear embeddedness. Reader understands researcher's access, time in field, relationship to informants. First-person voice where appropriate.",
+        "4": "Good embeddedness with minor gaps in conveying access or relationship to field.",
+        "3": "Some embeddedness evident but mixed with distanced language. Acceptable for multimethod papers.",
+        "2": "Minimal sense of embeddedness despite fieldwork claims.",
+        "1": "No embeddedness - reads like secondary data analysis."
+      },
+      "examples": {
+        "good": "'I conducted a two-year field study...' 'Over 14 months, I observed 34 sets of night rounds...' 'My research team included three embedded researchers placed on factory lines.'",
+        "bad": "'Data were collected through semi-structured interviews. Interviews were transcribed and coded.'"
+      },
+      "multimethod_note": "Multimethod papers may use more distanced voice for quantitative sections while maintaining embeddedness in fieldwork descriptions. This is acceptable - score based on fieldwork portions."
+    },
+    {
+      "id": 7,
+      "name": "Extended Quotes with Analytical Framing",
+      "description": "Quotes are substantial (often 60-120+ words), colorful/voicey, and each is preceded by analytical setup and followed by further development.",
+      "weight": 5,
+      "levels": {
+        "5": "Quotes are extended and voicey. Each has analytical setup. Analysis continues after quote. Quotes do substantial argumentative work.",
+        "4": "Good quote usage with minor gaps in setup or follow-through.",
+        "3": "Quotes present but either too brief or insufficiently framed.",
+        "2": "Quotes are orphaned (no setup) or merely illustrative.",
+        "1": "Few quotes, or quotes used like in quant papers (brief mechanism illustration only)."
+      },
+      "examples": {
+        "good": "Shadow Learning quotes are 80-150 words, highly voicey ('baby's first day system'), always with setup and follow-through.",
+        "bad": "Brief 15-word quotes used only to 'illustrate' a quantitative finding."
+      },
+      "multimethod_note": "Multimethod papers may have fewer quotes if some evidence is quantitative (e.g., archival data, behavioral counts). Score based on how well the qualitative evidence that IS present is handled. A paper can score 4-5 with fewer quotes if they're well-integrated and the quant evidence also builds theory inductively."
+    },
+    {
+      "id": 8,
+      "name": "Phenomenon Naming",
+      "description": "The paper introduces one or more named concepts/phenomena that become memorable theoretical contributions. Names are evocative and capture the essence of what was observed.",
+      "weight": 5,
+      "levels": {
+        "5": "Core phenomenon is named memorably. Name captures essence. May have sub-concepts also named.",
+        "4": "Named phenomenon but name is less evocative or memorable.",
+        "3": "Concepts are present but not distinctively named.",
+        "2": "No clear phenomenon naming.",
+        "1": "Paper reports findings without conceptual contribution."
+      },
+      "examples": {
+        "good": "'Shadow learning' (evocative, captures secrecy + learning). Sub-concepts: 'Premature Specialization', 'Abstract Rehearsal', 'Undersupervised Struggle'.",
+        "bad": "Findings about 'selection behavior' without a distinctive conceptual label."
+      }
+    },
+    {
+      "id": 9,
+      "name": "Discussion as Theoretical Elaboration",
+      "description": "Discussion section elaborates the theoretical contribution, connects back to sensitizing literatures, and identifies implications - WITHOUT reading as a list of contributions.",
+      "weight": 4,
+      "levels": {
+        "5": "Discussion as narrative elaboration. Extends prior theory. Names contribution clearly. No 'three contributions' lists. Implications flow naturally.",
+        "4": "Good discussion with minor listing tendencies.",
+        "3": "Discussion present but structured as contributions list or too brief.",
+        "2": "Discussion is thin or reads like quant paper implications section.",
+        "1": "No real discussion, or discussion is contribution checklist."
+      },
+      "examples": {
+        "good": "Shadow Learning: 'This study expands our conceptions of learning in communities of practice by showing that when technological change...'",
+        "bad": "'This paper makes three contributions. First... Second... Third...'"
+      }
+    },
+    {
+      "id": 10,
+      "name": "Theory-Building Language Throughout",
+      "description": "Paper uses language appropriate to inductive/theory-building research. Avoids hypothesis-testing language ('validated', 'confirmed', 'tested').",
+      "weight": 3,
+      "levels": {
+        "5": "Consistent theory-building language. 'I found that...', 'This suggests...', 'is consistent with...'. No hypo-deductive language.",
+        "4": "Mostly appropriate language with occasional lapses.",
+        "3": "Mixed language - some theory-building, some hypothesis-testing.",
+        "2": "Predominantly hypothesis-testing language despite inductive framing.",
+        "1": "Reads like theory-testing paper."
+      },
+      "examples": {
+        "good": "'I found that...', 'This study expands our conceptions...', 'These practices were associated with...'",
+        "bad": "'Our findings validate the hypothesis that...', 'Results confirm the prediction that...'"
+      }
+    }
+  ],
+  "anti_patterns": [
+    "Theory section that reveals the mechanism before findings",
+    "Findings organized as H1, H2, H3 with support/non-support",
+    "Brief quotes used only for illustration",
+    "Distanced 'data were collected' methods language",
+    "'Three contributions' lists in discussion",
+    "Abstract that reads like quant paper (hypothesis, test, result)",
+    "No named phenomenon or concept"
+  ],
+  "notes": {
+    "key_principle": "In inductive theory-building papers, the FINDINGS section is where theory is BUILT. The 'theory/background' section sets up lenses and puzzle, but the punchline - the theoretical contribution - emerges through progressive development in findings.",
+    "contrast_with_quant": "Quant-forward papers preview the mechanism in theory section, then test it in findings. Inductive papers hold the mechanism for findings, where it emerges through evidence.",
+    "multimethod_guidance": "Papers like Beane 2023 (Resourcing a Technological Portfolio) and Beane & Orlikowski 2015 use descriptive statistics and archival data alongside ethnographic fieldwork. These are STILL inductive theory-building papers because the theoretical contribution (e.g., 'portfolio resourcing process') emerges progressively through findings, not from hypothesis testing. The presence of quant data does not make a paper quant-forward.",
+    "exemplar_sources": [
+      {
+        "citation": "Barley 1990 ASQ - Alignment of Technology and Structure",
+        "contribution": "Role-based approach, ethnographic + sociometric data",
+        "pattern": "Classic structure: theory sets up approach, findings develop roles/networks"
+      },
+      {
+        "citation": "Bernstein 2012 ASQ - Transparency Paradox",
+        "contribution": "Field experiment + embedded participant observers",
+        "pattern": "Paradox framing in intro, theory develops concept, findings test + extend"
+      },
+      {
+        "citation": "Bailey, Leonardi & Barley 2012 OrgSci - Lure of the Virtual",
+        "contribution": "Semiotic framework applied to case study",
+        "pattern": "Framework in theory, case develops implications"
+      },
+      {
+        "citation": "Brayne 2017 ASR - Big Data Surveillance",
+        "contribution": "Ethnography of LAPD big data adoption",
+        "pattern": "Findings organized as 5 shifts in practice"
+      },
+      {
+        "citation": "Leonardi 2011 OrgSci - Innovation Blindness",
+        "contribution": "Cultural toolkits + frames framework",
+        "pattern": "Technology concepts as frames, progressive concept development"
+      },
+      {
+        "citation": "O'Mahony & Bechky 2006 AMJ - Stretchwork",
+        "contribution": "Comparative field studies, grounded theory",
+        "pattern": "Paradox framing, named phenomenon (stretchwork), 4 tactics"
+      },
+      {
+        "citation": "Karunakaran, Orlikowski & Scott 2022 OrgSci - Crowd-based Accountability",
+        "contribution": "Multi-sited comparative study",
+        "pattern": "3 practice changes → diffractive reactivity concept"
+      },
+      {
+        "citation": "Beane 2023 ASQ - Resourcing a Technological Portfolio (MULTIMETHOD)",
+        "contribution": "Ethnography + archival quantitative data",
+        "pattern": "Dividing → Adjusting → Making Do phases. Uses quant but theory emerges inductively"
+      },
+      {
+        "citation": "Beane & Orlikowski 2015 OrgSci - What Difference Does a Robot Make (MULTIMETHOD)",
+        "contribution": "Ethnography + timestamped behavioral data",
+        "pattern": "Material enactment concept, provisional settlements. Uses quant but theory emerges inductively"
+      }
+    ]
+  }
+}
