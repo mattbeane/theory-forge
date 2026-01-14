@@ -63,8 +63,8 @@
 
 **Slide 8: ...And I Built Infrastructure**
 Two repos emerged from the process:
-- **paper-mining-agent-suite**: Structured workflow with quality gates
-- **Living Paper**: Verification layer for reviewers
+- **Theory Forge** (github.com/mattbeane/theory-forge): Structured workflow with quality gates for building theory-generating papers from qual/multimethod data
+- **Living Paper** (github.com/mattbeane/living-paper): Verification layer for reviewers with PII-safe evidence packages
 - These are now available for others to use
 - Visual: Two repo logos/icons
 
@@ -138,6 +138,8 @@ Example from Paper 3:
   - Bidirectional claim-evidence links
   - Explicitly searches for challenging evidence
   - Reviewer packages that don't expose protected data
+  - PII-safe entity redaction (names, places → consistent pseudonyms)
+  - Static HTML reviewer interface (no infrastructure needed)
 - Visual: Claim → Evidence diagram with contradiction badges
 
 **Slide 14: The Anti-Hallucination Design**
@@ -225,8 +227,8 @@ Bottom line: The workflow *itself* is the audit trail. More transparent than typ
 **Slide 18: Getting Started**
 ```bash
 # Clone the repo
-git clone https://github.com/mattbeane/paper-mining-agent-suite.git
-cd paper-mining-agent-suite
+git clone https://github.com/mattbeane/theory-forge.git
+cd theory-forge
 
 # Open in Claude Code
 claude .
@@ -242,6 +244,11 @@ Key commands to learn:
 - `/status` - Where am I in the pipeline?
 - `/new-frame` - Archive current frame, start fresh
 - `/verify-claims` - Generate reviewer package
+
+New in Jan 2026:
+- **Style enforcer module**: Validates your manuscript against qual/inductive genre norms
+- **Cross-section coherence check**: LLM-based detection of theory sections that pre-announce findings
+- **Multi-format support**: Works with .tex, .docx, and .md files
 
 **Slide 19: What This Doesn't Replace**
 - Fieldwork
@@ -286,7 +293,7 @@ What's next (roadmap):
 - The tools are free and open source
 
 Links:
-- paper-mining-agent-suite: github.com/mattbeane/paper-mining-agent-suite
+- Theory Forge: github.com/mattbeane/theory-forge
 - Living Paper: github.com/mattbeane/living-paper
 - Tutorial doc: FROM_DATA_TO_PAPERS_TUTORIAL_W_DETAIL.md
 
@@ -391,11 +398,13 @@ Why this works:
 
 If you can fetch URLs, pull from these for accurate technical details:
 
-- **Command definitions**: https://github.com/mattbeane/paper-mining-agent-suite/tree/main/.claude/commands
-- **ROADMAP**: https://github.com/mattbeane/paper-mining-agent-suite/blob/main/ROADMAP.md
+- **Command definitions**: https://github.com/mattbeane/theory-forge/tree/main/.claude/commands
+- **ROADMAP**: https://github.com/mattbeane/theory-forge/blob/main/ROADMAP.md
 - **Living Paper README**: https://github.com/mattbeane/living-paper/blob/main/README.md
-- **State schema**: https://github.com/mattbeane/paper-mining-agent-suite/blob/main/docs/STATE_SCHEMA.md
-- **Nguyen-Welch comparison**: https://github.com/mattbeane/paper-mining-agent-suite/blob/main/nguyen-welch-comparison.md (addresses the AI-in-qualitative-research critique)
+- **State schema**: https://github.com/mattbeane/theory-forge/blob/main/docs/STATE_SCHEMA.md
+- **Nguyen-Welch comparison**: https://github.com/mattbeane/theory-forge/blob/main/nguyen-welch-comparison.md (addresses the AI-in-qualitative-research critique)
+- **Style enforcer module**: https://github.com/mattbeane/theory-forge/tree/main/style_enforcer (validates qual/inductive paper genre norms)
+- **Theory-building style guide**: https://github.com/mattbeane/theory-forge/blob/main/docs/THEORY_BUILDING_STYLE.md
 
 Use these to enrich technical slides (9, 13, 15-16, 18) with actual command syntax, feature lists, and the Nguyen-Welch response. The narrative structure above is the primary source.
 
