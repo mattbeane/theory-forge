@@ -1,8 +1,8 @@
-# Paper Mining Agents
+# Theory Forge
 
-**Turn dormant research data into submittable papers using AI-assisted analysis.**
+**Build theory-generating papers from qualitative and mixed-methods data.**
 
-This repo provides a structured workflow for qualitative researchers (and quant-curious ethnographers) to develop papers from existing datasets using Claude Code.
+A toolkit for researchers who have rich data (interviews, fieldnotes, observations) and want to develop inductive, theory-building papers for top management journals. Works with qual-only or qual+quant multimethod designs—the iterative workflow supports triangulation between data types.
 
 ---
 
@@ -34,7 +34,7 @@ Download from [claude.ai/download](https://claude.ai/download). Claude Desktop n
 ### 2. Clone this repo
 
 ```bash
-git clone https://github.com/mattbeane/paper-mining-agent-suite.git
+git clone https://github.com/mattbeane/theory-forge.git
 ```
 
 ### 3. Point Claude at your project
