@@ -104,11 +104,19 @@ Across 3 papers, I went through 18 total frame shifts. A typical sequence looks 
 
 ---
 
-### Phase 3: Finding the Sensitizing Literature
+### Phase 3: Finding the Sensitizing Literature (Optional Gambit)
 
-**This is the crucial step that transforms description into contribution.**
+**This is *one* powerful move that can transform description into contribution—but it's not the only move.**
 
-You've found a robust empirical pattern that violates an established theoretical prediction. Now you need a *second* literature—a "sensitizing" or "interpretive" lens—that explains the heterogeneity in your data.
+**When this gambit works well:**
+You've found a robust empirical pattern that violates an established theoretical prediction, and there's heterogeneity—not everyone violates. A second literature—a "sensitizing" or "interpretive" lens—can explain *who* violates and *why*.
+
+**When to use a different approach:**
+- Your contribution is a new mechanism, not a moderator
+- Your finding is uniform (everyone violates, no heterogeneity to explain)
+- Your puzzle is "how does X work?" rather than "why do only some violate?"
+
+**The foundation:** Ezra Zuckerman's "Tips for Article-Writers" provides the basic moves for any compelling paper: (1) a puzzle in the world, (2) build up and save the null, (3) your resolution. The sensitizing literature move is one way to execute step 3, not the only way.
 
 **The pattern**:
 1. Primary theory makes a prediction (e.g., "X leads to Y")
@@ -322,7 +330,7 @@ Over 5 days, I made dozens of judgment calls that shaped these papers. Here's wh
 
 ### 1. "What interpretive lens helps explain the variation?"
 
-This is the sensitizing literature move. It transforms "here's a pattern" into "here's a contribution."
+This is the sensitizing literature move—one powerful gambit for transforming "here's a pattern" into "here's a contribution." It works especially well when your data shows heterogeneity (only some cases violate the prediction). But it's not the only move; sometimes your contribution is a new mechanism, a boundary condition, or a reframing of an established phenomenon.
 
 ### 2. "Show me what survives controls"
 

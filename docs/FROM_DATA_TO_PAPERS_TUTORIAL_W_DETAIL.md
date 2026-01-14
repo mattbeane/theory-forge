@@ -34,7 +34,7 @@ In late November 2025, I saw a tweet from Aniket Panjwani suggesting that coding
 
 **What I produced in ~3 weeks of part-time work:**
 
-- **Paper 1**: "Wait and See: Why Temporary Workers Don't Flee Impending Automation" (targeting ASQ). Uses Company X data: temp exit records, productivity data, automation timelines, and the full qualitative dataset. Core finding: voluntary resignations *decline* 18-19 pp as automation approaches—workers stay to make sense of uncertainty.
+- **Paper 1**: ~~"Wait and See: Why Temporary Workers Don't Flee Impending Automation"~~ → **"Hedging with Talent: How Managers Use Selection to Navigate Novel Technology"** (targeting ASQ). Uses Company X data: temp exit records, automation timelines, and the full qualitative dataset. Core finding: when deploying *novel* technology, managers select temps on reliability and withhold job-threat information—creating a "hedge" that increases tenure 4x at the robot facility while mature-tech sites show no change. *Reframed Jan 2026 after validation revealed the sensemaking mechanism was not supported by the data; hedging-with-talent is the final version.*
 
 - **Paper 2**: "Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities" (targeting Management Science). Uses Company X data: daily operational data, separation records, automation timelines, and interviews focused on network planning. Core finding: firms solve the exploration-exploitation dilemma *spatially*—pilot nodes explore, optimization nodes exploit.
 
@@ -148,12 +148,13 @@ You've found a robust empirical pattern that violates an established theoretical
 
 **Examples from this project**:
 
-**Paper 1**:
+**Paper 1** (original "Wait and See" framing, later reframed):
 - Primary theory: Labor economics predicts workers exit when automation threatens jobs
 - Violation: Workers stayed; turnover *decreased* before automation
 - Sensitizing question: "Why stay when you can easily leave?"
 - Sensitizing literature: Real options theory + Sensemaking
 - Extension: Anticipatory sensemaking—workers stay to understand before acting
+- **Jan 2026 reframe**: Validation revealed workers *couldn't* be making sense—managers withheld information. New frame: "Hedging with Talent" focuses on *manager-side* selection mechanism (select on reliability + information asymmetry → longer tenure as hedge against novel-tech uncertainty)
 
 **Paper 3**:
 - Primary theory: P-E fit theory predicts misfit → withdrawal
@@ -379,7 +380,7 @@ What it *dramatically accelerates*:
 
 I had data from three field studies that had been sitting dormant for 2-5 years. I hadn't touched them because the analysis-to-paper pipeline felt overwhelming. In ~3 weeks of part-time work, I produced four submission-ready papers with full online appendices:
 
-1. **Paper 1: "Wait and See"** (targeting ASQ) - Workers stay to make sense of uncertain automation. Uses Company X data. Complete with event-study figures, robustness checks, and verification package.
+1. **Paper 1: "Hedging with Talent"** (targeting ASQ) - Managers select temps on reliability and withhold job-threat info when deploying novel technology, creating a workforce "hedge" that increases tenure 4x. Uses Company X data. Complete with diff-in-diff analysis, within-facility variation, and full validation package with quantitative replication. *Reframed from "Wait and See" (Jan 2026) after validation showed sensemaking mechanism unsupported.*
 
 2. **Paper 2: "Learning to Automate"** (targeting Management Science) - Firms distribute exploration and exploitation across facilities. Uses Company X data. Complete with 9 alternative threshold robustness checks, pre-trend analysis, placebo tests, and replication code.
 
@@ -402,7 +403,7 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 
 ## Appendix: Full Frame Shift Log
 
-### Paper 1: Wait and See
+### Paper 1: Wait and See → Hedging with Talent
 
 | # | Frame | Fate |
 |---|-------|------|
@@ -410,7 +411,8 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 | 2 | "Workers flee approaching automation" | Killed: data showed opposite pattern |
 | 3 | "The Anticipation Paradox: Turnover declines before automation" | Evolved: too descriptive |
 | 4 | "Option Cultivation: Why Workers Stay" | Evolved: real options alone didn't explain mechanism |
-| 5 | **"Wait and See: Why Temporary Workers Don't Flee Impending Automation"** | Final: anticipatory sensemaking + real options, explains both staying AND technology moderation |
+| 5 | "Wait and See: Why Temporary Workers Don't Flee Impending Automation" | Killed (Jan 2026): validation revealed sensemaking mechanism not supported—workers couldn't be "making sense" if managers withheld information |
+| 6 | **"Hedging with Talent: How Managers Use Selection to Navigate Novel Technology"** | **Final (Jan 2026)**: Reframed as *hedging-with-talent*. Manager-side mechanism: select on reliability + withhold job-threat info. Novel tech = high uncertainty → tenure 4x increase (21h→84h); mature tech = no change. N=1 robot facility acknowledged as limitation. Diff-in-diff: +74h [95% CI: 62-92h]. Validation package created with full quantitative replication. |
 
 ### Paper 2: Learning to Automate
 
@@ -479,4 +481,4 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 
 ---
 
-*Document updated December 2025. For questions: mattbeane@ucsb.edu*
+*Document updated January 2026. For questions: mattbeane@ucsb.edu*

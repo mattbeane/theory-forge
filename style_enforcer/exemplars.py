@@ -56,6 +56,7 @@ class ExemplarDB:
             "introduction_cold_open": self._introduction_cold_open_exemplar(),
             "theory": self._theory_exemplar(),
             "methods": self._methods_exemplar(),
+            "iterative_methods": self._iterative_methods_exemplar(),
             "findings": self._findings_exemplar(),
             "findings_quote_integration": self._findings_quote_exemplar(),
             "discussion": self._discussion_exemplar(),
@@ -153,6 +154,23 @@ Key features:
 - Concrete details about being there
 - Sample description woven into narrative
 """,
+        )
+
+    def _iterative_methods_exemplar(self) -> Exemplar:
+        return Exemplar(
+            source="Beane 2023 ASQ (Resourcing a Technological Portfolio)",
+            section="iterative_methods",
+            text="""I carried out two interdependent and iterative analytical streams: one qualitative, one quantitative. Initial qualitative analysis revealed that robotic surgical work demanded constant coordination between surgeons, residents, and nurses—coordination that shifted dramatically as uncertainty declined. I then turned to quantitative data to identify when these shifts occurred, discovering distinct phases marked by declining variability in procedure length, complication rates, and engineer intervention frequency. These quantitative markers drove me back to qualitative data to understand what had changed organizationally in each phase. The phase structure presented in findings emerged from this iterative process: phases correspond to organizational events informants described as marking qualitative shifts in their work, corroborated by quantitative discontinuities in operational patterns.""",
+            notes="""
+Key features of iterative methods description:
+- Explicitly names "two interdependent and iterative analytical streams"
+- Describes puzzle emerging from one data source
+- Describes returning to other data source to investigate
+- States that framework "emerged from this iterative process"
+- Connects qual and quant: qual revealed patterns, quant identified timing, qual explained meaning
+- Emphasizes that phases "correspond to organizational events" (qual) "corroborated by quantitative discontinuities" (quant)
+""",
+            is_qual_forward=True,
         )
 
     def _findings_exemplar(self) -> Exemplar:

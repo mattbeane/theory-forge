@@ -186,6 +186,24 @@
         "good": "'I found that...', 'This study expands our conceptions...', 'These practices were associated with...'",
         "bad": "'Our findings validate the hypothesis that...', 'Results confirm the prediction that...'"
       }
+    },
+    {
+      "id": 11,
+      "name": "Iterative Methods Description (Multimethod Only)",
+      "description": "For papers using both qual and quant data: Methods section explicitly describes iterative movement between data sources, with puzzles driving iteration and framework emerging from the process.",
+      "weight": 3,
+      "applies_to": "multimethod_only",
+      "levels": {
+        "5": "Clear 'two streams' language. Describes puzzle → qual → quant → qual cycle. States framework 'emerged from' iteration.",
+        "4": "Mentions iteration but less explicit about cycle or emergence.",
+        "3": "Describes both data sources but not iterative relationship.",
+        "2": "Data sources described separately without integration.",
+        "1": "No mention of iterative process; reads like parallel analyses."
+      },
+      "examples": {
+        "good": "Beane 2023: 'two interdependent and iterative analytical streams... phases emerged from this iterative process'",
+        "bad": "We analyzed interviews using grounded theory. We also analyzed quantitative data using regression."
+      }
     }
   ],
   "anti_patterns": [
@@ -195,7 +213,15 @@
     "Distanced 'data were collected' methods language",
     "'Three contributions' lists in discussion",
     "Abstract that reads like quant paper (hypothesis, test, result)",
-    "No named phenomenon or concept"
+    "No named phenomenon or concept",
+    "'Expected Patterns' section in theory (implies hypo-deductive framing)",
+    "'Pattern 1/2/3' labels in findings (implies pre-specified patterns)",
+    "'We predict' or 'We expect' language when describing OUR expectations",
+    "Missing iterative methods description in multimethod papers",
+    "Enumerated contribution statements ('First, we contribute... Second...')",
+    "Citing non-peer-reviewed sources (HBR, practitioner outlets) as theoretical foundations",
+    "Speculating findings into existence ('X-type facilities might...', 'we would attend to...')",
+    "Multiple enumerated research questions instead of ONE compound question"
   ],
   "notes": {
     "key_principle": "In inductive theory-building papers, the FINDINGS section is where theory is BUILT. The 'theory/background' section sets up lenses and puzzle, but the punchline - the theoretical contribution - emerges through progressive development in findings.",

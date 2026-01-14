@@ -44,7 +44,7 @@
 ### Section 2: What I Produced (Slides 5-8)
 
 **Slide 5: The Output—4 Papers**
-- Paper 1: "Wait and See" (workers STAY when automation approaches—voluntary resignations drop 18-19 pp)
+- Paper 1: "Hedging with Talent" (managers select temps on reliability under novel-tech uncertainty—tenure 4x at robot facility, +74h diff-in-diff)
 - Paper 2: "Learning to Automate" (firms solve exploration/exploitation spatially—pilot nodes vs optimization nodes)
 - Paper 3: "When Misfit Motivates" (work orientation moderates P-E fit—seasonal workers respond 2x)
 - Paper 4: "Developmental Uncertainty" (uncertainty enables cross-status skill transfer—76% advanced, window closes)
@@ -52,8 +52,8 @@
 **Slide 6: The Plot Twists**
 - Every paper started with a wrong hypothesis
 - 23+ total frame shifts across 4 papers
-- Example: "Workers flee automation" → data showed OPPOSITE → became Paper 1
-- Key insight: The AI helped me find what the data actually showed, not what I expected
+- Example: "Workers flee automation" → data showed OPPOSITE → "Wait and See" (workers making sense) → BUT validation revealed managers withheld info, so workers *couldn't* be sensemaking → **Final**: "Hedging with Talent" (manager-side selection mechanism)
+- Key insight: The AI helped me find what the data actually showed, not what I expected—AND validation caught a plausible-but-wrong mechanism
 
 **Slide 7: What Made This Possible**
 - Not magic—leverage
@@ -84,8 +84,16 @@ Show the full workflow as a diagram:
 8. `/audit-claims` - What evidence supports/challenges each claim?
 9. `/verify-claims` - External adversarial review + Living Paper export
 
-**Slide 10: The Key Move—Finding Sensitizing Literature**
-The pattern that makes contributions:
+**Slide 10: The Foundation—Zuckerman's Framework + Optional Moves**
+
+**The foundation (Zuckerman):**
+Every compelling paper needs:
+1. A puzzle in the world (not a lit gap)
+2. Build up and save the null (make the conventional view compelling before breaking it)
+3. Your resolution (the contribution)
+
+**One powerful gambit—Sensitizing Literature:**
+When your data shows heterogeneity (only SOME violate):
 1. Primary theory predicts X
 2. Your data shows Y (violation!)
 3. You find a SECOND literature that explains WHO violates
@@ -97,15 +105,21 @@ Example from Paper 3:
 - Sensitizing lit: Work orientation (Wrzesniewski, Schein)
 - Contribution: Orientation moderates the misfit-response relationship
 
+**But it's not the only move:**
+- Sometimes your contribution is a new mechanism, not a moderator
+- Sometimes the finding is uniform (everyone violates)
+- The sensitizing literature gambit is one tool, not the whole toolkit
+
 **Slide 11: Frame Shifts Are The Process**
 - Show example frame shift table (Paper 1):
   1. "Automation causes turnover" → Killed: didn't survive controls
   2. "Workers flee automation" → Killed: data showed opposite
   3. "Anticipation Paradox" → Evolved: too descriptive
   4. "Option Cultivation" → Evolved: needed mechanism
-  5. **"Wait and See"** → Final: sensemaking + real options
+  5. "Wait and See" → Killed (Jan 2026): validation revealed workers couldn't be sensemaking if managers withheld info
+  6. **"Hedging with Talent"** → Final: manager-side selection on reliability + information asymmetry
 
-- Key lesson: Be willing to kill your darlings. The FIRST framing is almost never right.
+- Key lesson: Be willing to kill your darlings. Even a LATER framing can be wrong—validation matters.
 
 **Slide 12: Qualitative-Quantitative Integration**
 - This is where qual researchers have an advantage
@@ -133,6 +147,29 @@ Example from Paper 3:
   - Living Paper forces explicit evidence links
   - Zuckerman criteria at two checkpoints
 - Key quote: "The system that built the analysis should NOT be the only verifier"
+
+**Slide 14b: Theory-Building vs Theory-Testing Language (Optional Style)**
+
+**Know your paper's genre:**
+- **Theory-building**: Discovers patterns, proposes mechanisms, develops frameworks
+- **Theory-testing**: Tests pre-specified hypotheses against data
+
+**A single paper can't do both.** If you're discovering patterns AND claiming to test them, something's wrong.
+
+**Language matters:**
+| Theory-Building | Theory-Testing |
+|-----------------|----------------|
+| "The data suggest..." | "The data confirm..." |
+| "is consistent with..." | "supports the hypothesis..." |
+| "the pattern indicates..." | "validates the prediction..." |
+
+**Red flags for theory-building papers:**
+- Numbered hypotheses (H1, H2, H3)
+- "The data support Hypothesis 1"
+- "As predicted..."
+- Tables with "Supported/Not Supported" columns
+
+**This is a style choice**—some papers legitimately test hypotheses. Use the theory-building rubric in `docs/THEORY_BUILDING_STYLE.md` when your paper is building, not testing.
 
 ---
 
@@ -328,21 +365,24 @@ Why this works:
 
 3. "The system that built the analysis should NOT be the only verifier."
 
-4. "We'll see. I want to see what happens. If it doesn't work out, I can always leave." (from Paper 1, capturing anticipatory sensemaking)
+4. "The first thing I did is I verified attendance across first and second shift, but it's probably the most important thing, right? You need to show up to work." (from Paper 1, capturing reliability-based selection)
 
-5. "Money was not the answer." (from Paper 3, the 1,300 workers who didn't quit)
+5. "The ultimate goal here is to reduce labor costs... But I'm not going to go ahead and deliver that message." (from Paper 1, capturing deliberate information withholding)
 
-6. "Gallatin develops, Fresno perfects." (from Paper 2, deliberate facility role differentiation)
+6. "Money was not the answer." (from Paper 3, the 1,300 workers who didn't quit)
+
+7. "Gallatin develops, Fresno perfects." (from Paper 2, deliberate facility role differentiation)
 
 ## STATS TO HIGHLIGHT
 
 - 4 papers in ~3 weeks of part-time work
-- 23+ frame shifts across papers
+- 23+ frame shifts across papers (6 for Paper 1 alone: through "Wait and See" to final "Hedging with Talent")
 - 59,000 temp worker exit records
 - 33 million telemetry records
 - 351 interviews, 718 hours observation
 - 76% of early-phase drivers advanced to professional roles
-- 18-19 pp decline in voluntary resignations before automation
+- +74h diff-in-diff tenure increase at robot vs sorter facilities [95% CI: 62-92h]
+- 4x tenure increase at robot facility (21h → 84h median)
 - 2x incentive response for seasonal vs full-time workers
 
 ---

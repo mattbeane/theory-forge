@@ -10,6 +10,7 @@ This module implements a hybrid architecture:
 - Automatic fixing of style violations
 - Data inventory for statistics verification
 - Section-level sanity checks
+- Cross-section coherence validation (LLM-based)
 
 Key components:
 - StyleValidator: Deterministic rule checking (fast, no LLM)
@@ -19,15 +20,24 @@ Key components:
 - DataInventory: Scans available data files to prevent hallucination
 - StatisticsValidator: Flags unverified statistical claims
 - SectionSanityChecker: Section-level validation beyond style rules
+- CoherenceValidator: Cross-section semantic validation (requires LLM)
+- load_document: Unified document loading (.tex, .docx, .md)
 """
 
 from .validator import StyleValidator, ValidationResult, ViolationType, Severity
 from .exemplars import ExemplarDB
+from .loaders import load_document, load_latex, load_word, load_markdown, detect_format
 from .config import SectionConfig, ManuscriptConfig, PaperType, QUANT_FORWARD_ORGSCI
 from .orchestrator import ManuscriptOrchestrator, GenerationResult
 from .data_inventory import DataInventory, InventoryResult, scan_paper_data
 from .statistics_validator import StatisticsValidator, StatisticalClaim
 from .section_sanity import SectionSanityChecker, SanityReport
+from .coherence_validator import (
+    CoherenceValidator,
+    CoherenceReport,
+    CoherenceViolationType,
+    validate_paper_coherence,
+)
 
 __all__ = [
     # Core
@@ -51,4 +61,15 @@ __all__ = [
     'StatisticalClaim',
     'SectionSanityChecker',
     'SanityReport',
+    # Cross-section coherence (LLM-based)
+    'CoherenceValidator',
+    'CoherenceReport',
+    'CoherenceViolationType',
+    'validate_paper_coherence',
+    # Document loaders
+    'load_document',
+    'load_latex',
+    'load_word',
+    'load_markdown',
+    'detect_format',
 ]

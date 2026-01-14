@@ -50,6 +50,13 @@ class ViolationType(Enum):
     QUOTE_WITHOUT_FOLLOWTHROUGH = "quote_without_followthrough"
     FINDINGS_NOT_PROGRESSIVE = "findings_not_progressive"
 
+    # Multimethod inductive paper specific violations
+    EXPECTED_PATTERNS_SECTION = "expected_patterns_section"
+    PATTERN_NUMBERING = "pattern_numbering"
+    ENUMERATED_CONTRIBUTIONS = "enumerated_contributions"
+    MISSING_ITERATIVE_METHODS = "missing_iterative_methods"
+    SPECULATIVE_FINDINGS = "speculative_findings"
+
 
 class Severity(Enum):
     """Severity of violations."""
@@ -121,9 +128,11 @@ class StyleValidator:
     ]
 
     # Bullet point patterns (including LaTeX)
+    # NOTE: Asterisk bullet pattern removed - too many false positives from
+    # table footnotes (e.g., "* Projected figures.") and markdown italics
     BULLET_PATTERNS = [
         r'^\s*[-•●○▪▸]\s+',  # Common bullet characters
-        r'^\s*\*\s+(?!\*)',   # Asterisk as bullet (not bold)
+        # r'^\s*\*\s+(?!\*)',   # DISABLED: catches table footnotes
         r'\\item\s+',         # LaTeX \item command
         r'\\item\[',          # LaTeX \item with optional argument
     ]
@@ -136,10 +145,12 @@ class StyleValidator:
     ]
 
     # Numbered list patterns (including LaTeX)
+    # NOTE: Pattern for (a) or (1) style removed - too many false positives from
+    # citation years like "(2021)" at start of lines in PDF conversions
     NUMBERED_LIST_PATTERNS = [
         r'^\s*\d+[\.\)]\s+',           # 1. or 1)
         r'^\s*[a-z][\.\)]\s+',         # a. or a)
-        r'^\s*\([a-z\d]+\)\s+',        # (a) or (1)
+        # r'^\s*\([a-z\d]+\)\s+',      # DISABLED: catches citation years (2021)
         r'^\s*[ivxIVX]+[\.\)]\s+',     # Roman numerals
         r'\\begin\{enumerate\}',        # LaTeX enumerate
     ]
@@ -169,12 +180,39 @@ class StyleValidator:
     ]
 
     # Mechanism preview language (inappropriate in intro/theory for qual papers)
+    # These patterns catch when the theory section reveals findings rather than setting up
+    # sensitizing concepts and research questions
+    # NOTE: Relaxed patterns to reduce false positives on published papers
     MECHANISM_PREVIEW_PATTERNS = [
+        # Original patterns - causal claims (strong indicators)
         r'\bwe\s+(find|show|demonstrate|argue)\s+that\s+\w+\s+(leads?\s+to|causes?|produces?)',
         r'\bour\s+analysis\s+(reveals?|shows?)\s+that',
         r'\bthe\s+mechanism\s+(is|involves?|works?)',
         r'\bthis\s+(occurs?|happens?)\s+because',
         r'\bwe\s+theorize\s+that\s+\w+\s+(leads?\s+to|results?\s+in)',
+        # Theory-building patterns (only flag when combined with enumeration)
+        r'\bwe\s+develop\s+a\s+theory\s+of\b',  # Should emerge in findings
+        r'\bwe\s+theorize\s+(three|two|four|several)\b',  # Enum theorizing = findings work
+        # NOTE: Removed 'we theorize that' alone - too broad, legitimate in modern intros
+        r'\bthe\s+key\s+insight\s+is\s+that\b',  # Punchline belongs in findings
+        r'\bthe\s+core\s+argument\s+is\s+that\b',  # Core argument should emerge
+        r'\ba\s+key\s+theoretical\s+claim\s+is\s+that\b',  # Labeling claims as theoretical
+        # NOTE: Removed 'we propose that' alone - too common in legitimate usage
+        # Context-specific patterns for warehouse automation papers
+        r'\b\w+\s+nodes?\s+are\s+(designated|exploitation|exploration)\b',  # "X nodes are..."
+        r'\bthese\s+facilities\s+(absorb|receive|serve|function|are)\b',  # Empirical claims
+        # NOTE: Removed 'managers expect/anticipate' - too common in legitimate theory
+    ]
+
+    # Speculative findings patterns (inappropriate in theory section)
+    # Theory section should NOT describe what "might" happen in detail - that's speculating findings
+    SPECULATIVE_FINDINGS_PATTERNS = [
+        r'\b\w+-focused\s+facilities\s+might\b',  # "Exploration-focused facilities might..."
+        r'\bif\s+\w+-focused\s+facilities\s+exist\b',  # "If exploration-focused facilities exist..."
+        r'\bat\s+such\s+facilities[,\s]',  # "At such facilities, productivity might..."
+        r'\bwe\s+would\s+attend\s+to\b',  # "we would attend to: X, Y, Z"
+        r'\bif\s+such\s+differentiation\s+occurs\b',  # Extended speculation
+        r'\bthe\s+question\s+is\s+whether\s+such\b',  # Setting up speculative framework
     ]
 
     # Theory-building language (expected in qual papers)
@@ -195,6 +233,47 @@ class StyleValidator:
         r'\binitially\b.*\bsubsequently\b',
         r'\bphase\s+\d\b',
         r'\bstage\s+\d\b',
+    ]
+
+    # ==========================================================================
+    # MULTIMETHOD INDUCTIVE PAPER PATTERNS
+    # These catch hypo-deductive anti-patterns that should not appear in
+    # papers using quantitative data for triangulation, not hypothesis testing
+    # ==========================================================================
+
+    # Expected Patterns / Pattern X anti-patterns (multimethod inductive papers)
+    EXPECTED_PATTERNS_ANTIPATTERNS = [
+        r'\b[Ee]xpected\s+[Pp]atterns?\b',  # "Expected Pattern(s)" header
+        r'\bthree\s+(expected\s+)?patterns?\b',  # "three expected patterns"
+        r'\b[Pp]attern\s+\d+\b',  # "Pattern 1", "Pattern 2"
+        r'\bwe\s+(would\s+)?expect\s+to\s+observe\b',  # "we would expect to observe"
+        r'\bobservable\s+implications?\b',  # "observable implications"
+        r'\byields?\s+a\s+prediction\b',  # "yields a prediction"
+    ]
+
+    # Enumerated contribution patterns (beyond "makes three contributions")
+    ENUMERATED_CONTRIBUTION_PATTERNS = [
+        r'\b[Ff]irst,\s+we\s+(contribute|extend|show|demonstrate)\b',
+        r'\b[Ss]econd,\s+we\s+(contribute|extend|show|demonstrate)\b',
+        r'\b[Tt]hird,\s+we\s+(contribute|extend|show|demonstrate)\b',
+        r'\b[Oo]ur\s+(first|second|third)\s+contribution\b',
+    ]
+
+    # Prior theory vs our prediction distinction
+    # These are OK when describing what PRIOR WORK predicts, flagged when describing OUR predictions
+    OUR_PREDICTION_PATTERNS = [
+        r'\bwe\s+(therefore\s+)?(expect|predict)\s+that\b',  # "We expect that"
+        r'\bthis\s+(suggests|implies)\s+that\s+\w+\s+should\b',  # "This suggests X should"
+        r'\bour\s+(framework|theory|model)\s+(predicts|suggests)\b',  # "Our framework predicts"
+    ]
+
+    # Iterative methods language (REQUIRED for multimethod inductive)
+    ITERATIVE_METHODS_INDICATORS = [
+        r'\biterative(ly)?\b.*\b(qual|quant)',
+        r'\bquant.*\bqual|qual.*\bquant\b',  # mentions both in proximity
+        r'\bpuzzle\b.*\breturned\s+to\b',
+        r'\bemerged\s+from\s+(this|the)\s+(iterative|analytical)\s+process\b',
+        r'\btwo\s+(interdependent|iterative)\s+(analytical\s+)?streams\b',  # Resourcing paper phrasing
     ]
 
     def __init__(
@@ -234,6 +313,13 @@ class StyleValidator:
         self._hypothesis_re = [re.compile(p, re.IGNORECASE) for p in self.HYPOTHESIS_LANGUAGE_PATTERNS]
         self._mechanism_preview_re = [re.compile(p, re.IGNORECASE) for p in self.MECHANISM_PREVIEW_PATTERNS]
         self._theory_building_re = [re.compile(p, re.IGNORECASE) for p in self.THEORY_BUILDING_LANGUAGE]
+        self._speculative_findings_re = [re.compile(p, re.IGNORECASE) for p in self.SPECULATIVE_FINDINGS_PATTERNS]
+
+        # Compile multimethod inductive paper patterns
+        self._expected_patterns_re = [re.compile(p, re.IGNORECASE) for p in self.EXPECTED_PATTERNS_ANTIPATTERNS]
+        self._enumerated_contrib_re = [re.compile(p, re.IGNORECASE) for p in self.ENUMERATED_CONTRIBUTION_PATTERNS]
+        self._our_prediction_re = [re.compile(p, re.IGNORECASE) for p in self.OUR_PREDICTION_PATTERNS]
+        self._iterative_methods_re = [re.compile(p, re.IGNORECASE | re.DOTALL) for p in self.ITERATIVE_METHODS_INDICATORS]
 
     def validate(
         self,
@@ -276,6 +362,11 @@ class StyleValidator:
             violations.extend(self._check_hypothesis_language(text, section_name))
             violations.extend(self._check_mechanism_preview(text, section_name))
             violations.extend(self._check_quote_followthrough(text))
+            violations.extend(self._check_speculative_findings(text, section_name))
+            # Multimethod inductive checks
+            violations.extend(self._check_expected_patterns(text, section_name))
+            violations.extend(self._check_enumerated_contributions(text))
+            violations.extend(self._check_our_predictions(text, section_name))
 
         hard_count = sum(1 for v in violations if v.severity == Severity.HARD)
         soft_count = sum(1 for v in violations if v.severity == Severity.SOFT)
@@ -292,6 +383,7 @@ class StyleValidator:
         violations = []
         lines = text.split('\n')
         in_tablenotes = False
+        in_figure_or_table = False
 
         for i, line in enumerate(lines):
             # Track tablenotes environment (standard LaTeX for table footnotes)
@@ -302,6 +394,13 @@ class StyleValidator:
                 in_tablenotes = False
                 continue
             if in_tablenotes:
+                continue
+
+            # Heuristic: Skip lines that look like figure/table content
+            # (short lines with bullets are often from converted PDF figures)
+            line_stripped = line.strip()
+            if len(line_stripped) < 60 and line_stripped.startswith('•'):
+                # Short bullet line - likely from figure/table, skip
                 continue
 
             for pattern in self._bullet_re:
@@ -499,8 +598,9 @@ class StyleValidator:
         is_section_open: bool = False,
     ) -> list[Violation]:
         """Check that quotes have preceding analytical claims."""
-        # Find block quotes (text in quotation marks spanning multiple lines or >50 chars)
-        quote_pattern = r'["""]([^"""]{50,})["""]|```quote\n(.*?)\n```'
+        # Find BLOCK quotes only (>100 chars to avoid inline quotes)
+        # Increased threshold from 50 to 100 to reduce false positives
+        quote_pattern = r'["""]([^"""]{100,})["""]|```quote\n(.*?)\n```'
 
         quotes = list(re.finditer(quote_pattern, text, re.DOTALL))
 
@@ -509,8 +609,6 @@ class StyleValidator:
 
         # Cold opens are exempt
         if is_cold_open or is_section_open:
-            # But must have framing after
-            # This is hard to check in isolation; rely on section-level review
             return []
 
         violations = []
@@ -519,16 +617,23 @@ class StyleValidator:
             # Get text before the quote
             before_text = text[:match.start()].strip()
 
-            # Check for analytical claim patterns
+            # Check for analytical claim patterns - expanded to reduce false positives
+            # Published papers use many ways to set up quotes
             claim_patterns = [
-                r'\w+\s+(described|explained|noted|observed|recalled|stated)',
+                r'\w+\s+(described|explained|noted|observed|recalled|stated|said|wrote|argued|suggested)',
                 r'(as|like)\s+one\s+\w+\s+(put|said|noted|explained)',
-                r'this\s+(pattern|dynamic|mechanism|phenomenon)',
-                r'(illustrat|demonstrat|reveal|show|exemplif)',
+                r'this\s+(pattern|dynamic|mechanism|phenomenon|finding|observation)',
+                r'(illustrat|demonstrat|reveal|show|exemplif|captur|indicat)',
+                r'(he|she|they|we|I)\s+(found|saw|heard|learned|discovered)',
+                r'(interviewee|informant|respondent|participant|surgeon|manager|worker)',
+                r'(typical|common|frequent|representative|characteristic)',
+                r'(for\s+example|for\s+instance|e\.g\.|such\s+as)',
+                r'(according\s+to|in\s+the\s+words\s+of)',
+                r':\s*$',  # Colon at end often precedes a quote
             ]
 
             has_setup = any(
-                re.search(p, before_text[-200:], re.IGNORECASE)  # Check last 200 chars
+                re.search(p, before_text[-300:], re.IGNORECASE)  # Check last 300 chars
                 for p in claim_patterns
             )
 
@@ -701,6 +806,169 @@ class StyleValidator:
                 ))
 
         return violations
+
+    # ==========================================================================
+    # MULTIMETHOD INDUCTIVE PAPER CHECKS
+    # ==========================================================================
+
+    def _check_expected_patterns(
+        self,
+        text: str,
+        section_name: Optional[str] = None,
+    ) -> list[Violation]:
+        """
+        Check for "Expected Patterns" / "Pattern 1/2/3" anti-patterns.
+
+        In multimethod inductive papers, patterns should EMERGE from analysis,
+        not be pre-specified. Sections titled "Expected Patterns" or references
+        to "Pattern 1", "Pattern 2" indicate hypo-deductive framing.
+        """
+        violations = []
+
+        for pattern in self._expected_patterns_re:
+            match = pattern.search(text)
+            if match:
+                violations.append(Violation(
+                    type=ViolationType.EXPECTED_PATTERNS_SECTION,
+                    severity=Severity.HARD,
+                    message="Pre-specified pattern language detected in inductive paper.",
+                    location=match.group(0),
+                    suggestion="Inductive papers discover patterns through analysis, not pre-specify them. "
+                              "Replace 'Expected Patterns' with 'Research Questions' or 'Empirical Questions'. "
+                              "Replace 'Pattern 1' with descriptive labels that emerged from analysis. "
+                              "Reframe 'we expect to observe' as 'we examine whether'.",
+                ))
+
+        return violations
+
+    def _check_speculative_findings(
+        self,
+        text: str,
+        section_name: Optional[str] = None,
+    ) -> list[Violation]:
+        """
+        Check for speculative findings language in theory section.
+
+        Theory sections should NOT describe in detail what "might" happen or what
+        we "would attend to" if various conditions exist. This speculates findings
+        into existence rather than letting them emerge from analysis.
+
+        The theory section should set up sensitizing concepts and ONE compound
+        research question, then briefly state what we find (1-2 sentences max).
+        """
+        violations = []
+
+        # Only check in theory/background sections
+        if section_name and section_name.lower() not in ['theory', 'theoretical', 'background', 'lens']:
+            return []
+
+        for pattern in self._speculative_findings_re:
+            match = pattern.search(text)
+            if match:
+                violations.append(Violation(
+                    type=ViolationType.SPECULATIVE_FINDINGS,
+                    severity=Severity.HARD,
+                    message="Speculative findings language in theory section.",
+                    location=match.group(0),
+                    suggestion="Theory section should NOT speculate what 'might' happen or describe "
+                              "hypothetical facility types in detail. Instead: (1) Set up sensitizing "
+                              "concepts from peer-reviewed literature, (2) Pose ONE compound research "
+                              "question, (3) Briefly state what you find (1-2 sentences). "
+                              "The detailed typology/framework should emerge in FINDINGS.",
+                ))
+
+        return violations
+
+    def _check_enumerated_contributions(self, text: str) -> list[Violation]:
+        """
+        Check for enumerated contribution patterns.
+
+        Beyond "makes three contributions:", also catches:
+        - "First, we contribute... Second, we contribute..."
+        - "Our first contribution... Our second contribution..."
+        """
+        violations = []
+
+        for pattern in self._enumerated_contrib_re:
+            match = pattern.search(text)
+            if match:
+                violations.append(Violation(
+                    type=ViolationType.ENUMERATED_CONTRIBUTIONS,
+                    severity=Severity.HARD,
+                    message="Enumerated contribution pattern detected.",
+                    location=match.group(0),
+                    suggestion="State contributions as narrative theoretical extensions, not numbered lists. "
+                              "Example: 'This research extends X by showing Y. We demonstrate that...' "
+                              "The contribution should read as joining a scholarly conversation, not checking boxes.",
+                ))
+
+        return violations
+
+    def _check_our_predictions(
+        self,
+        text: str,
+        section_name: Optional[str] = None,
+    ) -> list[Violation]:
+        """
+        Check for prediction language attributable to US (not prior theory).
+
+        It's acceptable to say "Prior work predicts X" or "Standard theory expects Y"
+        when setting up a puzzle. It's NOT acceptable to say "We predict" or
+        "Our framework suggests X should show" in an inductive paper.
+        """
+        violations = []
+
+        # Only check in theory sections where this matters most
+        if section_name and section_name.lower() not in ['theory', 'theoretical', 'background']:
+            return []
+
+        for pattern in self._our_prediction_re:
+            match = pattern.search(text)
+            if match:
+                violations.append(Violation(
+                    type=ViolationType.HYPOTHESIS_LANGUAGE_IN_QUAL,
+                    severity=Severity.HARD,
+                    message="Prediction language attributable to this paper (not prior theory).",
+                    location=match.group(0),
+                    suggestion="In inductive papers, avoid stating what WE predict/expect. "
+                              "Instead: 'This raises the question of whether...' or "
+                              "'We examine whether...' or 'This directs attention to...'. "
+                              "Describing what PRIOR THEORY predicts is acceptable for setting up puzzles.",
+                ))
+
+        return violations
+
+    def check_iterative_methods_present(
+        self,
+        methods_text: str,
+    ) -> Optional[Violation]:
+        """
+        Check that multimethod inductive papers include iterative analysis language.
+
+        Required elements (at least one):
+        - Explicit mention of iterative qual-quant movement
+        - Description of puzzle emerging from one data source
+        - Description of returning to other data source
+        - Statement that framework/typology emerged from this iteration
+        """
+        has_iterative_indicator = any(
+            pattern.search(methods_text)
+            for pattern in self._iterative_methods_re
+        )
+
+        if not has_iterative_indicator:
+            return Violation(
+                type=ViolationType.MISSING_ITERATIVE_METHODS,
+                severity=Severity.SOFT,  # Soft because some papers may have different structure
+                message="Methods section may lack iterative analysis language.",
+                suggestion="Multimethod inductive papers should describe how analysis moved "
+                          "iteratively between qual and quant data. Example: 'Initial fieldwork "
+                          "revealed X. We then examined quantitative data to Y. This puzzle drove "
+                          "us back to qualitative evidence, where we found Z. The framework "
+                          "presented in findings emerged from this iterative process.'",
+            )
+
+        return None
 
 
 # Convenience function for quick validation

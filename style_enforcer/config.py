@@ -277,6 +277,8 @@ def _qual_forward_sections() -> dict[str, SectionConfig]:
                 "numbered_hypotheses_list",
                 "propositions",
                 "predictions",
+                "expected_patterns_section",  # Hypo-deductive framing
+                "pattern_numbering",  # "Pattern 1", "Pattern 2" etc.
             ],
             allow_hypothesis_language=False,  # Theory-building only
             exemplar_key="theory",
@@ -293,6 +295,7 @@ def _qual_forward_sections() -> dict[str, SectionConfig]:
                 "access_and_embeddedness",  # How researcher got in
                 "data_sources_narrative",  # Data described in narrative form
                 "analytical_approach_inductive",  # Abductive/grounded theory language
+                "iterative_analysis_description",  # Required for multimethod: qual-quant iteration
             ],
             # First-person voice is expected in qual methods
             exemplar_key="methods",

@@ -73,6 +73,37 @@ QUAL_FORWARD_GUIDANCE = """This is a QUAL-FORWARD paper. Ethnographic evidence i
 - More space for setting description and observational detail
 """
 
+MULTIMETHOD_INDUCTIVE_GUIDANCE = """This is a MULTIMETHOD INDUCTIVE paper. Theory emerges through iterative qual-quant analysis.
+
+CRITICAL EPISTEMOLOGICAL FRAMING:
+- This paper uses quantitative data for TRIANGULATION, not hypothesis testing
+- Patterns are DISCOVERED through analysis, not pre-specified as "Expected Patterns"
+- Never use "Pattern 1/2/3" labels - use descriptive names that emerged from analysis
+- Replace "we predict" with "we examine" or "this raises the question of"
+
+ITERATIVE METHODS (required):
+- Describe how analysis moved between qual and quant data
+- Example: "Initial fieldwork revealed X. We then examined quantitative patterns to understand Y.
+  This puzzle drove us back to qualitative evidence. The framework emerged from this iteration."
+
+THEORY SECTION RULES:
+- ONLY cite peer-reviewed journal articles (no HBR, practitioner outlets, books-without-data)
+- Sets up SENSITIZING CONCEPTS from literature, NOT detailed hypothetical frameworks
+- ONE compound research question ("Do firms X, and if so, how?") - NOT enumerated/bulleted
+- Brief statement of what you find (1-2 sentences max)
+- NO speculating findings ("X-focused facilities might...", "we would attend to...")
+- The detailed typology/framework emerges in FINDINGS, not here
+
+FINDINGS:
+- "Consistent with Pattern 1" → "Corroborating this interpretation"
+- "As predicted" → "Aligning with the emergent framework"
+- Theory is BUILT here through progressive concept development
+
+CONTRIBUTIONS:
+- NEVER "This paper makes three contributions. First... Second... Third..."
+- ALWAYS narrative elaboration: "This research extends X by showing Y. We demonstrate that..."
+"""
+
 
 # Prompt for paragraph fixer
 PARAGRAPH_FIXER_PROMPT = """The following paragraph violates a style rule for top management journals.

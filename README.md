@@ -209,15 +209,30 @@ Then follow the workflow, invoking each agent when ready.
 
 ## Critical Concepts
 
-### The Sensitizing Literature
+### Zuckerman's Framework: The Foundation
 
-The most important intellectual move in this pipeline is finding the **sensitizing literature**—the second body of work that explains *why* your finding varies.
+Ezra Zuckerman's "Tips for Article-Writers" provides the fundamental moves for any compelling academic paper:
 
-**Pattern**:
+1. **The puzzle** — a real-world phenomenon that existing theory can't explain
+2. **Build up and save the null** — make the conventional explanation compelling before showing why it fails
+3. **The contribution** — your proposed explanation for the puzzle
+
+This workflow builds on Zuckerman's framework. See `Zuckerman_UP_2008_Tips_For_Writers.pdf` in this repo for the original memo.
+
+### The Sensitizing Literature (Optional Gambit)
+
+One powerful move for executing Step 3 (the contribution) is finding the **sensitizing literature**—a second body of work that explains *why* your finding varies. This works especially well when your data shows heterogeneity.
+
+**When this gambit works well:**
 1. You find a robust empirical pattern
 2. It violates an established theoretical prediction
 3. But not everyone violates it—there's heterogeneity
 4. The sensitizing literature explains *who* violates and *why*
+
+**When to use a different approach:**
+- Your contribution is a new mechanism, not a moderator
+- Your finding is uniform (everyone violates, no heterogeneity to explain)
+- Your puzzle is "how does X work?" rather than "why do only some violate?"
 
 **Example** (from prior published work):
 - Finding: Some surgical trainees skilled up fast despite minimal formal practice
@@ -225,6 +240,16 @@ The most important intellectual move in this pipeline is finding the **sensitizi
 - Heterogeneity: Only *some* trainees achieved rapid skill gains
 - Sensitizing literature: Deviance and workarounds
 - Contribution: "Shadow learning" explains skill variance outside formal training
+
+### Theory-Building vs Theory-Testing Language
+
+If your paper is **building theory** (discovering patterns, proposing mechanisms) rather than **testing hypotheses**, use language appropriate to that genre. See [`docs/THEORY_BUILDING_STYLE.md`](docs/THEORY_BUILDING_STYLE.md) for a detailed rubric.
+
+**Key distinction:**
+- Theory-building: "The data suggest...", "is consistent with...", "the pattern indicates..."
+- Theory-testing: "The data confirm...", "supports the hypothesis...", "validates..."
+
+A single paper can't do both. This is a style choice—some papers legitimately test pre-specified hypotheses.
 
 ### Frame Shifts Are Normal
 
