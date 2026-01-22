@@ -45,19 +45,33 @@ Frame: [N] of [total] | [theory name if set]
 Updated: [relative time, e.g., "2 hours ago"]
 
 ─────────────────────────────────────────────────────────────────────
-WORKFLOW PROGRESS
+PIPELINE PROGRESS (use /run-pipeline for guided execution)
 ─────────────────────────────────────────────────────────────────────
 
   [✓] explore-data      Data inventory complete (15 files, 3,421 obs)
   [✓] hunt-patterns     3 robust patterns identified
-  [→] find-theory       IN PROGRESS
-  [ ] find-lens         Waiting for theory selection
-  [ ] mine-qual
-  [ ] smith-frames
+  [✓] GATE A            Pattern confirmed by user
+  [✓] find-theory       Process losses (Steiner 1972)
+  [✓] find-lens         Technology affordances (Leonardi 2011)
+  [✓] mine-qual         5 key quotes, 11 field notes mined
+  [✓] GATE B            Mechanism STRONG, disconfirming documented
+  [✓] smith-frames      5 framings generated
+  [✓] GATE C            "Technology-Enabled Role Structure" selected
+  [→] eval-zuckerman    IN PROGRESS
+  [ ] eval-becker       Waiting
+  [ ] eval-genre        Waiting
+  [⛔] GATE D           Evaluations must all pass
+  [ ] audit-claims
   [ ] verify-claims
+  [ ] GATE E            Verification gate
   [ ] draft-paper
+  [ ] eval-paper-quality
+  [ ] GATE F            Quality gate
+  [ ] package-verification
 
-Progress: ████████░░░░░░░░░░░░ 25% (2/8 steps)
+Progress: ████████████░░░░░░░░ 45% (9/20 steps)
+
+⚠️  GATE D PENDING: All evaluations must pass before drafting
 
 ─────────────────────────────────────────────────────────────────────
 CURRENT FRAME (#2)

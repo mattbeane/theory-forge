@@ -250,15 +250,69 @@ Interpretations a skeptic might raise:
 
 ## Create the ZIP Package
 
-After creating the brief, package everything:
+**CRITICAL: The package MUST be self-contained.** An external reviewer (AI or human) must be able to verify claims WITHOUT access to anything outside the ZIP file. DO NOT ask the user whether to include data—just include it.
+
+### Required Package Contents
 
 ```
 analysis/verification/
-├── VERIFICATION_BRIEF.md
-├── verification_code.py
-├── DATA_DESCRIPTOR.md
-└── VERIFICATION_PACKAGE.zip  ← Create this
+├── README_REVIEWER.md         ← Instructions for external reviewer
+├── VERIFICATION_BRIEF.md      ← All claims with verification logic
+├── DATA_DESCRIPTOR.md         ← Variable definitions
+├── data/                      ← ACTUAL DATA FILES (not symlinks)
+│   ├── case_timing.xlsx       ← Quantitative data (copy, not link)
+│   └── [other data files]
+├── code/                      ← Analysis code (if exists)
+│   └── analysis.py            ← Reproducible analysis script
+├── evidence/                  ← Qualitative evidence
+│   └── key_quotes.md          ← Anonymized quotes with source refs
+└── REVIEW_PACKAGE.zip         ← Final package
 ```
+
+### Mandatory Steps (DO NOT SKIP)
+
+1. **Copy actual data files** into `analysis/verification/data/`
+   - Do NOT use symlinks—they won't work when package is sent elsewhere
+   - If data is too large or sensitive, create a representative subset
+   - Document any redactions in DATA_DESCRIPTOR.md
+
+2. **Include or create analysis code**
+   - If original analysis code exists, copy it to `code/`
+   - If no code exists, write verification scripts that reproduce key claims
+   - Code must be runnable with only the included data
+
+3. **Extract key qualitative evidence**
+   - Copy anonymized quotes to `evidence/key_quotes.md`
+   - Include source file references (but not full transcripts if sensitive)
+
+4. **Create README_REVIEWER.md** with:
+   - Package contents
+   - How to verify each claim type
+   - Questions for the reviewer to answer
+   - Expected verdict format
+
+5. **Create the ZIP** including ALL of the above
+
+```bash
+cd analysis/verification
+zip -r REVIEW_PACKAGE.zip \
+  README_REVIEWER.md \
+  VERIFICATION_BRIEF.md \
+  DATA_DESCRIPTOR.md \
+  data/ \
+  code/ \
+  evidence/
+```
+
+### Why This Is Mandatory
+
+If the package isn't self-contained:
+- External AI can't run verification code
+- Reviewer must ask for missing files (defeats purpose)
+- Claims become "trust me" instead of verifiable
+- The entire verification step is theater, not substance
+
+**If you find yourself about to ask "should I include X?"—the answer is YES.**
 
 ## Rubric-Based Claim Scoring
 
