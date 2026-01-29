@@ -12,6 +12,7 @@ Before starting:
 3. Check current frame number and use frame-aware output paths
 4. If in frame > 1, output to `analysis/framing/frame-[N]/qualitative/`
 5. Check if consensus mode is enabled: `state.json` → `consensus.stages.mine_qual.enabled`
+6. **Check if student mode is enabled**: `state.json` → `student_mode.enabled`
 
 After completing:
 1. Update `state.json`:
@@ -21,6 +22,132 @@ After completing:
    - If consensus mode: add `workflow.mine_qual.consensus_result` with quote stability summary
    - Update `updated_at` timestamp
 2. Append entry to `DECISION_LOG.md`
+3. **If student mode**: Append session record to `STUDENT_WORK.md`
+
+---
+
+## Student Mode Behavior
+
+If `state.json.student_mode.enabled === true`, add these steps:
+
+### Before Running Analysis
+
+Prompt the user:
+
+```
+📚 STUDENT MODE: Before I mine your qualitative data, show me YOUR coding.
+
+**This is the most important student mode checkpoint.** Qualitative coding is where deep understanding develops.
+
+Please do the following:
+
+1. **Read 3-5 interviews yourself** (choose varied informants)
+2. **Write down the mechanisms you see** in STUDENT_WORK.md:
+   - What mechanisms do informants describe?
+   - What quotes would you use to support them?
+   - What surprised you in the interviews?
+
+3. **Identify potential disconfirming evidence**:
+   - Any informants who experienced it differently?
+   - Any quotes that challenge your emerging interpretation?
+
+Take 1-2 hours on this. This is not optional in student mode—the skill of seeing mechanisms in qualitative data cannot be outsourced.
+
+[When done, say "continue" and I'll process the remaining interviews]
+```
+
+Wait for user response. **Do not proceed until they provide substantive coding notes.**
+
+### After Running Analysis
+
+Add a **"Why I Did This"** section to your output:
+
+```markdown
+## Why I Did This (Explanation Layer)
+
+**How I generated mechanism hypotheses:**
+- [Where hypotheses came from—theory, sensitizing lit, pattern report]
+
+**How I coded the data:**
+- [What I looked for in each interview]
+- [How I decided what counts as "supporting" vs "challenging"]
+
+**Key judgment calls:**
+- [Ambiguous quotes and how I categorized them]
+- [Informants I weighted more heavily and why]
+
+**What I might have gotten wrong:**
+- [Biases in my extraction]
+- [Alternative interpretations of the same quotes]
+```
+
+Then add a **comparison section**:
+
+```markdown
+## Your Coding vs. My Coding
+
+| Mechanism | You Found | I Found | Overlap |
+|-----------|-----------|---------|---------|
+| [mechanism] | X quotes | Y quotes | Z% |
+| ... | ... | ... | ... |
+
+**Mechanisms you saw that I missed**: [List—these might be real insights]
+
+**Mechanisms I found that you missed**: [List—consider why]
+
+**Quotes you selected vs. quotes I selected**:
+- [Compare a few key quotes—did you pick different ones?]
+
+**Your disconfirming evidence vs. mine**:
+- You found: [List]
+- I found: [List]
+- [Note differences]
+
+**Questions to consider**:
+1. If I found mechanisms you missed, is it because you read fewer interviews or because you have different theoretical priors?
+2. If you found mechanisms I missed, you may have spotted something real—pursue it.
+3. Are our disconfirming evidence findings consistent? If not, why?
+```
+
+### Logging to STUDENT_WORK.md
+
+Append a session record:
+
+```markdown
+---
+
+## Session: [Date/Time]
+
+### /mine-qual
+
+**Interviews I read manually**: [List which ones]
+
+**Mechanisms I identified (before AI)**:
+[Paste what student wrote]
+
+**My key quotes (before AI)**:
+[Paste their quotes]
+
+**My disconfirming evidence (before AI)**:
+[What they found]
+
+**AI findings summary**:
+- Primary mechanism: [X]
+- Supporting evidence: [N quotes]
+- Disconfirming evidence: [N quotes]
+
+**Comparison**:
+- Mechanisms we both found: [List]
+- Mechanisms only I found: [List]
+- Mechanisms only AI found: [List]
+- Quote overlap: [X%]
+
+**Reflection prompt**: Qualitative coding is where you develop "theoretical sensitivity"—the ability to see mechanisms in messy data. How does your coding compare to the AI's? Where you differ, who's right? Go check the raw data.
+
+---
+```
+
+---
 
 ## Why This Matters
 

@@ -9,6 +9,7 @@ Before starting:
 2. Verify prerequisite: `workflow.find_theory.status === "completed"`
 3. Check current frame number and use frame-aware output paths
 4. If in frame > 1, output to `analysis/framing/frame-[N]/theory/`
+5. **Check if student mode is enabled**: `state.json` → `student_mode.enabled`
 
 After completing:
 1. Update `state.json`:
@@ -18,6 +19,126 @@ After completing:
    - Update `frames.[current_frame].lens` with lens name
    - Update `updated_at` timestamp
 2. Append entry to `DECISION_LOG.md`
+3. **If student mode**: Append session record to `STUDENT_WORK.md`
+
+---
+
+## Student Mode Behavior
+
+If `state.json.student_mode.enabled === true`, add these steps:
+
+### Before Running Analysis
+
+Prompt the user:
+
+```
+📚 STUDENT MODE: Before I search for sensitizing literature, show me YOUR thinking.
+
+Please write in STUDENT_WORK.md (or tell me now):
+
+1. **What moderators might explain the heterogeneity?** (List 2-3 candidates)
+   - Why does the effect hold for some but not others?
+
+2. **For each moderator, what literature might be relevant?**
+   - What body of work discusses this factor?
+   - Any specific papers you'd start with?
+
+3. **Which moderator do you think is most promising?** (And why)
+
+4. **How would this literature "talk to" the primary theory?**
+   - What's the bridge between the two bodies of work?
+
+This is where theoretical creativity happens—seeing connections between literatures that haven't been made. Take 15-20 minutes.
+
+[When ready, say "continue" and I'll show you what I find]
+```
+
+Wait for user response before proceeding.
+
+### After Running Analysis
+
+Add a **"Why I Did This"** section to your output:
+
+```markdown
+## Why I Did This (Explanation Layer)
+
+**How I searched for sensitizing literature:**
+- [Search strategy, what I looked for]
+
+**Why I selected this lens over alternatives:**
+- [Reasoning for the choice]
+
+**The bridge I see between these literatures:**
+- [How primary theory and sensitizing lit connect]
+
+**Key judgment calls:**
+- [How I evaluated "fit" with the heterogeneity]
+- [Why some lenses were rejected]
+
+**What I'm uncertain about:**
+- [Alternative lenses that could work]
+```
+
+Then add a **comparison section**:
+
+```markdown
+## Your Candidates vs. My Analysis
+
+| Your Candidate | My Assessment | Notes |
+|----------------|---------------|-------|
+| [moderator they named] | [Good fit / Partial / Not ideal] | [Why] |
+| [literature they named] | [Relevant / Tangential / Different literature is better] | [Why] |
+| ... | ... | ... |
+
+**What you identified correctly**: [Moderators/literatures that are indeed relevant]
+
+**What you missed**: [Lenses I found that they didn't name]
+
+**The bridge you saw vs. the bridge I see**:
+- Your connection: [How they linked the literatures]
+- My connection: [How I linked them]
+- [Are they the same? Different? Why?]
+
+**Questions to consider**:
+1. Why didn't you think of [literature X]? What reading gap does that suggest?
+2. Is your moderator actually what explains the heterogeneity, or is it correlated with something else?
+3. Would a different sensitizing lens make the contribution clearer?
+```
+
+### Logging to STUDENT_WORK.md
+
+Append a session record:
+
+```markdown
+---
+
+## Session: [Date/Time]
+
+### /find-lens
+
+**My candidate moderators (before AI)**:
+[Paste what student wrote]
+
+**My candidate literatures (before AI)**:
+[Paste what student wrote]
+
+**AI recommendation**:
+- Sensitizing lens: [X]
+- Key moderator: [Y]
+- Bridge to primary theory: [Z]
+
+**Comparison**:
+- Moderators I identified correctly: [List]
+- Moderators I missed: [List]
+- Literatures I knew: [List]
+- Literatures I should read: [List]
+
+**Reflection prompt**: Finding the sensitizing literature requires knowing multiple bodies of work. If you missed good options, that's a reading list for you.
+
+---
+```
+
+---
 
 ## Why This Matters
 

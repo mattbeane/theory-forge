@@ -9,6 +9,7 @@ Before starting:
 2. Verify prerequisite: `workflow.hunt_patterns.status === "completed"`
 3. Check current frame number from `state.json` and use frame-aware output paths
 4. If in frame > 1, output to `analysis/framing/frame-[N]/theory/`
+5. **Check if student mode is enabled**: `state.json` → `student_mode.enabled`
 
 After completing:
 1. Update `state.json`:
@@ -18,6 +19,107 @@ After completing:
    - Update `frames.[current_frame].theory` with theory name
    - Update `updated_at` timestamp
 2. Append entry to `DECISION_LOG.md`
+3. **If student mode**: Append session record to `STUDENT_WORK.md`
+
+---
+
+## Student Mode Behavior
+
+If `state.json.student_mode.enabled === true`, add these steps:
+
+### Before Running Analysis
+
+Prompt the user:
+
+```
+📚 STUDENT MODE: Before I identify the theory being violated, show me YOUR thinking.
+
+Please write in STUDENT_WORK.md (or tell me now):
+
+1. **What theory might this finding violate?** (Name 2-3 candidate theories)
+2. **What does each theory predict?** (The standard prediction)
+3. **How does your finding contradict each?** (Be specific)
+4. **Which violation would be most interesting to your target audience?** (And why)
+
+This is where scholarly intuition develops. You need to know literatures well enough to see violations. Take 15-20 minutes.
+
+[When ready, say "continue" and I'll show you what I find]
+```
+
+Wait for user response before proceeding.
+
+### After Running Analysis
+
+Add a **"Why I Did This"** section to your output:
+
+```markdown
+## Why I Did This (Explanation Layer)
+
+**How I searched for theories:**
+- [Search strategy, databases, keywords]
+
+**Why I selected this primary theory over alternatives:**
+- [Reasoning for the choice]
+
+**Key judgment calls:**
+- [How I determined "violation" vs "extension" vs "specification"]
+- [Why some theories were considered but rejected]
+
+**What I'm uncertain about:**
+- [Areas where a human expert might disagree]
+```
+
+Then add a **comparison section**:
+
+```markdown
+## Your Candidates vs. My Analysis
+
+| Your Candidate | My Assessment | Notes |
+|----------------|---------------|-------|
+| [theory they named] | [Good fit / Partial / Not the best choice] | [Why] |
+| ... | ... | ... |
+
+**What you got right**: [Theories they identified that are indeed relevant]
+
+**What you missed**: [Theories I found that they didn't name]
+
+**Why that matters**: [The missed theory might be a better fit because...]
+
+**Questions to consider**:
+1. Why didn't you think of [theory X]? What gap in your reading does that reveal?
+2. Is your preferred theory actually what your audience cares about?
+3. Would reframing around [alternative theory] make the contribution clearer?
+```
+
+### Logging to STUDENT_WORK.md
+
+Append a session record:
+
+```markdown
+---
+
+## Session: [Date/Time]
+
+### /find-theory
+
+**My candidates (before AI)**:
+[Paste what student wrote]
+
+**AI recommendation**:
+- Primary theory: [X]
+- Violation type: [True violation / Extension / Specification]
+
+**Comparison**:
+- Theories I identified correctly: [List]
+- Theories I missed: [List]
+- Why my ranking differed from AI: [Explanation]
+
+**Reflection prompt**: Knowing which theory is violated requires deep familiarity with literatures. If you missed the best theory, what should you read next?
+
+---
+```
+
+---
 
 ## Why This Matters
 

@@ -9,6 +9,7 @@ Before starting:
 2. Verify prerequisite: `workflow.explore_data.status === "completed"`
 3. If prerequisite not met, inform user and suggest running `/explore-data` first
 4. Check if consensus mode is enabled: `state.json` → `consensus.stages.hunt_patterns.enabled`
+5. **Check if student mode is enabled**: `state.json` → `student_mode.enabled`
 
 After completing:
 1. Update `state.json`:
@@ -18,8 +19,110 @@ After completing:
    - If consensus mode: add `workflow.hunt_patterns.consensus_result` with stability summary
    - Update `updated_at` timestamp
 2. Append entry to `DECISION_LOG.md`
+3. **If student mode**: Append session record to `STUDENT_WORK.md`
 
-## Your Task
+---
+
+## Student Mode Behavior
+
+If `state.json.student_mode.enabled === true`, add these steps:
+
+### Before Running Analysis
+
+Prompt the user:
+
+```
+📚 STUDENT MODE: Before I hunt for patterns, document your predictions.
+
+Please write in STUDENT_WORK.md (or tell me now):
+
+1. **What patterns do you expect to find?** (List 3-5 specific hypotheses)
+2. **Which pattern do you think will be strongest?** (And why)
+3. **What would surprise you?** (What finding would challenge your priors)
+4. **What patterns would be most theoretically interesting?** (And for what literature)
+
+This forces you to form expectations before seeing AI output. Take 10-15 minutes.
+
+[When ready, say "continue" and I'll run the pattern search]
+```
+
+Wait for user response before proceeding.
+
+### After Running Analysis
+
+Add a **"Why I Did This"** section to your output:
+
+```markdown
+## Why I Did This (Explanation Layer)
+
+**Patterns I tested and why:**
+- [List each pattern and reasoning for including it]
+
+**Key judgment calls:**
+- [How I decided what counts as "robust"]
+- [Why I killed certain findings]
+- [How I chose which patterns to deep-dive]
+
+**Alternatives I considered:**
+- [Other patterns I could have tested but didn't, and why]
+```
+
+Then add a **comparison section**:
+
+```markdown
+## Your Predictions vs. My Findings
+
+| You Predicted | I Found | Match? |
+|---------------|---------|--------|
+| [their hypothesis] | [actual result] | ✓/✗ |
+| ... | ... | ... |
+
+**Your strongest pick**: [What they said]
+**Actually strongest**: [What emerged]
+**Why the difference?**: [Explanation]
+
+**Surprises you should sit with**:
+1. [Finding that contradicts their priors]
+2. [Pattern they didn't predict at all]
+
+**Questions to consider**:
+1. Why did you expect [X] to be strong when it wasn't?
+2. What theory led you to miss [Y]?
+3. Does [surprise Z] suggest a different framing than you assumed?
+```
+
+### Logging to STUDENT_WORK.md
+
+Append a session record:
+
+```markdown
+---
+
+## Session: [Date/Time]
+
+### /hunt-patterns
+
+**My predictions (before AI)**:
+[Paste what student wrote]
+
+**AI findings summary**:
+- Robust patterns: [List]
+- Killed patterns: [List]
+- Strongest: [X]
+
+**Comparison**:
+- Predictions confirmed: [List]
+- Predictions disconfirmed: [List]
+- Patterns I missed: [List]
+
+**Reflection prompt**: Your predictions came from somewhere—theory, intuition, prior work. When they're wrong, that's information. What does the mismatch tell you about your theoretical assumptions?
+
+---
+```
+
+---
+
+## Your Task (Standard Mode)
 
 Starting from the data inventory, systematically search for patterns that are:
 1. Statistically robust (survive basic controls)

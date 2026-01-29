@@ -12,6 +12,7 @@ Before starting:
    - `workflow.mine_qual.status === "completed"` (preferred but not required)
 3. Check current frame number and use frame-aware output paths
 4. Output to `analysis/framing/frame-[N]/FRAMING_OPTIONS.md`
+5. **Check if student mode is enabled**: `state.json` → `student_mode.enabled`
 
 After completing:
 1. Update `state.json`:
@@ -21,6 +22,136 @@ After completing:
    - Update `frames.[current_frame].framing` with selected framing label
    - Update `updated_at` timestamp
 2. Append entry to `DECISION_LOG.md`
+3. **If student mode**: Append session record to `STUDENT_WORK.md`
+
+---
+
+## Student Mode Behavior
+
+If `state.json.student_mode.enabled === true`, add these steps:
+
+### Before Running Analysis
+
+Prompt the user:
+
+```
+📚 STUDENT MODE: Before I generate framings, write YOUR framing first.
+
+Please write in STUDENT_WORK.md (or tell me now):
+
+1. **Your proposed framing** (1-2 paragraphs):
+   - What's the puzzle?
+   - What theory is violated?
+   - What's your contribution?
+   - Who's the audience?
+
+2. **Draft title**: [Your best title]
+
+3. **Why this framing?**:
+   - Why did you choose this angle over alternatives?
+   - What makes it compelling?
+
+4. **What's the weakest part?**:
+   - Where might reviewers push back?
+
+This is perhaps THE most important skill in academic writing: seeing multiple ways to frame the same finding and choosing well. Take 20-30 minutes.
+
+[When done, say "continue" and I'll generate alternatives]
+```
+
+Wait for user response. **Require substantive framing before proceeding.**
+
+### After Running Analysis
+
+Add a **"Why I Did This"** section to your output:
+
+```markdown
+## Why I Did This (Explanation Layer)
+
+**How I generated these framings:**
+- [Logic behind each variation]
+
+**Why I varied these dimensions:**
+- Lead: [Why different hooks]
+- Theory: [Why foreground different theories]
+- Contribution: [Why different claims]
+- Audience: [Why different targets]
+
+**Key judgment calls:**
+- [How I evaluated novelty, robustness, coherence, fit]
+- [Why some framings scored higher than others]
+
+**What I'm uncertain about:**
+- [Areas where human judgment should override my evaluation]
+```
+
+Then add a **comparison section**:
+
+```markdown
+## Your Framing vs. My Options
+
+**Your framing**: [Paste their framing summary]
+
+**How it compares to mine**:
+
+| Dimension | Your Framing | My Option 1 | My Option 2 | My Option 3 |
+|-----------|--------------|-------------|-------------|-------------|
+| Puzzle | [theirs] | [mine] | [mine] | [mine] |
+| Theory | [theirs] | [mine] | [mine] | [mine] |
+| Contribution | [theirs] | [mine] | [mine] | [mine] |
+| Audience | [theirs] | [mine] | [mine] | [mine] |
+
+**Is your framing among my top options?** [Yes/No]
+
+**If no, why might your framing still be better?**:
+- [Reasons your intuition might be right]
+- [Reasons I might be missing something]
+
+**If yes, what's different about my version?**:
+- [Refinements or variations]
+
+**Questions to consider**:
+1. Why did you choose [their theory] when I foregrounded [different theory]?
+2. Is your audience the right audience? Who actually needs to hear this?
+3. What would your advisor say about your framing vs. my alternatives?
+```
+
+### Logging to STUDENT_WORK.md
+
+Append a session record:
+
+```markdown
+---
+
+## Session: [Date/Time]
+
+### /smith-frames
+
+**My framing (before AI)**:
+[Paste what student wrote]
+
+**My title (before AI)**:
+[Their title]
+
+**AI framings summary**:
+1. [Framing 1 label]
+2. [Framing 2 label]
+3. [Framing 3 label]
+
+**AI recommendation**: [Top choice]
+
+**Comparison**:
+- My framing resembles AI's: [Which one, if any]
+- Key differences: [List]
+- My framing's strengths: [List]
+- My framing's weaknesses: [List]
+
+**Reflection prompt**: Framing is taste. Taste develops through practice and feedback. If your framing differs from the AI's top recommendation, that's not necessarily wrong—but you should be able to articulate why yours is better for your goals.
+
+---
+```
+
+---
 
 ## Why This Matters
 
