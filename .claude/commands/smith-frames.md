@@ -72,7 +72,17 @@ Expect to generate 3-5 framings. The user will choose. Frame shifts are normal�
    - Coherence: Does the frame hold together logically?
    - Fit: Does it fit target journal's genre?
 
-5. **Recommend with rationale**
+5. **Adversarial check for each framing**
+
+   For EACH framing, actively search for:
+   - **Counter-evidence**: What data challenges this frame?
+   - **Alternative interpretations**: What else could explain the same pattern?
+   - **Boundary conditions**: When/where would this frame NOT apply?
+   - **Weakest link**: Which claim in this framing is most vulnerable?
+
+   Document these honestly. A framing that can't survive adversarial scrutiny won't survive peer review.
+
+6. **Recommend with rationale**
 
 ## Output Format
 
@@ -117,6 +127,13 @@ Create `analysis/framing/FRAMING_OPTIONS.md`:
 - **Coherence**: [High/Med/Low] — [Does it hold together?]
 - **Journal fit**: [Good for X, less good for Y]
 
+### Adversarial Check
+- **Counter-evidence**: [What data challenges this frame?]
+- **Alternative interpretation**: [What else could explain the pattern?]
+- **Boundary conditions**: [When would this NOT apply?]
+- **Weakest claim**: [Which part is most vulnerable to attack?]
+- **Survivability**: [High/Med/Low] — [Can this frame survive a hostile R2?]
+
 ---
 
 ## Framing 2: [Short label]
@@ -155,6 +172,16 @@ Create `analysis/framing/FRAMING_OPTIONS.md`:
 |---------|---------------------------|-------------------|-------|
 | 1 | [What else to run?] | [What to cite?] | [What could go wrong?] |
 | 2 | ... | ... | ... |
+
+## Adversarial Summary
+
+| Framing | Counter-Evidence | Alt. Interpretation | Survivability |
+|---------|------------------|---------------------|---------------|
+| 1: [label] | [Brief] | [Brief] | H/M/L |
+| 2: [label] | [Brief] | [Brief] | H/M/L |
+| 3: [label] | [Brief] | [Brief] | H/M/L |
+
+**Most defensible framing**: [X] because it addresses counter-evidence by [Y] and alternative interpretations are less plausible because [Z].
 
 ## Draft Abstract for Recommended Framing
 
