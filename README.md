@@ -391,8 +391,13 @@ For researchers new to theory-forge or working under supervision, enable student
 
 This adds:
 - **Prediction prompts** — write what you expect before AI runs
-- **Explanation layers** — AI shows its reasoning
+- **Explanation layers** — AI shows its reasoning ("Why I Did This" sections)
+- **Comparison tables** — your predictions vs. AI findings
 - **Enhanced audit trail** — logs predictions vs. findings to `STUDENT_WORK.md`
+
+**Integrated into 6 core commands**: `/explore-data`, `/hunt-patterns`, `/find-theory`, `/find-lens`, `/mine-qual`, `/smith-frames`
+
+The `/mine-qual` command is strictest—it requires reading 3-5 interviews manually before AI runs, ensuring students can't skip the interpretive work.
 
 Student mode doesn't change the analysis—it adds scaffolding for learning. See [`docs/STUDENT_MODE_FEATURE_OPTIONS.md`](docs/STUDENT_MODE_FEATURE_OPTIONS.md) for design rationale.
 
