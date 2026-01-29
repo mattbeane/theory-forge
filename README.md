@@ -122,6 +122,7 @@ Then follow the workflow, invoking each agent when ready.
 | `/new-frame list` | View all frame attempts | Reviewing progress |
 | `/new-frame compare` | Compare framings side-by-side | Choosing direction |
 | `/consensus-config` | Configure statistical consensus settings | Before final analysis |
+| `/student-mode` | Toggle student mode (predictions, explanations, audit trail) | For learning/supervision |
 
 ### Output & Integration
 
@@ -297,6 +298,19 @@ The workflow includes hooks that warn you when running commands out of sequence:
 
 These are warnings, not blocks—you can proceed if you have good reason, but they help prevent wasted effort.
 
+### Adversarial Evidence (Standard Feature)
+
+Theory-forge is designed to make cherry-picking harder, not easier. **Adversarial evidence surfacing is built into the standard workflow**—not just a student mode feature.
+
+Where it appears:
+- **`/hunt-patterns`** — documents "killed findings" that didn't survive controls
+- **`/mine-qual`** — requires disconfirming evidence section
+- **`/audit-claims`** — explicitly adversarial; searches ALL data for challenging evidence
+- **`/smith-frames`** — evaluates counter-evidence, alternative interpretations, and "survivability" for each framing
+- **`/verify-claims`** — documents alternative interpretations and specification choices
+
+The philosophy: reviewers are adversarial. If you don't find problems first, they will. See [`docs/ADVERSARIAL_EVIDENCE.md`](docs/ADVERSARIAL_EVIDENCE.md) for the full rationale.
+
 ### Zuckerman Criteria (Two-Stage Check)
 
 Ezra Zuckerman's "Tips for Article-Writers" provides 10 criteria that capture what makes academic papers compelling. This workflow integrates them at two points:
@@ -347,7 +361,44 @@ Configure with `/consensus-config`. See `lib/consensus/` for the Python implemen
 
 ---
 
-## Requirements
+## Prerequisites
+
+**Theory-forge assumes you already have qualitative methods training.** This tool accelerates skilled researchers—it doesn't replace skill development.
+
+Before using theory-forge, you should have:
+- Coded at least one dataset by hand
+- Written at least one qualitative methods section
+- Read extensively in your theoretical area
+- Experienced peer review (ideally both sides)
+
+See [`docs/PREREQUISITES.md`](docs/PREREQUISITES.md) for details on why these matter and what happens if you skip them.
+
+### For Advisors
+
+If you supervise students using theory-forge, see [`docs/ADVISOR_GUIDE.md`](docs/ADVISOR_GUIDE.md) for:
+- How to structure supervised use
+- Warning signs of over-reliance on AI
+- Gate checkpoints for review
+- Conversation starters at each stage
+
+### Student Mode
+
+For researchers new to theory-forge or working under supervision, enable student mode:
+
+```
+/student-mode on
+```
+
+This adds:
+- **Prediction prompts** — write what you expect before AI runs
+- **Explanation layers** — AI shows its reasoning
+- **Enhanced audit trail** — logs predictions vs. findings to `STUDENT_WORK.md`
+
+Student mode doesn't change the analysis—it adds scaffolding for learning. See [`docs/STUDENT_MODE_FEATURE_OPTIONS.md`](docs/STUDENT_MODE_FEATURE_OPTIONS.md) for design rationale.
+
+---
+
+## Technical Requirements
 
 - Claude Desktop (includes Claude Code)
 - Your data in accessible files (CSV, Excel, text files for interviews)
