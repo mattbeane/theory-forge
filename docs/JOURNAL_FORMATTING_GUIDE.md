@@ -237,6 +237,85 @@ This guide provides specific formatting requirements and expectations for top ma
 
 ---
 
+## Theory Section Depth Check
+
+Theory sections in ASQ and Organization Science require **deep engagement**, not just citation strings. A thin theory section is a common desk rejection trigger.
+
+### Word Count Minimums
+
+| Journal | Theory Section Minimum | Red Flag |
+|---------|----------------------|----------|
+| **ASQ** | 1,500-2,500 words | < 1,000 words |
+| **Organization Science** | 1,500-2,500 words | < 1,000 words |
+| **AMJ** | 2,000-3,000 words (includes hypotheses) | < 1,500 words |
+| **Management Science** | 1,500-2,500 words (includes hypotheses) | < 1,200 words |
+
+### Deep Engagement Indicators
+
+A theory section demonstrates deep engagement when it:
+
+1. **Unpacks mechanisms, not just outcomes**
+   - ❌ "Prior work shows X leads to Y (Author, Year)"
+   - ✅ "Author (Year) argues that X leads to Y through mechanism Z, because [explanation of why Z matters]"
+
+2. **Explicitly defines novel constructs before findings**
+   - If you introduce a new term (e.g., "developmental uncertainty"), define it in theory
+   - State what it is, what it's not, and why existing terms don't capture it
+
+3. **Builds tension or puzzle**
+   - Theory should create expectation that findings will either confirm, extend, or challenge
+   - Reader should understand the theoretical stakes before seeing data
+
+4. **Cites foundational works substantively**
+   - Key theorists (Thompson, Galbraith, Perrow for contingency; Abbott for professions; etc.) should be engaged, not just name-dropped
+   - ❌ Citation string: "(Thompson, 1967; Galbraith, 1973; Burns & Stalker, 1961)"
+   - ✅ Substantive engagement: "Thompson (1967) distinguishes three forms of interdependence... Galbraith (1973) extends this by arguing..."
+
+5. **States null expectations explicitly**
+   - What would standard theory predict? Why might your case be different?
+   - This creates the puzzle your paper resolves
+
+### Comparison to Exemplars
+
+When assessing theory section depth, compare against published exemplars:
+
+| Paper | Theory Words | Key Feature |
+|-------|-------------|-------------|
+| Barley (1990) ASQ | ~2,500 | Deep engagement with contingency theory, explicit mechanisms |
+| Bernstein (2012) ASQ | ~2,000 | Builds theoretical tension, defines "transparency trap" |
+| Leonardi (2011) OrgSci | ~1,800 | Unpacks affordance theory, defines "imbrication" |
+| Bailey et al. (2012) AMJ | ~2,200 | Reviews emotion regulation literature systematically |
+
+### Quick Diagnostic
+
+Run this check before submission:
+
+1. **Word count**: Is theory section ≥ 1,500 words? If not, likely too thin.
+
+2. **Citation depth**: For your 5 most important theoretical citations, do you engage with them for 2+ sentences each? If most appear only in citation strings, engagement is shallow.
+
+3. **Novel construct definition**: If you introduce a new term, is it explicitly defined before findings? Can a reader explain what it means without reading your findings?
+
+4. **Mechanism preview**: Do you explain *why* effects occur, not just *that* they occur? (Note: For inductive papers, preview the *type* of mechanisms you'll explore, not the specific mechanisms you'll find.)
+
+5. **Theoretical stakes**: After reading theory, does the reader know what's at stake? What would be surprising vs. expected?
+
+### Recovery Strategies for Thin Theory
+
+If your theory section is thin:
+
+1. **Expand foundational citations**: Pick 2-3 key theorists and engage with their arguments substantively (2-3 sentences each)
+
+2. **Add null expectation**: What would conventional theory predict? Why might your setting differ?
+
+3. **Define terms explicitly**: If you use a novel term, give it a formal definition paragraph
+
+4. **Unpack mechanisms**: For each theoretical claim, explain the causal pathway
+
+5. **State boundary conditions**: Under what conditions does the theory apply? When might it not?
+
+---
+
 ## Common Rejection Reasons (and How to Avoid Them)
 
 ### "Incremental contribution"
@@ -303,5 +382,46 @@ texcount paper.tex
 
 ---
 
-*Last updated: December 2024*
-*Sources: Official journal submission guidelines*
+## AI Disclosure and Data Availability
+
+### AI Disclosure (Methods Section)
+
+Place at end of analytical approach / data analysis subsection.
+
+**For Qualitative/Mixed-Methods Papers:**
+```
+We used large language model assistants during manuscript preparation
+and analysis. AI assistance supported literature search and synthesis,
+exploratory data analysis, identification of patterns in qualitative
+data, and prose drafting. The authors directed all analytical choices:
+research design, data collection, selection of theoretical framing,
+evaluation of alternative interpretations, and final claims. We verified
+all citations, quotes, and empirical claims against primary sources.
+The authors bear full responsibility for the accuracy and integrity
+of this work.
+```
+
+**For Quantitative Papers:**
+Add "model specification and variable operationalization" to author-directed work.
+
+**For Conceptual Papers:**
+Swap "coding and interpretation of qualitative data" for "argument construction and interpretation of cited work."
+
+### Data Availability (When Data Is Protected)
+
+```
+Interview transcripts and [data type] remain protected under IRB protocol
+and nondisclosure agreements; these data cannot be shared. To support
+verification, we provide: (1) quote provenance metadata linking each
+in-text quote to interview source and location; (2) a claim-evidence
+registry documenting supporting and challenging evidence for each
+substantive claim; and (3) aggregated quantitative summaries. These
+materials are available upon request from the first author. Researchers
+seeking to verify specific claims can arrange supervised access through
+a data use agreement.
+```
+
+---
+
+*Last updated: January 2026*
+*Sources: Official journal submission guidelines, JOSS AI guidance*
