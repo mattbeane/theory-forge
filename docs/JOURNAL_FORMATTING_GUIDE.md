@@ -316,6 +316,70 @@ If your theory section is thin:
 
 ---
 
+## Post-Quote Interpretation Rules
+
+In qualitative papers, every block quote MUST be followed by interpretive text before any section break or new quote. Naked quotes—evidence without analytical framing—violate genre norms and waste the reader's interpretive effort.
+
+### Core Rule: No Naked Quotes
+
+Every block quote requires post-quote text that does at least one of the following:
+
+### Functions of Post-Quote Text (by importance)
+
+1. **Name the mechanism** - Give an analytical label to what the quote illustrates
+   - "This is what I call *venting*—a pattern of emotionally charged but vague complaints"
+   - "This diagnostic role positioned drivers as essential participants rather than mere operators"
+
+2. **Link to theory/argument** - Connect specific evidence to the paper's conceptual framework
+   - "This reciprocal dynamic sustained conditions favorable to continued knowledge transfer"
+   - "The gap between job advertisement and actual contribution captures what made Phase 1 distinctive"
+
+3. **Synthesize with other data** - Show the pattern is systematic, not anecdotal
+   - "As Table 1 shows, this pattern produced 38 significant obstacles by late 2015"
+   - "This response was typical; 12 of 15 drivers described similar experiences"
+
+4. **Explicate hidden logic** - Explain what participants are *doing* beneath surface language
+   - "Experienced surgeons kept their griping vague because they were concerned about being perceived as complainers"
+
+5. **Contrast with prior state** - Show what changed or differs
+   - "In sharp contrast, workers who joined later had no such opportunity"
+
+6. **Trace consequences** - What does this behavior produce?
+   - "This title change translated skill development into career legibility"
+
+### The Two-Move Pattern
+
+Most effective post-quote sequences follow this structure:
+
+1. **Name** what the quote exemplifies (mechanism, process, concept)
+2. **Situate** it within the larger argument (consequences, pattern, theory)
+
+### Structural Rules
+
+**Keep interpretation shorter than quote** - Analysis should not dwarf evidence. If quote is 150 words, aim for 50-100 words of interpretation.
+
+**Move upward in abstraction** - Quote is immediate and particular; interpretation is conceptual and generalizable.
+
+**Use connective language** - "This illustrates..." "What this reveals is..." "The mechanism here is..." "This pattern recurs..."
+
+### Anti-Patterns
+
+| Anti-Pattern | Example | Problem |
+|--------------|---------|---------|
+| **Pure restatement** | Quote: "We're tripled on work" → "She feels tripled on work" | Adds nothing |
+| **Floating quote** | Quote → section break | Reader left to guess significance |
+| **Over-summarization** | Three rich quotes → one flat summary | Kills nuance |
+| **Telling without showing** | "Workers resist" → quote | Names before evidence; backwards |
+
+### Quick Diagnostic
+
+Before submission, search for `\end{quote}` and check what follows each one:
+- If immediately followed by `\section`, `\subsection`, or another `\begin{quote}` → **FIX IT**
+- If followed by a sentence that merely restates the quote → **STRENGTHEN IT**
+- If followed by 1-2 sentences that name and situate → **GOOD**
+
+---
+
 ## Common Rejection Reasons (and How to Avoid Them)
 
 ### "Incremental contribution"
