@@ -108,8 +108,19 @@ Then follow the workflow, invoking each agent when ready.
 | `/mine-qual` | Extract mechanism evidence from interviews | After finding lens |
 | `/smith-frames` | Generate and evaluate theoretical framings | After qual mining |
 | `/eval-zuckerman` | **Full framing check**: All 10 Zuckerman criteria | After framing, BEFORE verification |
+| `/audit-claims` | Search raw data for supporting AND challenging evidence | Before verification |
 | `/verify-claims` | Create verification package for external review | After framing check passes |
 | `/draft-paper` | Generate journal-ready manuscript | After verification |
+
+### Evaluation & Quality (NEW)
+
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `/eval-contribution` | **Diagnose contribution type** — not all papers are "theory violation" | Before eval-zuckerman |
+| `/integrate-quant-qual` | Connect quantitative patterns with qualitative mechanisms | After hunt-patterns AND mine-qual |
+| `/compare-frames` | Side-by-side comparison of multiple theoretical framings | After 2+ /new-frame iterations |
+| `/simulate-review` | Generate adversarial peer reviews before submission | After draft-paper |
+| `/build-lit-review` | Build bibliography from identified theory/lens | After find-theory AND find-lens |
 
 ### Project Management
 
@@ -123,6 +134,7 @@ Then follow the workflow, invoking each agent when ready.
 | `/new-frame compare` | Compare framings side-by-side | Choosing direction |
 | `/consensus-config` | Configure statistical consensus settings | Before final analysis |
 | `/student-mode` | Toggle student mode (predictions, explanations, audit trail) | For learning/supervision |
+| `/repair-state` | **Diagnose and fix state.json problems** | When state seems corrupted or out of sync |
 
 ### Output & Integration
 
@@ -210,15 +222,32 @@ Then follow the workflow, invoking each agent when ready.
 
 ## Critical Concepts
 
-### Zuckerman's Framework: The Foundation
+### Multiple Contribution Models (Beyond Zuckerman)
 
-Ezra Zuckerman's "Tips for Article-Writers" provides the fundamental moves for any compelling academic paper:
+Not all valuable papers violate theoretical predictions. This workflow now supports multiple contribution types:
+
+| Type | What It Is | Evaluation Framework |
+|------|------------|---------------------|
+| **Theory Violation** | Paper shows established theory is wrong under conditions | Zuckerman's 10 criteria |
+| **Theory Elaboration** | Paper adds precision without contradiction | Fisher & Aguinis criteria |
+| **Phenomenon Description** | The phenomenon itself is the contribution | Weick's criteria |
+| **Methodological** | New way of studying something | Abbott's heuristics |
+| **Practical Insight** | Actionable knowledge for practitioners | Corley & Gioia criteria |
+| **Literature Integration** | Synthesis of existing work | Palmatier et al. criteria |
+
+Run `/eval-contribution` BEFORE `/eval-zuckerman` to diagnose which type your paper is, then get evaluated against the appropriate criteria—not just Zuckerman.
+
+### Zuckerman's Framework (For Theory Violation Papers)
+
+Ezra Zuckerman's "Tips for Article-Writers" provides the fundamental moves for **theory violation** papers:
 
 1. **The puzzle** — a real-world phenomenon that existing theory can't explain
 2. **Build up and save the null** — make the conventional explanation compelling before showing why it fails
 3. **The contribution** — your proposed explanation for the puzzle
 
 This workflow builds on Zuckerman's framework. See `Zuckerman_UP_2008_Tips_For_Writers.pdf` in this repo for the original memo.
+
+**Important**: Zuckerman is excellent for theory violation papers (ASQ, Org Science style). But if your paper is elaborating theory, describing a phenomenon, or developing methodology, Zuckerman may not be the right fit. Use `/eval-contribution` to check.
 
 ### The Sensitizing Literature (Optional Gambit)
 
