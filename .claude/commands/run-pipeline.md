@@ -310,6 +310,8 @@ Proceeding to Stage 7: Verification
 
 5. **Log everything.** Every gate pass, fail, and override goes in DECISION_LOG.md.
 
+6. **Re-run eval-genre after substantive revisions.** Gate D is not "passed once, passed forever." If intro, abstract, or theory sections are rewritten after Gate D passes, re-run `/eval-genre` before submission. LLM-generated prose defaults to hypo-deductive framing ("develop and test," "derive implications," "we expect")—the genre eval catches this, but only if run on the actual revised text.
+
 ## After Pipeline Completes
 
 When all stages complete:
