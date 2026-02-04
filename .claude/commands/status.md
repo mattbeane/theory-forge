@@ -66,7 +66,8 @@ PIPELINE PROGRESS (use /run-pipeline for guided execution)
   [ ] GATE E            Verification gate
   [ ] draft-paper
   [ ] eval-paper-quality
-  [ ] GATE F            Quality gate
+  [ ] eval-limitations
+  [ ] GATE F            Quality gate (score + limitations)
   [ ] package-verification
 
 Progress: ████████████░░░░░░░░ 45% (9/20 steps)

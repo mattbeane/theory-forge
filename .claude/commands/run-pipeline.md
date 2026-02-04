@@ -59,11 +59,15 @@ STAGE 7: VERIFICATION
 STAGE 8: DRAFTING
   └─ /draft-paper
        ↓
-STAGE 9: QUALITY CHECK
-  └─ /eval-paper-quality (if rubric-eval available)
+STAGE 9: QUALITY CHECKS
+  ├─ /eval-paper-quality (if rubric-eval available)
+  ├─ /eval-limitations (REQUIRED)
+  └─ /eval-citations (REQUIRED)
        ↓
      GATE F: Quality gate
-       - Score ≥35/50 OR user override
+       - Paper quality score ≥35/50 OR user override
+       - Limitations section: PASS (≤400 words, no over-disclosure)
+       - Citations: ≥ minimum for target journal, no missing canonicals
        ↓
 STAGE 10: PACKAGING
   └─ /package-verification (creates final ZIP)
@@ -148,6 +152,9 @@ If this stage has a gate, evaluate the gate conditions:
 **GATE F (after draft):**
 - If rubric-eval available, check score
 - If score < 35: warn but allow override
+- Run /eval-limitations: check word count ≤400, no enumerated confessions
+- Run /eval-citations: check citation count ≥ minimum for target journal, no missing canonicals
+- If limitations OR citations FAIL: must revise before proceeding
 
 ### Step 4: Loop
 
@@ -222,7 +229,9 @@ For stages marked "parallel" (find-theory + find-lens, evaluations):
 | 7a | /audit-claims | Yes (E) | No HIGH concerns |
 | 7b | /verify-claims | Yes (E) | Package self-contained |
 | 8 | /draft-paper | No | — |
-| 9 | /eval-paper-quality | Yes (F) | Score ≥35 or override |
+| 9a | /eval-paper-quality | Yes (F) | Score ≥35 or override |
+| 9b | /eval-limitations | Yes (F) | ≤400 words, PASS |
+| 9c | /eval-citations | Yes (F) | ≥ min for journal, no missing canonicals |
 | 10 | /package-verification | No | — |
 
 ## Example Session
