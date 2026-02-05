@@ -111,13 +111,18 @@
 ---
 
 ### 2.5 Audit Trail / Transparency
-**Status:** state.json exists but incomplete
+**Status:** ✅ Complete
 **Why:** No black boxes.
 
 **Implementation:**
-- Log every AI decision with reasoning
-- Reviewable trail: "At 2:30pm, AI identified pattern X because..."
-- Export audit trail for methods appendix
+- ✅ Created `lib/audit/` module with tracker, reporter, history
+- ✅ Decision dataclass with full metadata (reasoning, alternatives, evidence)
+- ✅ DecisionType enum covering all pipeline decision types
+- ✅ log_decision() for structured decision logging to state.json
+- ✅ format_audit_trail() for markdown output
+- ✅ format_methods_appendix() for paper supplementary materials
+- ✅ Claude Code history linkage via ~/.claude/history.jsonl
+- ✅ Created `/audit-trail` command with filtering and export options
 
 ---
 
@@ -198,6 +203,7 @@ Ensure all commands are documented with examples.
 - [x] Level 4 Capstone in skill-forge (linked tool) (2025-02-04)
 - [x] Ecosystem framing with skill-forge (2025-02-04)
 - [x] P2.3: Confidence indicators in output (2025-02-04)
+- [x] P2.5: Audit trail / transparency (2025-02-04)
 
 ---
 
