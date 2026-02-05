@@ -6,6 +6,29 @@ A toolkit for researchers who have rich data (interviews, fieldnotes, observatio
 
 ---
 
+## This Tool Is For Experienced Researchers
+
+Theory-forge accelerates your work. It doesn't do the thinking for you.
+
+**What it does:**
+- Runs systematic pattern hunts across your data
+- Surfaces evidence you might miss
+- Generates framing options to consider
+- Catches genre mismatches before reviewers do
+- Verifies claims against your actual evidence
+
+**What it doesn't do:**
+- Replace your judgment about what's interesting
+- Know your field's unwritten rules
+- Guarantee your framing will work
+- Substitute for having done the reading
+
+If you're worried about AI replacing researchers: the researchers who can *supervise* AI are more valuable than ever. Theory-forge is designed to be supervised—it surfaces its reasoning, flags uncertainty, and requires you to make the calls. The gates exist because LLMs will confidently produce plausible-sounding garbage if you let them.
+
+Your job is to catch when the AI is wrong. That skill is why you're irreplaceable.
+
+---
+
 ## ⚠️ Before You Start
 
 **Theory-forge is a powerful tool—but power requires judgment.**
@@ -14,7 +37,7 @@ This toolkit helps you write papers faster and catch errors you might miss. It d
 
 **If you haven't yet published (or submitted) a mixed-methods paper:**
 
-We strongly recommend completing [skill-forge](https://github.com/mattbeane/skillforge) training first. Skill-forge teaches the judgment skills that theory-forge assumes you have:
+We strongly recommend completing [skill-forge](https://github.com/mattbeane/skill-forge) training first. Skill-forge teaches the judgment skills that theory-forge assumes you have:
 - Recognizing real patterns vs. noise
 - Identifying mechanisms in qualitative data
 - Framing contributions appropriately
@@ -25,6 +48,28 @@ We strongly recommend completing [skill-forge](https://github.com/mattbeane/skil
 Once you can do these things independently, theory-forge helps you do them faster and more systematically. The capstone assessment in skill-forge proves you can catch what AI gets wrong—which is exactly what you need to use theory-forge responsibly.
 
 **If you're an experienced researcher:** Proceed to Quick Start below.
+
+---
+
+## The Forge Ecosystem
+
+**Skill-forge** and **Theory-forge** work together:
+
+```
+Skill-Forge → Learn the craft → Theory-Forge → Accelerate the work
+   (judgment)                    (productivity)
+```
+
+| Tool | What It Does | Who It's For |
+|------|--------------|--------------|
+| **Skill-forge** | Teaches tacit research judgment through structured practice | PhD students, early-career researchers, anyone wanting systematic skill development |
+| **Theory-forge** | AI-assisted pipeline for producing papers from data | Researchers who already have the judgment skills |
+
+**Why both exist:** AI tools can generate plausible-looking research outputs. Without judgment, researchers can produce work that looks rigorous but isn't. Skill-forge builds the judgment; theory-forge assumes it.
+
+**The connection:** Theory-forge's `/init-project` command checks whether you've done skill-forge training. If not, it warns you and offers to redirect. This isn't gatekeeping—it's protection from wasted effort.
+
+**→ [Skill-forge documentation](https://github.com/mattbeane/skill-forge)**
 
 ---
 
