@@ -9,8 +9,8 @@
 **Implementation:**
 - ✅ Added to `/init-project` - Step 0: Experience Check
 - ✅ Prompt: "Have you independently written and submitted (or published) a mixed-methods paper?"
-- ✅ If no: Warning message with skill-forge redirect
-- ✅ Three options: proceed anyway (logged), go to skill-forge, cancel
+- ✅ If no: Warning message with research-quals redirect
+- ✅ Three options: proceed anyway (logged), go to research-quals, cancel
 - ✅ Decisions logged to DECISION_LOG.md
 
 ---
@@ -200,14 +200,14 @@ Ensure all commands are documented with examples.
 
 ## Completed
 
-- [x] P1.1: Skill-forge gate for new users (2025-02-04)
+- [x] P1.1: Research-quals gate for new users (2025-02-04)
 - [x] P1.2: Guided first project experience (2025-02-04)
 - [x] P1.3: Failure recovery with specific fixes (2025-02-04)
 - [x] P1.4: Modular eval use (2025-02-04)
 - [x] P2.2: AI-assisted messaging (README portion) (2025-02-04)
 - [x] Post-revision genre re-check warning (2025-02-04)
-- [x] Level 4 Capstone in skill-forge (linked tool) (2025-02-04)
-- [x] Ecosystem framing with skill-forge (2025-02-04)
+- [x] Level 4 Capstone in research-quals (linked tool) (2025-02-04)
+- [x] Ecosystem framing with research-quals (2025-02-04)
 - [x] P2.3: Confidence indicators in output (2025-02-04)
 - [x] P2.5: Audit trail / transparency (2025-02-04)
 - [x] P2.4: Import/Export integration (2025-02-04)

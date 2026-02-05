@@ -37,7 +37,7 @@ This toolkit helps you write papers faster and catch errors you might miss. It d
 
 **If you haven't yet published (or submitted) a mixed-methods paper:**
 
-We strongly recommend completing [skill-forge](https://github.com/mattbeane/skill-forge) training first. Skill-forge teaches the judgment skills that theory-forge assumes you have:
+We strongly recommend completing [research-quals](https://github.com/mattbeane/research-quals) training first. Research-quals teaches the judgment skills that theory-forge assumes you have:
 - Recognizing real patterns vs. noise
 - Identifying mechanisms in qualitative data
 - Framing contributions appropriately
@@ -45,7 +45,7 @@ We strongly recommend completing [skill-forge](https://github.com/mattbeane/skil
 - Handling disconfirming evidence
 - Verifying claims against evidence
 
-Once you can do these things independently, theory-forge helps you do them faster and more systematically. The capstone assessment in skill-forge proves you can catch what AI gets wrong—which is exactly what you need to use theory-forge responsibly.
+Once you can do these things independently, theory-forge helps you do them faster and more systematically. The capstone assessment in research-quals proves you can catch what AI gets wrong—which is exactly what you need to use theory-forge responsibly.
 
 **If you're an experienced researcher:** Proceed to Quick Start below.
 
@@ -53,7 +53,7 @@ Once you can do these things independently, theory-forge helps you do them faste
 
 ## The Forge Ecosystem
 
-**Skill-forge** and **Theory-forge** work together:
+**Research-quals** and **Theory-forge** work together:
 
 ```
 Skill-Forge → Learn the craft → Theory-Forge → Accelerate the work
@@ -62,14 +62,14 @@ Skill-Forge → Learn the craft → Theory-Forge → Accelerate the work
 
 | Tool | What It Does | Who It's For |
 |------|--------------|--------------|
-| **Skill-forge** | Teaches tacit research judgment through structured practice | PhD students, early-career researchers, anyone wanting systematic skill development |
+| **Research-quals** | Teaches tacit research judgment through structured practice | PhD students, early-career researchers, anyone wanting systematic skill development |
 | **Theory-forge** | AI-assisted pipeline for producing papers from data | Researchers who already have the judgment skills |
 
-**Why both exist:** AI tools can generate plausible-looking research outputs. Without judgment, researchers can produce work that looks rigorous but isn't. Skill-forge builds the judgment; theory-forge assumes it.
+**Why both exist:** AI tools can generate plausible-looking research outputs. Without judgment, researchers can produce work that looks rigorous but isn't. Research-quals builds the judgment; theory-forge assumes it.
 
-**The connection:** Theory-forge's `/init-project` command checks whether you've done skill-forge training. If not, it warns you and offers to redirect. This isn't gatekeeping—it's protection from wasted effort.
+**The connection:** Theory-forge's `/init-project` command checks whether you've done research-quals training. If not, it warns you and offers to redirect. This isn't gatekeeping—it's protection from wasted effort.
 
-**→ [Skill-forge documentation](https://github.com/mattbeane/skill-forge)**
+**→ [Research-quals documentation](https://github.com/mattbeane/research-quals)**
 
 ---
 

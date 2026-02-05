@@ -46,10 +46,10 @@ If you use theory-forge before you know how to write good papers independently,
 you'll produce plausible-looking work that fails at review—or worse, gets
 published and embarrasses you later.
 
-We strongly recommend completing skill-forge training first:
-→ https://github.com/mattbeane/skill-forge
+We strongly recommend completing research-quals training first:
+→ https://github.com/mattbeane/research-quals
 
-Skill-forge teaches the judgment skills theory-forge assumes you have:
+Research-quals teaches the judgment skills theory-forge assumes you have:
 • Recognizing real patterns vs. noise
 • Identifying mechanisms in qualitative data
 • Framing contributions appropriately
@@ -62,7 +62,7 @@ exactly what you need to use theory-forge responsibly.
 
 Options:
 [1] I understand the risks—proceed anyway
-[2] Take me to skill-forge (opens link)
+[2] Take me to research-quals (opens link)
 [3] Cancel and come back later
 ```
 
@@ -70,12 +70,12 @@ If user chooses [1], log this decision in DECISION_LOG.md:
 ```
 ## [Date]: Project Initialized (Experience Warning Acknowledged)
 
-- User acknowledged they have not completed skill-forge training
+- User acknowledged they have not completed research-quals training
 - User chose to proceed anyway
 - Note: Review outputs carefully; seek mentor review before submission
 ```
 
-If user chooses [2], open the skill-forge URL and exit.
+If user chooses [2], open the research-quals URL and exit.
 
 If user chooses [3], exit without creating project.
 
