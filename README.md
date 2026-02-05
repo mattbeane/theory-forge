@@ -6,6 +6,28 @@ A toolkit for researchers who have rich data (interviews, fieldnotes, observatio
 
 ---
 
+## ⚠️ Before You Start
+
+**Theory-forge is a powerful tool—but power requires judgment.**
+
+This toolkit helps you write papers faster and catch errors you might miss. It does NOT replace the skills needed to do good research. If you use theory-forge before you know how to write good papers independently, you'll produce plausible-looking work that fails at review—or worse, gets published and embarrasses you later.
+
+**If you haven't yet published (or submitted) a mixed-methods paper:**
+
+We strongly recommend completing [skill-forge](https://github.com/mattbeane/skillforge) training first. Skill-forge teaches the judgment skills that theory-forge assumes you have:
+- Recognizing real patterns vs. noise
+- Identifying mechanisms in qualitative data
+- Framing contributions appropriately
+- Distinguishing discovery from testing
+- Handling disconfirming evidence
+- Verifying claims against evidence
+
+Once you can do these things independently, theory-forge helps you do them faster and more systematically. The capstone assessment in skill-forge proves you can catch what AI gets wrong—which is exactly what you need to use theory-forge responsibly.
+
+**If you're an experienced researcher:** Proceed to Quick Start below.
+
+---
+
 ## What This Is
 
 A set of specialized prompts ("agents") that guide you through the full data-to-paper pipeline:
