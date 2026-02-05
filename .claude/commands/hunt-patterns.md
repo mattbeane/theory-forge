@@ -337,6 +337,30 @@ result = await engine.run_with_consensus(
 # - result.overall_stability: HIGH/MEDIUM/LOW
 ```
 
+### Formatting Confidence Output
+
+Use the formatters to surface confidence data in markdown output:
+
+```python
+from lib.consensus import (
+    format_confidence_section,
+    format_stability_summary,
+    format_flagged_items_callout,
+)
+
+# Full confidence section (for end of report)
+confidence_md = format_confidence_section(result)
+
+# Brief summary (for inline references)
+summary = format_stability_summary(result)  # e.g., "🟢 HIGH (3 metrics, 0 flags)"
+
+# Warning callout for flagged items
+if result.flagged_items:
+    callout = format_flagged_items_callout(result)
+```
+
+**Always include confidence output** when consensus mode is enabled. The `format_confidence_section()` output should appear at the end of PATTERN_REPORT.md.
+
 ### Why This Matters
 
 Single-run analysis: "Effect is β = 0.21"

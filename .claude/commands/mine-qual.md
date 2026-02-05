@@ -389,6 +389,30 @@ result = await engine.run_with_consensus(
 # - result.flagged_items: List of LOW stability warnings
 ```
 
+### Formatting Quote Stability Output
+
+Use the formatters to surface quote stability in markdown output:
+
+```python
+from lib.consensus import (
+    format_confidence_section,
+    format_quote_list_with_stability,
+    format_flagged_items_callout,
+    stability_emoji,
+)
+
+# Full confidence section (for end of report)
+confidence_md = format_confidence_section(result, include_metrics=False, include_quotes=True)
+
+# Quote list with stability indicators
+quote_list = format_quote_list_with_stability(result.quotes, warn_low_stability=True)
+
+# For individual quotes in prose
+emoji = stability_emoji(quote.stability)  # Returns 🟢, 🟡, 🔴, or ⚪
+```
+
+**Always include quote stability** when consensus mode is enabled. Each quote in QUAL_EVIDENCE_REPORT.md should show its stability badge (🟢 HIGH, 🟡 MEDIUM, 🔴 LOW).
+
 ---
 
 ## After You're Done

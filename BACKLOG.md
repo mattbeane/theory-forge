@@ -83,14 +83,18 @@
 ---
 
 ### 2.3 Confidence Indicators
-**Status:** Not started
+**Status:** ✅ Complete
 **Why:** Users trust AI output too much or too little.
 
 **Implementation:**
-- Pattern recognition: Show confidence level
-- Mechanism identification: Flag uncertainty
-- Claim verification: Mark strength of evidence links
-- Color coding: Green (high confidence) → Yellow (verify) → Red (uncertain)
+- ✅ Created `lib/consensus/formatters.py` with markdown formatting functions
+- ✅ Stability badges: 🟢 HIGH, 🟡 MEDIUM, 🔴 LOW, ⚪ UNKNOWN
+- ✅ Full confidence section formatter for command output
+- ✅ Quote stability display for qualitative mining
+- ✅ Flagged items callout for items needing review
+- ✅ Updated `/hunt-patterns` to use formatters
+- ✅ Updated `/mine-qual` to use formatters
+- ✅ Created `docs/CONFIDENCE_INDICATORS.md` documentation
 
 ---
 
@@ -193,6 +197,7 @@ Ensure all commands are documented with examples.
 - [x] Post-revision genre re-check warning (2025-02-04)
 - [x] Level 4 Capstone in skill-forge (linked tool) (2025-02-04)
 - [x] Ecosystem framing with skill-forge (2025-02-04)
+- [x] P2.3: Confidence indicators in output (2025-02-04)
 
 ---
 
