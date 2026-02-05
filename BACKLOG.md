@@ -99,14 +99,20 @@
 ---
 
 ### 2.4 Import/Export Integration
-**Status:** Atlas.ti parser exists; others don't
+**Status:** ✅ Complete (core)
 **Why:** Researchers have existing tools.
 
 **Implementation:**
-- NVivo import
-- Overleaf export (direct push)
-- Word export
-- Zotero integration for references
+- ✅ Created `tools/importers/bibtex.py` - Parse BibTeX from Zotero/Mendeley
+- ✅ Reference dataclass with deduplication logic
+- ✅ import_bibtex_file() stores refs in state.json
+- ✅ Created `tools/exporters/docx.py` - Word export via pandoc
+- ✅ export_with_bibliography() includes refs from state.json
+- ✅ Created `tools/exporters/pdf.py` - PDF export via pandoc/LaTeX
+- ✅ export_to_latex() for Overleaf with companion .bib file
+- ✅ Updated `/import-refs` and `/export` commands
+- ⏳ NVivo import (future)
+- ⏳ Direct Overleaf push (future)
 
 ---
 
@@ -204,6 +210,7 @@ Ensure all commands are documented with examples.
 - [x] Ecosystem framing with skill-forge (2025-02-04)
 - [x] P2.3: Confidence indicators in output (2025-02-04)
 - [x] P2.5: Audit trail / transparency (2025-02-04)
+- [x] P2.4: Import/Export integration (2025-02-04)
 
 ---
 

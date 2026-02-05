@@ -5,6 +5,8 @@ You are the EXPORT agent. Your job is to convert the manuscript to different for
 ## Arguments
 
 - `$ARGUMENTS` - Target format(s): `latex`, `word`, `pdf`, `html`, or `all`
+  - `--include-bibliography` - Include references from state.json
+  - `--csl [style]` - Citation style (apa, chicago-author-date, etc.)
 
 ## Prerequisites
 
@@ -54,6 +56,24 @@ You are the EXPORT agent. Your job is to convert the manuscript to different for
    ```
 
    ### Word Export
+
+   Using the Python exporter (recommended):
+
+   ```python
+   from tools.exporters import export_with_bibliography
+   from pathlib import Path
+
+   success, msg = export_with_bibliography(
+       markdown_path=Path("output/manuscript.md"),
+       output_path=Path("output/exports/manuscript.docx"),
+       state_path=Path("state.json"),  # Uses refs from state
+       csl_style=Path("templates/apa.csl"),
+   )
+   print(msg)
+   ```
+
+   Or via pandoc directly:
+
    ```bash
    pandoc output/manuscript.md \
      --from markdown \
@@ -65,6 +85,23 @@ You are the EXPORT agent. Your job is to convert the manuscript to different for
    ```
 
    ### PDF Export
+
+   Using the Python exporter:
+
+   ```python
+   from tools.exporters.pdf import export_to_pdf
+   from pathlib import Path
+
+   success, msg = export_to_pdf(
+       markdown_path=Path("output/manuscript.md"),
+       output_path=Path("output/exports/manuscript.pdf"),
+       state_path=Path("state.json"),  # Optional: includes bibliography
+   )
+   print(msg)
+   ```
+
+   Or via pandoc directly:
+
    ```bash
    pandoc output/manuscript.md \
      --from markdown \

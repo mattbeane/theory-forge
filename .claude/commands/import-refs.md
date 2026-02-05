@@ -18,24 +18,36 @@ Import academic references into the project's bibliography (`literature/refs.bib
 
 ### For BibTeX Import (`/import-refs bibtex path/to/file.bib`)
 
-1. **Read source file**
-   ```bash
-   cat [path/to/file.bib]
+1. **Use the bibtex importer**
+
+   ```python
+   from tools.importers import import_bibtex_file, parse_bibtex
+   from pathlib import Path
+
+   # Import directly into state.json
+   bib_path = Path("path/to/file.bib")
+   state_path = Path("state.json")
+
+   total, new, dupes = import_bibtex_file(bib_path, state_path)
+   print(f"Imported {total} references: {new} new, {dupes} duplicates skipped")
    ```
 
-2. **Parse and validate entries**
-   - Check for required fields (author, title, year, journal/booktitle)
-   - Flag incomplete entries
-   - Detect duplicates against existing refs.bib
+2. **Or parse and inspect first**
 
-3. **Merge into project bibliography**
-   ```bash
-   # Backup existing
-   cp literature/refs.bib literature/refs.bib.backup
+   ```python
+   from tools.importers import parse_bibtex
 
-   # Merge (avoiding duplicates)
-   # Use citation keys to detect duplicates
+   with open("path/to/file.bib") as f:
+       refs = parse_bibtex(f.read())
+
+   for ref in refs:
+       print(f"{ref.citekey}: {ref.author} ({ref.year}). {ref.title}")
    ```
+
+3. **Deduplication**
+   - Matches by DOI first (strongest)
+   - Falls back to citekey
+   - Falls back to title similarity
 
 4. **Report results**
    ```
