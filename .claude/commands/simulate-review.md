@@ -77,6 +77,11 @@ Run BEFORE final submission to catch fixable problems.
 - Logical jumps that skip steps
 - Structural issues (information in wrong place)
 - Missing roadmaps or signposting
+- Paragraphs that open with citations instead of claims
+- Missing transitions (conceptual jumps between paragraphs)
+- Introduction that starts with literature instead of puzzle
+- Discussion that ends with summary instead of zoom-out
+- Citation deployment that's all parenthetical (no engagement with key works)
 
 **Tone**: Genuinely puzzled, asks "naive" questions that reveal real problems.
 
@@ -329,6 +334,23 @@ The authors have done strong work; these refinements would let it shine."
 1. [Question a reader might have that the paper doesn't address]
 2. [Another question]
 3. [Another question]
+
+---
+
+## Argument Construction Issues
+
+Flag any of the following structural problems separately from content-level concerns:
+
+| Issue Type | What to Look For | Section |
+|------------|-----------------|---------|
+| Citation-first paragraphs | Paragraphs opening with "Author (Year)..." instead of claims | All |
+| Literature opening | Introduction starts with "Prior research..." | Introduction |
+| Summary closing | Discussion ends with "In this paper we examined..." | Discussion |
+| Transition failures | No conceptual link between consecutive paragraphs | All |
+| Missing Turn | No clear adversative pivot in introduction | Introduction |
+| All-parenthetical citations | No author-in-prose engagement in theory section | Theory |
+
+These are structural issues that signal the paper needs argument architecture work, not just content revision. See `docs/ARGUMENT_CONSTRUCTION_RULES.md` for the full mechanical rules reference.
 
 ---
 

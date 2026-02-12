@@ -89,7 +89,47 @@ After completing:
    - **AMJ**: Clear hypotheses, robust statistics, practical implications
    - **Org Science**: Theoretical novelty, can be more exploratory
 
-4. **Integrate qualitative evidence**
+4. **Apply argument construction rules**
+
+   Before writing each paragraph, apply these mechanical rules (see `docs/ARGUMENT_CONSTRUCTION_RULES.md` for full reference):
+
+   **Every paragraph**:
+   - Open with a CLAIM (contestable statement), not a citation or description of what was done
+   - Follow with evidence/elaboration that supports the claim specifically
+   - Close with a clincher that restates/advances the claim or bridges to next paragraph
+   - Exception: Cold opens may begin with data/quotes (max 1-2 paragraphs)
+
+   **Between paragraphs**:
+   - Thread the last key concept of paragraph N into the first sentence of paragraph N+1
+   - Each paragraph should advance the argument, not just continue it
+   - Use "The Turn" when pivoting from consensus to complication: adversative conjunction (but, however, yet) + short sharp sentence
+
+   **Introduction** (arc: WORLD → PROBLEM → GAP → QUESTION → PREVIEW):
+   - Opening sentence: Broad Declarative, Trend Claim, or Literary Hook (never literature review)
+   - Gap must be about process/mechanism (never "more research needed")
+   - Citation functions shift across the arc: consensus → steelman → absence → tension
+   - One Turn only — don't pivot back and forth
+
+   **Theory/Literature Review**:
+   - Subsection opens: definitional/consensus claim with 2-4 foundational citations
+   - Build consensus, then pivot with adversative conjunction to complicate
+   - At least one exemplar study engaged in prose (2-5 sentences) per subsection
+   - End of section: restate gap, assert importance, introduce case (3 rapid-fire moves)
+
+   **Discussion**:
+   - Open by reconnecting to introduction's puzzle (Puzzle-Contrast-Finding or Method-to-Finding)
+   - Each contribution: literature anchor → contrast → mechanism → implication
+   - Limitations framed as boundary conditions, not flaws
+   - Final paragraph: Grand Zoom-Out or Pithy Paradox Restatement (NEVER summary)
+   - Final sentence should be quotable
+
+   **Citation deployment**:
+   - Consensus claims: parenthetical stacks (3-6 citations)
+   - Exemplar studies: author-in-prose (2-5 sentences of engagement)
+   - Direct quotes: 1-3 per theory section, for definitions only, always with page numbers
+   - Gap claims: typically uncited (author's assertion)
+
+5. **Integrate qualitative evidence**
 
    Use quotes from QUAL_EVIDENCE_REPORT.md:
    - Introduction: humanize the puzzle
@@ -188,31 +228,75 @@ zip -r manuscript_package.zip manuscript.tex references.bib tables/ figures/
 ```
 ```
 
-## Genre-Specific Notes
+## Register Rules: Writing That Sounds Like Your Target Journal
 
-### For Management Science
-- Formal hypothesis statements
-- Extensive robustness section
-- Online appendix for additional analyses
-- ~12,000 words typical
+Genre checks catch deductive language in inductive papers. Register rules catch a different problem: a paper that passes all language checks but **doesn't sound like papers published in its target journal**. A paper can avoid every hypo-deductive red flag and still read like a quant report dressed up for ASQ.
 
-### For ASQ
-- Theory-building orientation
-- Qualitative depth expected
-- Novel theoretical contribution primary
-- ~15,000 words acceptable
+Register = citation density + opening moves + theory-empirics balance + abstract structure. It's what makes a reader say "this reads like an ASQ paper" vs. "this reads like a working paper."
 
-### For AMJ
-- Clear H1, H2, H3 structure
-- Practical implications section
-- Tables follow specific format
-- ~12,000 words typical
+### The Cold-Open-With-Data Offramp
 
-### For Organization Science
-- Theoretical novelty emphasized
-- Can be more exploratory
-- Process models welcome
-- ~12,000 words typical
+Opening with empirical data **is legitimate and can be powerful**. Bernstein (2012 ASQ) opens with the transparency gospel before unpacking it. Some of the best papers open with a striking empirical fact or a vivid quote that crystallizes the puzzle.
+
+**The rule is not "never open with data." The rule is: you get 1-2 paragraphs of empirical punch, then you MUST pivot to literature.**
+
+Cold-open-with-data checklist:
+1. **Paragraphs 1-2**: Empirical hook — striking fact, vivid quote, counterintuitive pattern. This is permitted and encouraged when it creates genuine surprise.
+2. **Paragraph 3 (latest)**: Literature pivot — 2+ substantive citations engaging prior work. Not a citation string; actual engagement ("Author (Year) argues that... yet what we observed suggests...").
+3. **By end of introduction**: Citation density must reach ≥2 substantive citations per paragraph (averaged over remaining intro paragraphs after the hook).
+
+If the empirical opening extends past paragraph 2 without engaging literature, the paper risks reading as a research report rather than a scholarly contribution. **The cold open earns its keep by making the theoretical engagement that follows feel urgent.**
+
+### ASQ / Organization Science Register
+
+These journals expect papers that **sound like theoretical contributions illustrated with evidence**, not evidence reports decorated with theory.
+
+**Abstract**:
+- Open with research question, theoretical claim, or puzzle — NOT with sample sizes or data descriptions
+- ✗ "Using 59,021 separation records and 351 interviews across six facilities..."
+- ✓ "How do organizations construct who encounters novel technology?"
+- ✓ "I theorize about the implications of transparent organizational design..."
+- Name the core concept/contribution in the abstract
+- State method concisely (one clause, not the lead)
+
+**Introduction**:
+- After any cold-open hook (max 2 paragraphs), engage literature substantively
+- Citation density: ≥2 substantive citations per paragraph after the opening hook
+- By paragraph 4, the reader should know which scholarly conversation this paper joins
+- ✗ Five paragraphs of empirical description before any citation
+- ✓ Empirical surprise in paragraph 1, literature engagement by paragraph 3
+
+**Theory section**:
+- Substantive engagement with foundational works (2+ sentences per key theorist)
+- NOT citation strings: "(Thompson, 1967; Galbraith, 1973; Burns & Stalker, 1961)"
+- ✓ "Thompson (1967) distinguishes three forms of interdependence... Galbraith (1973) extends this by arguing..."
+- Frame as sensitizing concepts or analytical framework, not hypothesis development
+
+### Management Science Register
+
+ManSci is more empirics-forward. Formal hypotheses are expected. The register is crisper and more technical.
+
+**Abstract**: Can lead with the empirical question or finding. Sample description early is acceptable.
+**Introduction**: Get to the identification strategy and contribution fast. Less literature depth, more precision.
+**Theory**: Formal hypothesis statements (H1, H2, H3) are expected and correct here.
+
+### AMJ Register
+
+AMJ balances theory and practical motivation. Hypotheses are expected but practical implications carry weight.
+
+**Abstract**: Structured abstracts preferred. Can mention sample but should also state practical implications.
+**Introduction**: Clear gap identification, practical motivation alongside theoretical motivation.
+**Theory**: H1, H2, H3 structure expected. Build from literature to predictions.
+
+### Register Quick-Check Before Drafting
+
+Before writing each section, ask:
+1. **Would a reader of [target journal] recognize this as belonging there?**
+2. **Does the citation density match published papers in this journal?**
+3. **Does the opening move match the journal's conventions?**
+4. **Is the theory-empirics balance right for this journal?**
+
+If the answer to any is "no," adjust before continuing.
 
 ## After You're Done
 

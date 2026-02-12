@@ -57,6 +57,11 @@ class ViolationType(Enum):
     MISSING_ITERATIVE_METHODS = "missing_iterative_methods"
     SPECULATIVE_FINDINGS = "speculative_findings"
 
+    # Argument construction violations (soft)
+    CITATION_FIRST_PARAGRAPH = "citation_first_paragraph"
+    LITERATURE_OPENING = "literature_opening"
+    SUMMARY_CLOSING = "summary_closing"
+
 
 class Severity(Enum):
     """Severity of violations."""
@@ -164,6 +169,37 @@ class StyleValidator:
     ]
 
     # ==========================================================================
+    # ARGUMENT CONSTRUCTION PATTERNS
+    # See docs/ARGUMENT_CONSTRUCTION_RULES.md for full reference
+    # ==========================================================================
+
+    # Citation-first paragraph opening (paragraph opens with citation, not claim)
+    # NOTE: Definitional paragraphs ("Power (1997) termed...") are legitimate exceptions
+    CITATION_FIRST_PATTERNS = [
+        r'^\s*\([A-Z][a-z]+',                              # Opens with (Author
+        r'^\s*[A-Z][a-z]+\s+\(\d{4}\)',                    # Author (year)
+        r'^\s*[A-Z][a-z]+\s+and\s+[A-Z][a-z]+\s+\(\d{4}', # Author and Author (year)
+        r'^\s*[A-Z][a-z]+\s+et\s+al\.\s+\(\d{4}\)',       # Author et al. (year)
+        r'^\s*According\s+to\s+[A-Z]',                     # "According to Author"
+    ]
+
+    # Introduction opens with literature instead of puzzle/phenomenon
+    LITERATURE_OPENING_PATTERNS = [
+        r'^(Prior|Previous|Existing|Past)\s+(research|work|studies|literature)',
+        r'^(The|A)\s+literature\s+on',
+        r'^(Scholars|Researchers|Studies)\s+have\s+(long\s+)?(shown|found|argued|debated)',
+        r'^(Much|Considerable|Extensive)\s+(research|work|attention)\s+has',
+    ]
+
+    # Discussion closes with summary instead of zoom-out or paradox restatement
+    SUMMARY_CLOSING_PATTERNS = [
+        r'^(In\s+)?(this|our)\s+paper,?\s+we\s+(have\s+)?(examined|explored|investigated|studied)',
+        r'^(In\s+)?summary,?\s+(this|our)\s+(paper|study|research)',
+        r'^(To\s+)?(summarize|conclude),?\s+we\s+have',
+        r'^(In\s+)?conclusion,?\s+(this|our|we)',
+    ]
+
+    # ==========================================================================
     # QUAL-FORWARD SPECIFIC PATTERNS
     # These are used when paper_type is QUAL_FORWARD
     # ==========================================================================
@@ -242,8 +278,10 @@ class StyleValidator:
     # ==========================================================================
 
     # Expected Patterns / Pattern X anti-patterns (multimethod inductive papers)
+    # NOTE: "the expected pattern" (with article) is OK - it's puzzle framing referring to
+    # what prior theory predicts. We flag "Expected Patterns" as header/pre-specification.
     EXPECTED_PATTERNS_ANTIPATTERNS = [
-        r'\b[Ee]xpected\s+[Pp]atterns?\b',  # "Expected Pattern(s)" header
+        r'(?<![Tt]he\s)[Ee]xpected\s+[Pp]atterns\b',  # "Expected Patterns" header (not "the expected pattern")
         r'\bthree\s+(expected\s+)?patterns?\b',  # "three expected patterns"
         r'\b[Pp]attern\s+\d+\b',  # "Pattern 1", "Pattern 2"
         r'\bwe\s+(would\s+)?expect\s+to\s+observe\b',  # "we would expect to observe"
@@ -365,7 +403,7 @@ class StyleValidator:
             violations.extend(self._check_speculative_findings(text, section_name))
             # Multimethod inductive checks
             violations.extend(self._check_expected_patterns(text, section_name))
-            violations.extend(self._check_enumerated_contributions(text))
+            violations.extend(self._check_enumerated_contributions(text, section_name))
             violations.extend(self._check_our_predictions(text, section_name))
 
         hard_count = sum(1 for v in violations if v.severity == Severity.HARD)
@@ -879,14 +917,26 @@ class StyleValidator:
 
         return violations
 
-    def _check_enumerated_contributions(self, text: str) -> list[Violation]:
+    def _check_enumerated_contributions(
+        self,
+        text: str,
+        section_name: Optional[str] = None,
+    ) -> list[Violation]:
         """
         Check for enumerated contribution patterns.
 
         Beyond "makes three contributions:", also catches:
         - "First, we contribute... Second, we contribute..."
         - "Our first contribution... Our second contribution..."
+
+        EXCEPTION: Introduction and Discussion sections may enumerate contributions
+        in prose form (e.g., "This paper makes three contributions. First, we extend...").
+        This is standard academic practice for framing and summarizing.
         """
+        # Allow enumerated contributions in Introduction and Discussion
+        if section_name and section_name.lower() in ['introduction', 'discussion', 'conclusion']:
+            return []
+
         violations = []
 
         for pattern in self._enumerated_contrib_re:

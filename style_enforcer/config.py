@@ -18,6 +18,7 @@ class HookType(Enum):
     """Types of opening hooks."""
     THEORETICAL_PUZZLE = "theoretical_puzzle"
     EMPIRICAL_SURPRISE = "empirical_surprise"
+    LITERARY_HOOK = "literary_hook"  # Epigraph, analogy, or narrative frame
 
 
 class PaperType(Enum):
@@ -45,6 +46,13 @@ class SectionConfig:
     allow_cold_open: bool = False
     allow_hypothesis_language: bool = True  # But must have interpretation
     contribution_format: str = "narrative_only"  # Never "list"
+
+    # Argument construction rules (per section)
+    # See docs/ARGUMENT_CONSTRUCTION_RULES.md for full reference
+    require_topic_sentence_claims: bool = True   # Paragraph opens with claim, not citation
+    require_clincher_sentences: bool = False      # Paragraph ends with restatement/bridge
+    require_lexical_transitions: bool = False     # Cross-paragraph concept threading
+    citation_function_rules: list[str] = field(default_factory=list)  # Expected citation functions
 
     # Exemplar guidance
     exemplar_key: Optional[str] = None  # Key into ExemplarDB
@@ -110,6 +118,10 @@ class ManuscriptConfig:
                     "contribution_preview",
                     "paper_structure",
                 ],
+                # Argument construction: intro uses all 4 citation functions
+                require_topic_sentence_claims=True,
+                require_lexical_transitions=True,
+                citation_function_rules=["consensus", "steelman", "absence", "tension"],
                 exemplar_key="introduction",
             ),
 
@@ -128,6 +140,10 @@ class ManuscriptConfig:
                 prohibited_elements=[
                     "numbered_hypotheses_list",
                 ],
+                # Argument construction: theory uses consensus, steelman, absence
+                require_topic_sentence_claims=True,
+                require_lexical_transitions=True,
+                citation_function_rules=["consensus", "steelman", "absence"],
                 exemplar_key="theory",
             ),
 
@@ -169,6 +185,10 @@ class ManuscriptConfig:
                 max_words=3500,
                 quote_budget=(0, 1),
                 table_budget=(0, 1),
+                # Argument construction: discussion needs clinchers for contribution closure
+                require_topic_sentence_claims=True,
+                require_clincher_sentences=True,
+                citation_function_rules=["consensus", "steelman"],
                 required_elements=[
                     "summary_of_findings",
                     "theoretical_contributions",

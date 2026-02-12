@@ -238,6 +238,44 @@ Using Claude 3.5 Haiku with 5 runs on a 12,000-word paper:
 
 Increase runs to 10 for higher confidence (~2x cost).
 
+## Pre-Check: Argument Construction
+
+**Before running rubric-eval, scan for argument construction violations.**
+
+These are structural issues that affect how the argument lands, independent of content quality:
+
+1. **Citation-first paragraphs**: Search for paragraphs opening with "Author (Year)" or "(Author, Year)" or "According to Author". Count violations. Exception: definitional paragraphs in theory sections ("Power (1997) termed...").
+
+2. **Introduction opening**: Check if the first paragraph of the introduction opens with "Prior research..." or "The literature on..." instead of a phenomenon/puzzle. Flag if so.
+
+3. **Discussion closing**: Check if the final paragraph of the discussion opens with "In this paper, we examined..." or "In summary..." Flag if so — the closing should zoom out or restate the paradox, never summarize.
+
+4. **Transition quality**: Spot-check 3 paragraph boundaries (one in intro, one in theory, one in discussion). For each, check whether the first sentence of paragraph N+1 picks up a concept from the last sentence of paragraph N. Note gaps.
+
+5. **Citation function variety**: In the theory section, check whether all citations are parenthetical stacks or whether at least 1-2 exemplar studies are engaged in prose (2+ sentences). All-parenthetical = thin engagement.
+
+**Report these as structural issues** in the quality eval output, separate from rubric-eval scores. Reference `docs/ARGUMENT_CONSTRUCTION_RULES.md` for the full rule set.
+
+---
+
+## Pre-Check: Tracking Paragraphs
+
+**Before running rubric-eval, scan for and flag tracking paragraphs.**
+
+Search the manuscript for:
+- "In this paper, we..."
+- "This paper proceeds as follows..."
+- "We organize the remainder..."
+- "In the next section, we..."
+- "We then present our..."
+- "The paper is structured as follows..."
+
+**If found**: Flag in the report as a prose quality issue. These are throat-clearing that breaks flow. A good paper is self-guiding - readers don't need a roadmap if the structure is clear.
+
+**Action**: Delete tracking paragraphs before final submission. If structure isn't clear without them, fix the structure.
+
+---
+
 ## Common Patterns
 
 **Low argument_clarity + Low theoretical_grounding**: Paper needs conceptual tightening before prose work.
@@ -249,6 +287,8 @@ Increase runs to 10 for higher confidence (~2x cost).
 **Low prose_quality only**: Good news! Just needs editing, not rethinking.
 
 **High variance on theoretical_grounding**: Edge case - get human expert review.
+
+**Tracking paragraphs found**: Delete them. They signal author insecurity and break narrative momentum.
 
 ## Troubleshooting
 

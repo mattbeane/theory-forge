@@ -3,9 +3,19 @@
   "hooks": [
     {
       "event": "on_command",
-      "matcher": {
-        "command_name": "hunt-patterns"
-      },
+      "matcher": { "command_name": "hunt-patterns" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py hunt-patterns",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /hunt-patterns recommends Domain 1 Level 3 (Pattern Recognition).\nRun `skillforge status` to see your progress, or `skillforge take domain-1 level-1` to start."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "hunt-patterns" },
       "action": {
         "type": "command",
         "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('explore_data',{}).get('status')=='completed' else 1)\" || (test -f projects/*/state.json 2>/dev/null && echo 'Multi-project: check active project state' || echo 'No state.json found')",
@@ -17,9 +27,19 @@
     },
     {
       "event": "on_command",
-      "matcher": {
-        "command_name": "find-theory"
-      },
+      "matcher": { "command_name": "find-theory" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py find-theory",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /find-theory recommends Domain 1 Level 3 (Pattern Recognition) + Domain 2 Level 3 (Theoretical Positioning).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "find-theory" },
       "action": {
         "type": "command",
         "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('hunt_patterns',{}).get('status')=='completed' else 1)\"",
@@ -31,9 +51,19 @@
     },
     {
       "event": "on_command",
-      "matcher": {
-        "command_name": "find-lens"
-      },
+      "matcher": { "command_name": "find-lens" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py find-lens",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /find-lens recommends Domain 1 Level 3 (Pattern Recognition) + Domain 2 Level 3 (Theoretical Positioning).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "find-lens" },
       "action": {
         "type": "command",
         "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('find_theory',{}).get('status')=='completed' else 1)\"",
@@ -45,9 +75,19 @@
     },
     {
       "event": "on_command",
-      "matcher": {
-        "command_name": "mine-qual"
-      },
+      "matcher": { "command_name": "mine-qual" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py mine-qual",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /mine-qual recommends Domain 2 Level 3 (Theoretical Positioning) + Domain 3 Level 3 (Qualitative Mechanism Extraction).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "mine-qual" },
       "action": {
         "type": "command",
         "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('find_theory',{}).get('status')=='completed' and w.get('find_lens',{}).get('status')=='completed' else 1)\"",
@@ -59,9 +99,19 @@
     },
     {
       "event": "on_command",
-      "matcher": {
-        "command_name": "smith-frames"
-      },
+      "matcher": { "command_name": "smith-frames" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py smith-frames",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /smith-frames recommends Domain 3 Level 3 (Qualitative Mechanism Extraction) + Domain 4 Level 3 (Theoretical Framing).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "smith-frames" },
       "action": {
         "type": "command",
         "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('find_theory',{}).get('status')=='completed' and w.get('find_lens',{}).get('status')=='completed' else 1)\"",
@@ -73,23 +123,43 @@
     },
     {
       "event": "on_command",
-      "matcher": {
-        "command_name": "verify-claims"
-      },
+      "matcher": { "command_name": "eval-zuckerman" },
       "action": {
         "type": "command",
-        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('hunt_patterns',{}).get('status')=='completed' and w.get('smith_frames',{}).get('status')=='completed' else 1)\"",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py eval-zuckerman",
         "on_failure": {
           "behavior": "warn",
-          "message": "⚠️  Quality Gate: /hunt-patterns and /smith-frames should be completed before /verify-claims.\nYou need empirical patterns and a chosen framing to verify claims."
+          "message": "⚠️  Quals: /eval-zuckerman recommends Domain 3 Level 3 (Qualitative Mechanism Extraction) + Domain 4 Level 3 (Theoretical Framing).\nRun `skillforge status` to see your progress."
         }
       }
     },
     {
       "event": "on_command",
-      "matcher": {
-        "command_name": "draft-paper"
-      },
+      "matcher": { "command_name": "eval-genre" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py eval-genre",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /eval-genre recommends Domain 4 Level 3 (Theoretical Framing) + Domain 5 Level 3 (Epistemological Genre).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "draft-paper" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py draft-paper",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /draft-paper recommends Domain 4 Level 3 (Theoretical Framing) + Domain 5 Level 3 (Epistemological Genre).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "draft-paper" },
       "action": {
         "type": "command",
         "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('verify_claims',{}).get('status')=='completed' else 1)\"",
@@ -101,15 +171,97 @@
     },
     {
       "event": "on_command",
-      "matcher": {
-        "command_name": "export"
-      },
+      "matcher": { "command_name": "eval-limitations" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py eval-limitations",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /eval-limitations recommends Domain 5 Level 3 (Epistemological Genre).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "eval-citations" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py eval-citations",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /eval-citations recommends Domain 5 Level 3 (Epistemological Genre).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "audit-claims" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py audit-claims",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /audit-claims recommends Domain 5 Level 3 (Epistemological Genre) + Domain 6 Level 3 (Adversarial Evidence Handling).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "verify-claims" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py verify-claims",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /verify-claims recommends Domain 5 Level 3 (Epistemological Genre) + Domain 6 Level 3 (Adversarial Evidence Handling).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "verify-claims" },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('hunt_patterns',{}).get('status')=='completed' and w.get('smith_frames',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /hunt-patterns and /smith-frames should be completed before /verify-claims.\nYou need empirical patterns and a chosen framing to verify claims."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "package-verification" },
+      "action": {
+        "type": "command",
+        "command": "python3 /Users/mattbeane/knowledge-work/projects/theory-forge/.claude/check_quals.py package-verification",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quals: /package-verification recommends Domain 6 Level 3 (Adversarial Evidence Handling) + Domain 7 Level 3 (Claim Verification & Integrity).\nRun `skillforge status` to see your progress."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "export" },
       "action": {
         "type": "command",
         "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('draft_paper',{}).get('status')=='completed' else 1)\"",
         "on_failure": {
           "behavior": "warn",
           "message": "⚠️  Quality Gate: /draft-paper should be completed before /export.\nYou need a manuscript to export."
+        }
+      }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "draft-paper" },
+      "action": {
+        "type": "command",
+        "command": "python3 -c \"import json; from pathlib import Path; r=Path.home()/'.skillforge'/'record.json'; exit(0) if not r.exists() else exit(0 if json.loads(r.read_text()).get('foundations',{}).get('argument-construction',{}).get('level',0)>=1 else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "📝  Foundation: Argument Construction not yet assessed.\nArgument construction rules (paragraph architecture, transitions, citation deployment)\nwill be applied as guidance. See docs/ARGUMENT_CONSTRUCTION_RULES.md for reference."
         }
       }
     }
