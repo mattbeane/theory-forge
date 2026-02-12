@@ -2,16 +2,12 @@
 
 ## Priority 1: Immediate / High Impact
 
-### 1.1 Skill-Forge Gate for New Users
-**Status:** ✅ Complete
-**Why:** PhD students may use theory-forge as a crutch before developing judgment. The tool should detect this and redirect.
+### 1.1 ~~Skill-Forge Gate for New Users~~ (Removed)
+**Status:** Removed
+**Why removed:** Premature to couple tool access to a competency framework that's still a draft. The competency work (ResearchKit Quals) and the tooling work (TheoryForge) are independent projects evolving separately. The right relationship between them is an open question — previous implementation overclaimed the maturity of both projects.
 
-**Implementation:**
-- ✅ Added to `/init-project` - Step 0: Experience Check
-- ✅ Prompt: "Have you independently written and submitted (or published) a mixed-methods paper?"
-- ✅ If no: Warning message with research-quals redirect
-- ✅ Three options: proceed anyway (logged), go to research-quals, cancel
-- ✅ Decisions logged to DECISION_LOG.md
+**What was there:** Experience check in `/init-project`, competency gating via `check_quals.py` and hooks, redirect to research-quals.
+**What remains:** Quality gates based on workflow state (e.g., don't run `/find-theory` before `/hunt-patterns`). These are about pipeline sequencing, not competency assessment.
 
 ---
 
@@ -200,18 +196,18 @@ Ensure all commands are documented with examples.
 
 ## Completed
 
-- [x] P1.1: Research-quals gate for new users (2025-02-04)
+- [x] ~~P1.1: Research-quals gate for new users (2025-02-04)~~ — Removed: premature coupling
 - [x] P1.2: Guided first project experience (2025-02-04)
 - [x] P1.3: Failure recovery with specific fixes (2025-02-04)
 - [x] P1.4: Modular eval use (2025-02-04)
 - [x] P2.2: AI-assisted messaging (README portion) (2025-02-04)
 - [x] Post-revision genre re-check warning (2025-02-04)
-- [x] Level 4 Capstone in research-quals (linked tool) (2025-02-04)
-- [x] Ecosystem framing with research-quals (2025-02-04)
+- [x] ~~Level 4 Capstone in research-quals (linked tool) (2025-02-04)~~ — Removed: premature coupling
+- [x] ~~Ecosystem framing with research-quals (2025-02-04)~~ — Removed: premature coupling
 - [x] P2.3: Confidence indicators in output (2025-02-04)
 - [x] P2.5: Audit trail / transparency (2025-02-04)
 - [x] P2.4: Import/Export integration (2025-02-04)
 
 ---
 
-*Last updated: 2025-02-04*
+*Last updated: 2025-02-12*

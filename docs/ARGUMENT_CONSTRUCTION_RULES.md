@@ -2,7 +2,7 @@
 
 > **Source**: Extracted from mechanical analysis of 9 exemplar papers across ASQ, Organization Science, ASR, and AMJ. These are conventions of the tradition, not stylistic preferences.
 >
-> **Companion document**: For the competency/assessment side, see `research-quals/competencies/foundation-argument-construction.md`.
+> **Related**: The separate [ResearchKit Quals](https://github.com/mattbeane/research-quals) project includes a draft competency definition for argument construction (`competencies/foundation-argument-construction.md`). That project is evolving independently.
 
 ---
 

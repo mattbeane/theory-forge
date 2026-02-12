@@ -23,53 +23,17 @@ Theory-forge accelerates your work. It doesn't do the thinking for you.
 - Guarantee your framing will work
 - Substitute for having done the reading
 
-If you're worried about AI replacing researchers: the researchers who can *supervise* AI are more valuable than ever. Theory-forge is designed to be supervised—it surfaces its reasoning, flags uncertainty, and requires you to make the calls. The gates exist because LLMs will confidently produce plausible-sounding garbage if you let them.
+If you're worried about AI replacing researchers: the researchers who can *supervise* AI are more valuable than ever. Theory-forge is designed to be supervised — it surfaces its reasoning, flags uncertainty, and requires you to make the calls.
 
 Your job is to catch when the AI is wrong. That skill is why you're irreplaceable.
 
 ---
 
-## ⚠️ Before You Start
+## Related: ResearchKit Quals
 
-**Theory-forge is a powerful tool—but power requires judgment.**
+We're separately working on [ResearchKit Quals](https://github.com/mattbeane/research-quals) — a draft framework for naming and assessing the tacit research skills that matter when doing this kind of work. The two projects share a concern (helping researchers produce rigorous work) and inform each other, but they're independent and both works-in-progress.
 
-This toolkit helps you write papers faster and catch errors you might miss. It does NOT replace the skills needed to do good research. If you use theory-forge before you know how to write good papers independently, you'll produce plausible-looking work that fails at review—or worse, gets published and embarrasses you later.
-
-**If you haven't yet published (or submitted) a mixed-methods paper:**
-
-We strongly recommend completing [research-quals](https://github.com/mattbeane/research-quals) training first. Research-quals teaches the judgment skills that theory-forge assumes you have:
-- Recognizing real patterns vs. noise
-- Identifying mechanisms in qualitative data
-- Framing contributions appropriately
-- Distinguishing discovery from testing
-- Handling disconfirming evidence
-- Verifying claims against evidence
-
-Once you can do these things independently, theory-forge helps you do them faster and more systematically. The capstone assessment in research-quals proves you can catch what AI gets wrong—which is exactly what you need to use theory-forge responsibly.
-
-**If you're an experienced researcher:** Proceed to Quick Start below.
-
----
-
-## The Forge Ecosystem
-
-**Research-quals** and **Theory-forge** work together:
-
-```
-Skill-Forge → Learn the craft → Theory-Forge → Accelerate the work
-   (judgment)                    (productivity)
-```
-
-| Tool | What It Does | Who It's For |
-|------|--------------|--------------|
-| **Research-quals** | Teaches tacit research judgment through structured practice | PhD students, early-career researchers, anyone wanting systematic skill development |
-| **Theory-forge** | AI-assisted pipeline for producing papers from data | Researchers who already have the judgment skills |
-
-**Why both exist:** AI tools can generate plausible-looking research outputs. Without judgment, researchers can produce work that looks rigorous but isn't. Research-quals builds the judgment; theory-forge assumes it.
-
-**The connection:** Theory-forge's `/init-project` command checks whether you've done research-quals training. If not, it warns you and offers to redirect. This isn't gatekeeping—it's protection from wasted effort.
-
-**→ [Research-quals documentation](https://github.com/mattbeane/research-quals)**
+Theory-forge development surfaces which research skills are hardest to replace with AI. The competency work in research-quals helps us think about what "ready to use AI tools" means. But we don't yet know the right relationship between the two — whether skill assessment should affect tool behavior, and if so how. For now, they evolve independently.
 
 ---
 
@@ -459,7 +423,7 @@ Configure with `/consensus-config`. See `lib/consensus/` for the Python implemen
 
 ## Prerequisites
 
-**Theory-forge assumes you already have qualitative methods training.** This tool accelerates skilled researchers—it doesn't replace skill development.
+**Theory-forge assumes you already have qualitative methods training.** This tool accelerates skilled researchers — it doesn't replace skill development.
 
 Before using theory-forge, you should have:
 - Coded at least one dataset by hand
@@ -468,6 +432,8 @@ Before using theory-forge, you should have:
 - Experienced peer review (ideally both sides)
 
 See [`docs/PREREQUISITES.md`](docs/PREREQUISITES.md) for details on why these matter and what happens if you skip them.
+
+For a more structured take on what research skills matter, see the (separate, draft) [ResearchKit Quals](https://github.com/mattbeane/research-quals) project.
 
 ### For Advisors
 
