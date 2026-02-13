@@ -63,6 +63,18 @@
     },
     {
       "event": "on_command",
+      "matcher": { "command_name": "eval-genre" },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('draft_paper',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /draft-paper should be completed before /eval-genre.\nYou need a manuscript to evaluate for genre consistency."
+        }
+      }
+    },
+    {
+      "event": "on_command",
       "matcher": { "command_name": "draft-paper" },
       "action": {
         "type": "command",
@@ -90,10 +102,10 @@
       "matcher": { "command_name": "export" },
       "action": {
         "type": "command",
-        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); exit(0 if s.get('workflow',{}).get('draft_paper',{}).get('status')=='completed' else 1)\"",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('draft_paper',{}).get('status')=='completed' and w.get('eval_genre',{}).get('status')=='completed' else 1)\"",
         "on_failure": {
           "behavior": "warn",
-          "message": "⚠️  Quality Gate: /draft-paper should be completed before /export.\nYou need a manuscript to export."
+          "message": "⚠️  Quality Gate: /draft-paper and /eval-genre should be completed before /export.\nManuscript must pass genre evaluation before export."
         }
       }
     }

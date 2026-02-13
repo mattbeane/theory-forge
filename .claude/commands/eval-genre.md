@@ -330,6 +330,94 @@ Add register results to the Overall Assessment table:
 
 ---
 
+## Argument Construction Check
+
+Genre and register checks catch framing problems. This section catches **structural argument failures** — the mechanical construction errors that make even well-framed papers hard to follow. See `docs/ARGUMENT_CONSTRUCTION_RULES.md` for the full rule set.
+
+### Steps for Argument Construction Check
+
+10. **Check paragraph openings**
+    - Sample 10+ paragraphs across all sections
+    - Does each open with a CLAIM (contestable statement)?
+    - Flag citation-first openings: "Author (Year) argued..." or "(Author, Year) found..."
+    - Flag narration openings: "In this section, we..."
+    - Flag vague openings: "Several scholars have studied..."
+    - Exception: Cold opens (max 1-2 paragraphs) may lead with data/quotes
+
+11. **Check transitions between paragraphs**
+    - Sample 5+ paragraph boundaries
+    - Does the last key concept of paragraph N appear in the first sentence of paragraph N+1?
+    - Flag topic jumps where consecutive paragraphs introduce unconnected concepts
+    - Check for "The Turn": Is there exactly ONE adversative pivot (However/But/Yet) from consensus to complication?
+
+12. **Check introduction arc**
+    - Does it follow WORLD → PROBLEM → GAP → QUESTION → PREVIEW?
+    - Is the gap about a missing process/mechanism (not "more research needed")?
+    - Does citation function shift across the arc (consensus → steelman → absence → tension)?
+
+13. **Check discussion structure**
+    - Does it open by reconnecting to the introduction's puzzle?
+    - Does each contribution paragraph follow: literature anchor → contrast → mechanism → implication?
+    - Does the final paragraph zoom out or restate paradox (NOT summarize)?
+    - Is the final sentence quotable?
+
+14. **Check citation deployment**
+    - Are consensus claims backed by parenthetical stacks (3-6 citations)?
+    - Are key works engaged in prose (2-5 sentences), not just cited?
+    - Are gap claims typically uncited (author's own assertion)?
+    - Are direct quotes reserved for definitions, with page numbers?
+
+### Argument Construction Output (add to GENRE_EVAL.md)
+
+```markdown
+## Argument Construction
+
+### Paragraph Openings
+**Paragraphs sampled**: [N]
+**Citation-first violations**: [N] — [list locations]
+**Narration violations**: [N] — [list locations]
+**Assessment**: [PASS / NEEDS REVISION]
+
+### Transitions & Cohesion
+**Boundaries checked**: [N]
+**Topic jumps found**: [N] — [list locations]
+**The Turn present?**: [Yes, at paragraph N / No / Multiple (problem)]
+**Assessment**: [PASS / NEEDS REVISION]
+
+### Introduction Arc
+**WORLD**: [Present / Missing]
+**PROBLEM**: [Present / Missing]
+**GAP**: [Mechanism-specific / Vague "more research needed"]
+**QUESTION**: [Present / Missing]
+**PREVIEW**: [Present / Missing]
+**Assessment**: [PASS / NEEDS REVISION]
+
+### Discussion Structure
+**Puzzle reconnect**: [Yes / No]
+**Contribution paragraphs follow 4-move pattern**: [Yes / Partial / No]
+**Final paragraph**: [Zoom-out / Paradox restatement / Summary (FAIL)]
+**Assessment**: [PASS / NEEDS REVISION]
+
+### Citation Deployment
+**Consensus stacks used?**: [Yes / No]
+**Author-in-prose engagement found?**: [Yes, N instances / No]
+**Gap claims uncited?**: [Yes / No — overcited gaps weaken the claim]
+**Assessment**: [PASS / NEEDS REVISION]
+```
+
+Add to the Overall Assessment table:
+
+| Check | Status |
+|-------|--------|
+| ... existing checks ... | |
+| Paragraph openings are claims (not citations) | ✓/✗ |
+| Transitions thread concepts between paragraphs | ✓/✗ |
+| Introduction follows WORLD→GAP arc | ✓/✗ |
+| Discussion reconnects puzzle, doesn't summarize | ✓/✗ |
+| Citation functions deployed appropriately | ✓/✗ |
+
+---
+
 ## Common Patterns
 
 **"Dressed-up deduction"**: Paper was actually inductive but author wrote it deductively because that's how they were trained. Fix: Reframe theory section as "sensitizing concepts I brought to the field" rather than "hypotheses derived from literature."
