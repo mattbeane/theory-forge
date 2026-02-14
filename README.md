@@ -96,6 +96,8 @@ your-project/
 │   ├── exploration/     # /explore-data outputs
 │   ├── patterns/        # /hunt-patterns outputs
 │   ├── framing/         # Frame iterations (frame-1/, frame-2/, etc.)
+│   ├── absences/        # /surface-absences outputs
+│   ├── process/         # /trace-process outputs
 │   └── verification/    # Verification packages
 ├── literature/
 │   ├── primary/         # Core theory papers

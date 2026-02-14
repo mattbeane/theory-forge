@@ -9,7 +9,7 @@ Many of the most important findings in qualitative management research are proce
 Common processual patterns in published papers:
 - **Phase transitions**: The setting moves through qualitatively distinct phases (Barley 1986)
 - **Escalation/de-escalation**: A dynamic intensifies or dampens over time
-- **Drift**: Gradual, unnoticed shift from one state to another (Snook 2000)
+- **Drift**: Gradual, unnoticed shift from one state to another (Snook 2000). Note: identifying drift requires a theory of what the "should be" state is — drift is deviation from an expected trajectory, which implies a reference point.
 - **Turning points**: Critical events that redirect trajectories
 - **Feedback loops**: Actions create conditions that amplify or dampen subsequent actions
 - **Temporal bracketing**: Decomposing a continuous process into discrete periods for comparison (Langley 1999)
@@ -21,7 +21,7 @@ AI is useful here because systematically tracking how 30+ interviews describe ev
 Before starting:
 1. Check for `state.json` in project root
 2. This command can run after `/explore-data` — it does not require theory or lens work, though having them enriches the analysis
-3. Output to `analysis/temporal/PROCESS_TRACE.md`
+3. Output to `analysis/process/PROCESS_TRACE.md`
 4. **Check if student mode is enabled**: `state.json` → `student_mode.enabled`
 
 After completing:
@@ -68,7 +68,11 @@ Process research requires knowing your data's temporal structure before AI touch
 [When done, say "continue" and I'll trace systematically]
 ```
 
-Wait for user response before proceeding.
+Wait for user response. **Require a substantive temporal map before proceeding** — at minimum, a rough timeline with candidate phases and what changes across them. "I don't know" is not enough; the student must engage with the data's temporal structure first.
+
+### After Running Analysis
+
+Add a **comparison section** showing student's temporal map vs. systematic trace.
 
 ---
 
@@ -77,7 +81,6 @@ Wait for user response before proceeding.
 - Qualitative data files with temporal information (interviews with dates, field notes with dates, event logs)
 - Optionally: `analysis/patterns/PATTERN_REPORT.md` (quantitative temporal patterns to triangulate)
 - Optionally: `analysis/theory/PRIMARY_THEORY.md` (theory may predict temporal dynamics)
-- User guidance on: What time span? What temporal grain (days, weeks, months, phases)?
 
 ## Steps
 
@@ -86,7 +89,9 @@ Wait for user response before proceeding.
    Ask the user (or infer from data):
    - What is the overall time span of the data?
    - What are known anchor events (organizational changes, policy shifts, crises)?
-   - What temporal grain makes sense (daily, weekly, monthly, by phase)?
+   - What measurement resolution makes sense for data extraction (daily, weekly, monthly)?
+
+   **Note**: Temporal grain (how finely you extract events) is distinct from phase structure (how you divide the story into qualitatively distinct periods). Grain is a measurement choice; phases are an analytical judgment. Set the grain first, then let phase boundaries emerge from the data.
    - Is there quantitative data that shows temporal patterns?
 
 2. **Map events chronologically**
@@ -129,7 +134,7 @@ Wait for user response before proceeding.
 
 ## Output Format
 
-Create `analysis/temporal/PROCESS_TRACE.md`:
+Create `analysis/process/PROCESS_TRACE.md`:
 
 ```markdown
 # Process Trace

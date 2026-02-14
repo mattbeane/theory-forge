@@ -50,11 +50,11 @@ Read `state.json` and categorize AI involvement:
 | **Qualitative analysis** | `/mine-qual` | Extracted mechanism evidence from interviews |
 | **Absence detection** | `/surface-absences` | Identified conspicuous omissions in data |
 | **Process tracing** | `/trace-process` | Mapped temporal dynamics across phases |
-| **Framing** | `/smith-frames` | Generated and evaluated theoretical framings |
+| **Framing** | `/style-engine` | Generated and evaluated theoretical framings |
 | **Evaluation** | `/eval-*` | Checked framing against published criteria |
 | **Verification** | `/audit-claims`, `/verify-claims` | Adversarial evidence search, claim-evidence linking |
 | **Drafting** | `/draft-paper` | Generated manuscript draft |
-| **Custom analysis** | `/custom/*` | [Describe custom agents used] |
+| **Custom analysis** | Custom agents | [Describe custom agents used] |
 
 ### 2. Identify what humans directed
 
@@ -149,7 +149,7 @@ Create `output/AI_ATTRIBUTION.md`:
 
 ## Boilerplate Components
 
-These sections can be mixed and matched. Edit freely — they should reflect YOUR paper's actual process.
+These sections can be mixed and matched. Edit freely — they should reflect your paper's actual process. All components are written in first person ("We used..."), ready to paste directly into a manuscript.
 
 ### Component: Basic Attribution
 "We used large language model assistants ([model names]) during manuscript preparation and analysis. AI assistance supported [tasks]. The authors directed all analytical choices: [list]. We verified all citations and empirical claims against primary sources. We bear full responsibility for the accuracy and integrity of this work."
@@ -169,6 +169,19 @@ These sections can be mixed and matched. Edit freely — they should reflect YOU
 ### Component: Student Mode Disclosure
 "[Student/supervised researcher] conducted preliminary manual analysis before AI-assisted analysis, including [specific manual tasks]. AI findings were compared against human analysis; discrepancies were resolved through [process]."
 ```
+
+---
+
+## State Update (After Completing)
+
+1. Update `state.json`:
+   - Set `workflow.describe_ai_use.status` to "completed"
+   - Set `workflow.describe_ai_use.completed_at` to current ISO timestamp
+   - Add `output/AI_ATTRIBUTION.md` to `workflow.describe_ai_use.outputs`
+   - Update `updated_at` timestamp
+2. Append entry to `DECISION_LOG.md`:
+   - What journal conventions were used
+   - Which components were included and why
 
 ---
 

@@ -86,14 +86,16 @@ What people don't talk about is often as important as what they do. Absences can
 
 ## Steps
 
-1. **Establish the expected landscape**
+1. **Generate the expected landscape** (from domain knowledge, NOT the researcher)
 
-   Based on available context (setting, industry, organizational type, problem domain):
-   - What topics would you EXPECT to see discussed?
-   - What actors/roles would you EXPECT to be involved?
-   - What decisions would you EXPECT to be debated?
-   - What alternatives would you EXPECT to be considered?
-   - What emotions/reactions would you EXPECT to surface?
+   Based on the setting context, industry, organizational type, and problem domain described in the data:
+   - Generate a list of topics you would EXPECT to see discussed in this kind of setting
+   - Generate a list of actors/roles you would EXPECT to be involved
+   - Generate a list of decisions you would EXPECT to be debated
+   - Generate a list of alternatives you would EXPECT to be considered
+   - Generate a list of emotions/reactions you would EXPECT to surface
+
+   **Important**: The point is that YOU (the AI) generate these expectations from general domain knowledge, then check the data against them. If you ask the researcher what they expect to be missing, you've defeated the purpose — the whole value of this move is seeing what an outsider's perspective reveals. Present your expected landscape to the researcher for validation AFTER generating it, not before.
 
 2. **Scan for conspicuous absences**
 
@@ -110,6 +112,9 @@ What people don't talk about is often as important as what they do. Absences can
    For each absence identified:
    - **Type**: Normalized / Political / Structural / Temporal / Actor / Conceptual
    - **Confidence**: How confident are you this is a real absence (not just data limitation)?
+     - **HIGH**: Multiple informants discuss adjacent topics but never this one; topic is standard in this type of setting
+     - **MED**: Some informants touch on it obliquely; could be data limitation or genuine absence
+     - **LOW**: Topic might be irrelevant to this setting; absence may reflect appropriate scope rather than a meaningful silence
    - **Evidence of absence**: What makes you believe this SHOULD be present?
    - **Potential significance**: What would change if this were present?
 

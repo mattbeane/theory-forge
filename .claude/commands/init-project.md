@@ -38,7 +38,9 @@ The user may specify:
    │   ├── theory/             # /find-theory outputs
    │   ├── lens/               # /find-lens outputs
    │   ├── qualitative/        # /mine-qual outputs
-   │   ├── framing/            # /smith-frames outputs (frame-1/, frame-2/, etc.)
+   │   ├── framing/            # /style-engine outputs (frame-1/, frame-2/, etc.)
+   │   ├── absences/           # /surface-absences outputs
+   │   ├── process/            # /trace-process outputs
    │   ├── audit/              # /audit-claims outputs (evidence from raw data)
    │   └── verification/       # /verify-claims outputs
    ├── living_paper/           # Living paper CLI (bundled for seamless verification)

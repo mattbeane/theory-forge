@@ -18,7 +18,7 @@ This command lets researchers create project-specific agents that:
 Before starting:
 1. Check for `state.json` in project root
 2. No prerequisites — this can run at any point
-3. Output agent file to `.claude/commands/custom/[agent-name].md`
+3. Output agent file to `.claude/commands/[agent-name].md` (flat directory — Claude Code discovers commands here)
 4. Register in `state.json` under `custom_agents`
 
 After completing:
@@ -129,7 +129,7 @@ This is YOUR analytical tool — it should encode YOUR judgment about what matte
 
 ### Step 5: Install and Test
 
-1. Write the agent file to `.claude/commands/custom/[agent-name].md`
+1. Write the agent file to `.claude/commands/[agent-name].md`
 2. Register in `state.json`:
    ```json
    {
@@ -151,13 +151,13 @@ This is YOUR analytical tool — it should encode YOUR judgment about what matte
 
 The created agent file goes to:
 ```
-.claude/commands/custom/[agent-name].md
+.claude/commands/[agent-name].md
 ```
 
-Custom agents are kept separate from core theory-forge commands so that:
-- Core commands can be updated without overwriting custom work
-- Custom agents can be shared with collaborators independently
-- The researcher's bespoke analytical tools are clearly identified
+Custom agents live alongside core commands in `.claude/commands/`. To distinguish them:
+- Use a descriptive prefix in the filename (e.g., `custom-emotion-tracker.md`)
+- Register them in `state.json` under `custom_agents` for tracking
+- Custom agents can be shared with collaborators by copying the `.md` file
 
 ## Design Principles for Good Custom Agents
 
@@ -181,8 +181,8 @@ Custom agents can be:
 ## After You're Done
 
 Tell the user:
-- The agent has been created at `.claude/commands/custom/[agent-name].md`
-- How to invoke it: `/custom/[agent-name]`
+- The agent has been created at `.claude/commands/[agent-name].md`
+- How to invoke it: `/[agent-name]`
 - Suggest testing on a subset of data first
 - Remind them that custom agents encode THEIR judgment — if the output doesn't match their intuition, the agent needs refinement, not their intuition
 
