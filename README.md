@@ -137,13 +137,21 @@ Then follow the workflow, invoking each agent when ready.
 | `/find-theory` | Identify theory being violated | After puzzle check passes |
 | `/find-lens` | Find sensitizing/interpretive literature | After identifying theory |
 | `/mine-qual` | Extract mechanism evidence from interviews | After finding lens |
-| `/smith-frames` | Generate and evaluate theoretical framings | After qual mining |
+| `/style-engine` | Generate and evaluate theoretical framings (style engine) | After qual mining |
 | `/eval-zuckerman` | **Full framing check**: All 10 Zuckerman criteria | After framing, BEFORE verification |
 | `/audit-claims` | Search raw data for supporting AND challenging evidence | Before verification |
 | `/verify-claims` | Create verification package for external review | After framing check passes |
 | `/draft-paper` | Generate journal-ready manuscript | After verification |
 
-### Evaluation & Quality (NEW)
+### Analysis Extensions
+
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `/surface-absences` | **Identify what's conspicuously missing** from data (Glaser's "surfacing absences") | After exploration, anytime |
+| `/trace-process` | **Put data in temporal motion** — phases, turning points, drift, evolution | After exploration, anytime |
+| `/create-agent` | **Build bespoke analytical agents** for project-specific needs | Anytime |
+
+### Evaluation & Quality
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
@@ -171,6 +179,7 @@ Then follow the workflow, invoking each agent when ready.
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
+| `/describe-ai-use` | **Generate AI attribution statement** for methods section | After drafting |
 | `/eval-paper-quality` | Systematic quality scoring (rubric-eval) | After drafting |
 | `/export [format]` | Convert to LaTeX, Word, PDF, HTML | After drafting |
 | `/package-verification` | Create ZIP for external review | After verification |
@@ -217,7 +226,7 @@ Then follow the workflow, invoking each agent when ready.
      │
      ├──────────────────────┐
      ▼                      ▼
-/mine-qual              /smith-frames
+/mine-qual              /style-engine
      │                      │
      └──────────┬───────────┘
                 ▼
@@ -232,7 +241,7 @@ Then follow the workflow, invoking each agent when ready.
 └────────────────────────────────────────────────────────┘
                 │
                 ▼
-  [Pass?] ──► No? Loop back to /smith-frames
+  [Pass?] ──► No? Loop back to /style-engine
                 │
                 ▼
          /verify-claims
@@ -366,7 +375,7 @@ Where it appears:
 - **`/hunt-patterns`** — documents "killed findings" that didn't survive controls
 - **`/mine-qual`** — requires disconfirming evidence section
 - **`/audit-claims`** — explicitly adversarial; searches ALL data for challenging evidence
-- **`/smith-frames`** — evaluates counter-evidence, alternative interpretations, and "survivability" for each framing
+- **`/style-engine`** — evaluates counter-evidence, alternative interpretations, and "survivability" for each framing
 - **`/verify-claims`** — documents alternative interpretations and specification choices
 
 The philosophy: reviewers are adversarial. If you don't find problems first, they will. See [`docs/ADVERSARIAL_EVIDENCE.md`](docs/ADVERSARIAL_EVIDENCE.md) for the full rationale.
@@ -380,7 +389,7 @@ Ezra Zuckerman's "Tips for Article-Writers" provides 10 criteria that capture wh
 - Is the null hypothesis compelling?
 - Who is your audience (row vs column)?
 
-**Stage 2: `/eval-zuckerman`** (after `/smith-frames`, before `/verify-claims`)
+**Stage 2: `/eval-zuckerman`** (after `/style-engine`, before `/verify-claims`)
 - Full 10-criteria evaluation
 - One idea? Null built up AND saved?
 - Lit review or puzzle-focused theory section?
@@ -457,7 +466,7 @@ This adds:
 - **Comparison tables** — your predictions vs. AI findings
 - **Enhanced audit trail** — logs predictions vs. findings to `STUDENT_WORK.md`
 
-**Integrated into 6 core commands**: `/explore-data`, `/hunt-patterns`, `/find-theory`, `/find-lens`, `/mine-qual`, `/smith-frames`
+**Integrated into 6 core commands**: `/explore-data`, `/hunt-patterns`, `/find-theory`, `/find-lens`, `/mine-qual`, `/style-engine`
 
 The `/mine-qual` command is strictest—it requires reading 3-5 interviews manually before AI runs, ensuring students can't skip the interpretive work.
 

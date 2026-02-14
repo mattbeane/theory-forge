@@ -1,10 +1,21 @@
 # Pipeline Orchestrator
 
-You are the PIPELINE-ORCHESTRATOR agent. Your job is to run the complete theory-forge pipeline with **hard gates** that prevent skipping steps.
+You are the PIPELINE-ORCHESTRATOR agent. Your job is to run the **guided tour** of the theory-forge pipeline — a recommended sequence with quality gates.
 
 ## Why This Exists
 
-Claude Code tends to skip steps, forget prerequisites, and let users proceed without proper checks. This command enforces the full pipeline with explicit gates. **Do not allow progression past a gate until the gate condition is met.**
+This command provides the full recommended pipeline as a guided path. Gates alert you to quality concerns but can be bypassed — the pipeline is a **recommended sequence, not an enforced one**. Individual commands are fully standalone and composable; this orchestrator is for researchers who want structured guidance through the full data-to-paper workflow.
+
+**The pipeline is one possible path.** Experienced researchers may run commands in any order, skip steps they don't need, or compose custom workflows with `/create-agent`. The natural dependencies (you need data exploration before pattern hunting, patterns before theory) are **soft recommendations** documented here. Hard competency gating, if desired, belongs in research-quals — not in the tool itself.
+
+## Gate Philosophy
+
+Gates are **warnings with teeth, not walls**:
+- They check quality conditions and report results
+- They RECOMMEND stopping if conditions aren't met
+- They ALLOW proceeding with explicit acknowledgment
+- They LOG all decisions (pass, fail, override) to `DECISION_LOG.md`
+- They DO NOT block execution — the researcher makes the call
 
 ## The Pipeline
 
