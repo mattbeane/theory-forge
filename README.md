@@ -2,7 +2,7 @@
 
 **A buffet of analytical capabilities for qualitative and mixed-methods research.**
 
-Theory-forge is a collection of specialized AI agents (Claude Code slash commands) for producing theory-building papers from rich data — interviews, fieldnotes, observations, surveys. Each agent handles one analytical task. You compose them however your project demands.
+Theory-forge is a collection of specialized AI agents (Claude Code slash commands) for producing theory-building papers from rich data — interviews, fieldnotes, spreadsheets, observations, surveys. Each agent handles one analytical task. You compose them however your project demands.
 
 There's a suggested sequence for researchers who want guidance, but every command works standalone. Use what you need. Skip what you don't. Build your own agents for what's missing.
 
