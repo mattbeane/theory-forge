@@ -114,9 +114,26 @@ Systematically explore all data files in the project and produce a comprehensive
 
 ## Steps
 
+0. **Check registry for available data sources**
+   - Read `registry.json` from the project root (if it exists)
+   - Note which importers are available in the `data_sources` array
+   - If any raw export files are found (e.g., `.atlpac`, `.qdpx`, `.nvp`) that match a registered importer but haven't been imported yet, flag them:
+     ```
+     📦 Found [filename] — this looks like a [Source Name] export.
+        An importer is available: python -m tools.importers.[id] [filename]
+        Run it to convert to theory-forge format, or skip if already imported.
+     ```
+   - If raw export files are found with NO matching importer, flag them:
+     ```
+     ❓ Found [filename] — unrecognized format.
+        If this is a data export from a research tool, consider adding support:
+        /author-data-source [tool-name]
+     ```
+
 1. **Find all data files**
    - Look in `data/` directory and subdirectories
    - Check for: CSV, Excel (.xlsx, .xls), JSON, Parquet, text files, interview transcripts
+   - Also check for coded qualitative data in `data/qual/coded/` (produced by importers)
    - Note file sizes and modification dates
 
 2. **For each quantitative file**:

@@ -1,0 +1,165 @@
+{
+  "version": "1.0.0",
+  "description": "Theory-forge extensibility registry. Commands check this file to discover available data sources, methodologies, and custom agents. Use /author-data-source and /author-methodology to add entries.",
+
+  "data_sources": [
+    {
+      "id": "csv",
+      "name": "CSV / Excel",
+      "format": "CSV files (.csv) and Excel workbooks (.xlsx, .xls)",
+      "type": "quantitative",
+      "importer": null,
+      "doc": null,
+      "builtin": true,
+      "notes": "Native support — no importer needed. Handled directly by /explore-data and analysis commands."
+    },
+    {
+      "id": "plaintext-transcripts",
+      "name": "Plain Text Transcripts",
+      "format": "Text files (.txt, .md) containing interview transcripts or field notes",
+      "type": "qualitative",
+      "importer": null,
+      "doc": null,
+      "builtin": true,
+      "notes": "Native support — no importer needed. Place in data/qual/interviews/ or data/qual/fieldnotes/."
+    },
+    {
+      "id": "bibtex",
+      "name": "BibTeX References",
+      "format": "BibTeX files (.bib) from Zotero, Mendeley, or manual export",
+      "type": "references",
+      "importer": "tools/importers/bibtex.py",
+      "doc": null,
+      "builtin": true,
+      "notes": "Import via /import-refs. Stores parsed references in state.json for citation tracking."
+    }
+  ],
+
+  "methodologies": [
+    {
+      "id": "theory-violation",
+      "name": "Theory Violation (Zuckerman)",
+      "tradition": "Deductive framing of inductive findings",
+      "description": "Paper shows established theory makes a prediction that is WRONG under certain conditions. The dominant frame for top management/org journals.",
+      "rubric": "rubrics/zuckerman_criteria.json",
+      "eval_command": "eval-zuckerman",
+      "lite_command": "eval-zuckerman-lite",
+      "contribution_type": 1,
+      "criteria_count": 10,
+      "pass_threshold": "7/10 criteria",
+      "exemplar_journals": ["ASQ", "Organization Science", "AMJ"],
+      "builtin": true
+    },
+    {
+      "id": "theory-elaboration",
+      "name": "Theory Elaboration (Fisher & Aguinis)",
+      "tradition": "Mechanism specification and boundary precision",
+      "description": "Paper adds PRECISION to existing theory — clarifies mechanisms, specifies moderators, unpacks processes without contradicting core predictions.",
+      "rubric": null,
+      "eval_command": null,
+      "contribution_type": 2,
+      "criteria_count": 5,
+      "pass_threshold": "4/5 criteria",
+      "exemplar_journals": ["AMR", "Organization Science", "Strategic Management Journal"],
+      "builtin": true,
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+    },
+    {
+      "id": "phenomenon-description",
+      "name": "Phenomenon Description (Weick)",
+      "tradition": "Rich description as contribution",
+      "description": "The phenomenon itself IS the contribution. Theory is sensitizing, not predictive. Rich description enables future theorizing.",
+      "rubric": null,
+      "eval_command": null,
+      "contribution_type": 3,
+      "criteria_count": 5,
+      "pass_threshold": "4/5 criteria",
+      "exemplar_journals": ["ASQ", "Organization Studies", "Ethnography"],
+      "builtin": true,
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+    },
+    {
+      "id": "methodological",
+      "name": "Methodological Contribution (Abbott)",
+      "tradition": "Method as contribution",
+      "description": "Paper develops or demonstrates a new way of studying something. Method IS the contribution; substantive findings may be secondary.",
+      "rubric": null,
+      "eval_command": null,
+      "contribution_type": 4,
+      "criteria_count": 5,
+      "pass_threshold": "4/5 criteria",
+      "exemplar_journals": ["Sociological Methods & Research", "Organizational Research Methods", "Research Policy"],
+      "builtin": true,
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+    },
+    {
+      "id": "practical-insight",
+      "name": "Practical Insight (Corley & Gioia)",
+      "tradition": "Actionable knowledge for practitioners",
+      "description": "Primary value is applied. Clear prescriptive implications, accessible to non-academics.",
+      "rubric": null,
+      "eval_command": null,
+      "contribution_type": 5,
+      "criteria_count": 5,
+      "pass_threshold": "4/5 criteria",
+      "exemplar_journals": ["HBR", "SMR", "California Management Review", "Academy of Management Perspectives"],
+      "builtin": true,
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+    },
+    {
+      "id": "literature-integration",
+      "name": "Literature Integration (Palmatier et al.)",
+      "tradition": "Synthesis and reconciliation",
+      "description": "Paper organizes, synthesizes, or reconciles existing work. No new data — value is in conceptual organization.",
+      "rubric": null,
+      "eval_command": null,
+      "contribution_type": 6,
+      "criteria_count": 5,
+      "pass_threshold": "4/5 criteria",
+      "exemplar_journals": ["AMR", "Journal of Management", "Annual Review of Sociology"],
+      "builtin": true,
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+    },
+    {
+      "id": "paper-quality",
+      "name": "General Paper Quality",
+      "tradition": "Cross-cutting quality assessment",
+      "description": "General paper quality rubric covering structure, argumentation, evidence, and writing. Not contribution-type specific.",
+      "rubric": "rubrics/paper_quality.json",
+      "eval_command": "eval-paper-quality",
+      "contribution_type": null,
+      "criteria_count": null,
+      "pass_threshold": null,
+      "exemplar_journals": [],
+      "builtin": true
+    },
+    {
+      "id": "claim-verification",
+      "name": "Claim Verification",
+      "tradition": "Claim-evidence integrity",
+      "description": "Checks that claims are honestly matched to evidence. Used by /audit-claims and /verify-claims.",
+      "rubric": "rubrics/claim_verification.json",
+      "eval_command": null,
+      "contribution_type": null,
+      "criteria_count": null,
+      "pass_threshold": null,
+      "exemplar_journals": [],
+      "builtin": true
+    },
+    {
+      "id": "qual-inductive",
+      "name": "Qualitative Inductive Research Criteria",
+      "tradition": "Inductive qualitative research quality",
+      "description": "Evaluation criteria specific to inductive qualitative papers — data access, analytical transparency, theoretical contribution.",
+      "rubric": "rubrics/qual_inductive_criteria.json",
+      "eval_command": null,
+      "contribution_type": null,
+      "criteria_count": null,
+      "pass_threshold": null,
+      "exemplar_journals": ["ASQ", "AMJ", "Organization Science"],
+      "builtin": true
+    }
+  ],
+
+  "custom_agents": []
+}

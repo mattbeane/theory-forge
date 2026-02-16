@@ -13,6 +13,8 @@ Run any evaluation independently, outside the full pipeline. Useful for:
 
 ## Available Evaluations
 
+### Built-in Evaluations
+
 | Name | What It Checks | Typical Use |
 |------|----------------|-------------|
 | `zuckerman` | Full 10-criteria framing check | Before submission, after major intro/theory changes |
@@ -22,6 +24,12 @@ Run any evaluation independently, outside the full pipeline. Useful for:
 | `limitations` | Limitations section quality | After draft, before submission |
 | `citations` | Reference coverage | Before submission |
 | `contribution` | Contribution clarity | After framing work |
+
+### Contributed Evaluations (from registry)
+
+Check `registry.json` in the project root for additional methodologies that have `eval_command` entries. Any methodology registered with an `eval_command` can be run via `/eval [name]`.
+
+To add a new evaluation framework: `/author-methodology`
 
 ## Arguments
 
@@ -60,7 +68,7 @@ Check that the file exists and is readable. If not found:
 
 ### Step 3: Run the Evaluation
 
-Dispatch to the appropriate evaluation command:
+First, check the built-in dispatch table:
 
 | Input | Runs |
 |-------|------|
@@ -71,6 +79,22 @@ Dispatch to the appropriate evaluation command:
 | `limitations` | `/eval-limitations` |
 | `citations` | `/eval-citations` |
 | `contribution` | `/eval-contribution` |
+
+**If the evaluation name doesn't match a built-in**, check `registry.json` in the project root:
+
+1. Read `registry.json`
+2. Search `methodologies` array for an entry where `id` or `eval_command` matches the requested name
+3. If found and an `eval_command` exists, dispatch to `/[eval_command]`
+4. If found but no `eval_command`, check if a rubric file exists at the `rubric` path — if so, run a generic rubric-based evaluation using that JSON rubric
+5. If not found anywhere:
+   ```
+   ❌ Unknown evaluation: "[name]"
+
+   Available evaluations:
+   [list built-in table + any registered methodologies with eval_commands]
+
+   To add a new evaluation framework: /author-methodology
+   ```
 
 ### Step 4: Report Results
 

@@ -266,6 +266,63 @@ When you run `/verify-claims`, it automatically creates a [Living Paper](https:/
 
 ---
 
+## Contributing: Add Your Own Data Sources & Methodologies
+
+Theory-forge is extensible. You can add support for new data formats and new methodological traditions without touching core code.
+
+### Add a Data Source
+
+Support a new qualitative/quantitative data tool (Dedoose, NVivo, MAXQDA, Otter.ai, etc.):
+
+```
+/author-data-source [tool-name]
+```
+
+This creates:
+- A Python importer (`tools/importers/[name].py`) that normalizes the format
+- Documentation (`data_sources/[name].md`) with export/import instructions
+- A registry entry so commands like `/explore-data` auto-discover the source
+
+### Add a Methodology
+
+Add a new evaluation framework or analytical tradition (grounded theory, process tracing, narrative analysis, etc.):
+
+```
+/author-methodology [tradition-name]
+```
+
+This creates:
+- An evaluation rubric (`rubrics/[name].json`) with calibrated criteria
+- An eval command (`.claude/commands/eval-[name].md`) runnable via `/eval [name]`
+- Documentation (`methodologies/[name].md`)
+- A registry entry so `/eval-contribution` and `/eval` know about it
+
+### The Registry
+
+`registry.json` in the project root indexes everything extensible: data sources, methodologies, and custom agents. Commands check this file at runtime to discover what's available.
+
+### Contributing Upstream
+
+To share what you've built:
+1. Run `/author-data-source` or `/author-methodology` to generate the files
+2. Fork theory-forge
+3. Copy the generated files into your fork
+4. Open a PR
+
+The commands produce everything needed for a complete contribution — no guessing about which files to create or what format to use.
+
+### Build a Custom Agent
+
+For project-specific analytical needs (not general enough to contribute upstream):
+
+```
+/create-agent
+```
+
+Custom agents are registered in both `state.json` and `registry.json` and live alongside core commands.
+
+---
+
 ## Technical Requirements
 
 - Claude Code (via Claude Desktop or standalone)

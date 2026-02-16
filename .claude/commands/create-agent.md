@@ -156,8 +156,21 @@ The created agent file goes to:
 
 Custom agents live alongside core commands in `.claude/commands/`. To distinguish them:
 - Use a descriptive prefix in the filename (e.g., `custom-emotion-tracker.md`)
-- Register them in `state.json` under `custom_agents` for tracking
+- Register them in BOTH `state.json` (under `custom_agents`) AND `registry.json` (under `custom_agents` array) for tracking
 - Custom agents can be shared with collaborators by copying the `.md` file
+
+When registering in `registry.json`, add an entry to the `custom_agents` array:
+```json
+{
+  "id": "[agent-name]",
+  "name": "[Human-readable name]",
+  "purpose": "[one sentence]",
+  "command": "[agent-name]",
+  "created_by": "[contributor name if known]",
+  "inputs": ["[list of required inputs]"],
+  "outputs": ["[list of output files]"]
+}
+```
 
 ## Design Principles for Good Custom Agents
 

@@ -494,6 +494,21 @@ Tell the user:
 - If Type 1, proceed to `/eval-zuckerman`
 - If other types, use the evaluation produced by this command
 
+## Registry-Aware Evaluation
+
+Before running the diagnosis, read `registry.json` from the project root. The `methodologies` array may contain additional contribution types beyond the 6 built-in types.
+
+For each methodology entry in the registry:
+- If it has a `contribution_type` number and is NOT one of the built-in types (1-6), include it in the decision tree as an additional type
+- If it has an `eval_command`, route to that command for evaluation
+- If it has a `rubric` path, use that rubric for criterion-by-criterion evaluation
+
+When presenting results, list ALL available evaluation frameworks — both built-in and registered — so the user sees the full menu of options.
+
+If the paper doesn't fit any built-in type but matches a registered methodology, use that methodology's criteria. If it doesn't fit ANY registered type, say so and suggest the contributor create one with `/author-methodology`.
+
+---
+
 ## Common Mistakes
 
 **Forcing violation frame onto elaboration evidence**: Paper claims to "challenge" theory but evidence actually adds precision without contradiction. Fix: Reframe as elaboration.
@@ -503,3 +518,5 @@ Tell the user:
 **Applying Zuckerman to everything**: Not all valuable papers violate theoretical predictions. Some elaborate, describe, or guide. Don't force a framework that doesn't fit.
 
 **Mixing types without integration**: Paper tries to violate theory, describe a phenomenon, AND guide practice all at once. Fix: Choose a primary contribution type; others can be secondary.
+
+**Ignoring registered methodologies**: If someone has added a methodology via `/author-methodology`, it exists for a reason. Check the registry before defaulting to the 6 built-in types.
