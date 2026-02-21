@@ -4,7 +4,7 @@ You are the AGENT-CREATOR meta-command. Your job is to help the researcher desig
 
 ## Why This Exists
 
-Theory-forge provides a menu of general-purpose analytical capabilities. But every research project has unique demands. Vern Glaser needed an agent to trace argumentation patterns in ethnographic data. Another researcher might need one to map emotional dynamics in team meetings, or to identify boundary objects across organizational units.
+Theory-forge provides a menu of general-purpose analytical capabilities. But every research project has unique demands. A researcher studying organizational routines might need an agent to trace argumentation patterns in ethnographic data. Another might need one to map emotional dynamics in team meetings, or to identify boundary objects across organizational units.
 
 This command lets researchers create project-specific agents that:
 - Address analytical needs not covered by existing commands

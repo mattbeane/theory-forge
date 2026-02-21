@@ -82,7 +82,14 @@ your-project/
 | `/verify-claims` | Create verification package for external review |
 | `/simulate-review` | Generate adversarial peer reviews before submission |
 
-### Output & Integration
+### Measurement & Integration
+
+| Command | What It Does |
+|---------|-------------|
+| `/measure-at-scale` | Measure discovered constructs across full corpus; GABRIEL-compatible |
+| `/integrate-quant-qual` | Connect quantitative patterns with qualitative mechanisms |
+
+### Output
 
 | Command | What It Does |
 |---------|-------------|
@@ -91,7 +98,6 @@ your-project/
 | `/eval-paper-quality` | Systematic quality scoring against rubrics |
 | `/export [format]` | Convert to LaTeX, Word, PDF, HTML |
 | `/package-verification` | Create ZIP with reviewer instructions for external review |
-| `/integrate-quant-qual` | Connect quantitative patterns with qualitative mechanisms |
 | `/build-lit-review` | Build bibliography from identified theory/lens |
 
 ### Project Management
@@ -127,6 +133,8 @@ Most theory-building papers follow a rough arc: find something interesting → f
                                                Yes
                                                 │
                         /audit-claims → /verify-claims → /draft-paper
+                              ↑
+                     /measure-at-scale (optional but strengthens claims)
 ```
 
 **But this is just one path.** Your project might need something different:
@@ -135,33 +143,30 @@ Most theory-building papers follow a rough arc: find something interesting → f
 - **Not a theory violation?** Skip the Zuckerman gates entirely. Use `/eval-contribution` to figure out what kind of paper you're writing, then evaluate against the appropriate criteria.
 - **Exploratory?** Start with `/surface-absences` — what's conspicuously missing may be more interesting than what's present.
 - **Need a custom analysis?** Use `/create-agent` to build a bespoke agent for your specific analytical need.
+- **Need to show pervasiveness?** Run `/measure-at-scale` after discovering constructs — exhaustive measurement answers "how common is this?" across your full corpus.
 
 The commands are composable. The sequence above is a sensible default for theory-violation papers, not a requirement.
 
 ---
 
-## Theoretical Grounding
+## Analytical Foundations
 
-Theory-forge draws on several frameworks for how AI can productively support qualitative research:
+Theory-forge encodes analytical moves that have long histories in qualitative research — ethnography, grounded theory, case study methodology, interpretive sociology. The commands accelerate these moves using AI; they don't invent new ones.
 
-### Glaser's Four Abductive Moves
+### Core Analytical Moves
 
-Glaser & First Loan (forthcoming, *Strategic Organization*) identify four moves for AI-augmented qualitative analysis:
-
-| Move | Theory-forge command |
-|------|---------------------|
-| **Multiplying lenses** — interpreting data through multiple theoretical frames | `/style-engine` |
-| **Surfacing absences** — identifying conspicuous omissions | `/surface-absences` |
-| **Bridging levels** — connecting micro and macro | `/integrate-quant-qual` |
-| **Testing categories** — adversarial checking of emerging concepts | `/mine-qual`, `/audit-claims` |
+| Move | Theory-forge command | Tradition |
+|------|---------------------|-----------|
+| **Interpreting through multiple theoretical frames** | `/style-engine` | Standard across qualitative methods; recently articulated for GenAI contexts |
+| **Identifying conspicuous omissions** | `/surface-absences` | Ethnographic attention to silences and normalized assumptions |
+| **Connecting micro and macro** | `/integrate-quant-qual` | Mixed-methods integration; multi-level analysis |
+| **Adversarial checking of emerging concepts** | `/mine-qual`, `/audit-claims` | Disconfirmation logic in case study and grounded theory |
 
 Plus **interpretive vigilance** — the researcher's ongoing responsibility to supervise AI output. This is embedded in every command through required researcher review points.
 
-See [`docs/VERN_GLASER_FRAMEWORK_MAP.md`](docs/VERN_GLASER_FRAMEWORK_MAP.md) for the full mapping.
+### At-Scale Measurement
 
-### The Style Engine Concept
-
-The `/style-engine` (formerly `/smith-frames`) draws on Reimer & Peter's concept from IS research: GenAI as a tool that renders the same empirical reality through multiple theoretical styles. The same data, viewed through different lenses, yields different — and complementary — insights.
+`/measure-at-scale` bridges qualitative discovery and systematic measurement. After discovering constructs through `/mine-qual` and `/style-engine`, measure them exhaustively across your full corpus — every interview, every field note. Produces distributions, subgroup variation, and evidence for methods sections. Generates specs compatible with [GABRIEL](https://github.com/openai/GABRIEL) (Asirvatham, Mokski & Shleifer, 2026) for larger corpora.
 
 ### Multiple Contribution Types
 
@@ -335,7 +340,11 @@ Custom agents are registered in both `state.json` and `registry.json` and live a
 
 ## Origin
 
-Developed by Matt Beane (UC Santa Barbara) while using Claude Code to produce papers from dormant datasets. Theory-forge is a work in progress — the command set, the suggested workflow, and the theoretical grounding are all evolving. Contributions, critiques, and alternative approaches are welcome.
+Developed by Matt Beane (UC Santa Barbara) while using Claude Code to produce papers from dormant datasets. Theory-forge is a work in progress — the command set, the suggested workflow, and the analytical foundations are all evolving. Contributions, critiques, and alternative approaches are welcome.
+
+## Credits
+
+Theory-forge builds on ideas from many scholars and tools. See [`CREDITS.md`](CREDITS.md) for full acknowledgments — evaluation frameworks, AI-augmented research scholarship, technical dependencies, and design influences.
 
 ---
 

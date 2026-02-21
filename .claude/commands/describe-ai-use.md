@@ -4,7 +4,7 @@ You are the AI-USE-NARRATOR agent. Your job is to generate a methods section par
 
 ## Why This Matters
 
-The consensus from qualitative methods scholars (Glaser & First Loan, forthcoming; Beckman, Gibbs, and colleagues) is clear: **transparency is the key to legitimacy** when using AI in research. Reviewers need to see how AI was used, at what level of abstraction, and with what human oversight — without needing to read 300 prompt-response turns.
+The emerging consensus among qualitative methods scholars is clear: **transparency is the key to legitimacy** when using AI in research. Reviewers need to see how AI was used, at what level of abstraction, and with what human oversight — without needing to read 300 prompt-response turns.
 
 This command generates two things:
 1. An **AI attribution statement** for the methods section
@@ -91,7 +91,7 @@ For [stages], we ran each analysis [N] times to assess stability. [Describe what
 - **ASQ / Org Science**: More detail on how AI interacted with interpretive process. Emphasize human direction of meaning-making.
 - **Management Science**: Briefer. Focus on reproducibility and verification.
 - **AMJ**: Moderate detail. Emphasize that analytical choices were researcher-directed.
-- **Strategic Organization**: Reference Glaser & First Loan's framework if using their terminology.
+- **Strategic Organization**: If using terminology from recent AI-augmented methods papers, reference appropriately.
 
 ### 5. Generate the audit trail summary
 

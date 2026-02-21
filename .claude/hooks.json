@@ -99,6 +99,18 @@
     },
     {
       "event": "on_command",
+      "matcher": { "command_name": "measure-at-scale" },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); w=s.get('workflow',{}); exit(0 if w.get('mine_qual',{}).get('status')=='completed' else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /mine-qual should be completed before /measure-at-scale.\nYou need discovered constructs before measuring them at scale."
+        }
+      }
+    },
+    {
+      "event": "on_command",
       "matcher": { "command_name": "export" },
       "action": {
         "type": "command",

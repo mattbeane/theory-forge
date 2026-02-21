@@ -161,5 +161,20 @@
     }
   ],
 
+  "external_tools": [
+    {
+      "id": "gabriel",
+      "name": "GABRIEL (OpenAI)",
+      "description": "Generalized Attribute Based Ratings Information Extraction Library. LLM-as-measurement-instrument toolkit for rating, classifying, and extracting structured data from qualitative text at scale.",
+      "install": "pip install openai-gabriel",
+      "requires": "OPENAI_API_KEY",
+      "used_by": ["measure-at-scale"],
+      "url": "https://github.com/openai/GABRIEL",
+      "paper": "Asirvatham, Mokski & Shleifer (2026). GPT as a Measurement Tool. NBER Working Paper 34834.",
+      "optional": true,
+      "notes": "Required only for large corpora (>50 documents) or when inter-rater validation via external model is needed. /measure-at-scale can also run directly within Claude's context for smaller corpora."
+    }
+  ],
+
   "custom_agents": []
 }
