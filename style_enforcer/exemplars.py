@@ -22,6 +22,7 @@ class Exemplar:
     text: str            # The excerpt
     notes: str           # What this exemplifies
     is_qual_forward: bool = True  # Whether from qual-forward paper
+    journal: Optional[str] = None  # Target journal (e.g., "ASQ", "OrgSci", "ManSci", "AMJ")
 
 
 class ExemplarDB:
@@ -36,20 +37,44 @@ class ExemplarDB:
 
     def __init__(self):
         self._exemplars = self._build_exemplars()
+        self._journal_exemplars = self._build_journal_exemplars()
 
     def get(self, section: str, prefer_quant: bool = False) -> Optional[Exemplar]:
         """Get exemplar for a section type."""
         key = section.lower().replace(" ", "_")
         return self._exemplars.get(key)
 
+    def get_for_journal(self, section: str, journal: str) -> Optional[Exemplar]:
+        """Get journal-specific exemplar for a section type.
+
+        Falls back to generic exemplar if no journal-specific one exists.
+
+        Args:
+            section: Section type (e.g., "abstract", "introduction")
+            journal: Target journal (e.g., "ASQ", "OrgSci", "ManSci", "AMJ")
+        """
+        key = f"{journal.lower()}_{section.lower().replace(' ', '_')}"
+        exemplar = self._journal_exemplars.get(key)
+        if exemplar:
+            return exemplar
+        # Fall back to generic
+        return self.get(section)
+
     def get_all(self, section: str) -> list[Exemplar]:
-        """Get all exemplars for a section type."""
+        """Get all exemplars for a section type (generic + journal-specific)."""
+        results = []
         key = section.lower().replace(" ", "_")
-        exemplar = self._exemplars.get(key)
-        return [exemplar] if exemplar else []
+        generic = self._exemplars.get(key)
+        if generic:
+            results.append(generic)
+        # Add any journal-specific exemplars for this section
+        for jkey, exemplar in self._journal_exemplars.items():
+            if jkey.endswith(f"_{key}"):
+                results.append(exemplar)
+        return results
 
     def _build_exemplars(self) -> dict[str, Exemplar]:
-        """Build the exemplar database."""
+        """Build the generic exemplar database."""
         return {
             "abstract": self._abstract_exemplar(),
             "introduction": self._introduction_exemplar(),
@@ -61,6 +86,18 @@ class ExemplarDB:
             "findings_quote_integration": self._findings_quote_exemplar(),
             "discussion": self._discussion_exemplar(),
             "contribution": self._contribution_exemplar(),
+        }
+
+    def _build_journal_exemplars(self) -> dict[str, Exemplar]:
+        """Build journal-specific exemplar database.
+
+        Keys are "{journal}_{section}" (e.g., "asq_abstract").
+        These override generic exemplars when generating for a specific journal.
+        """
+        return {
+            "asq_abstract": self._asq_abstract_exemplar(),
+            "asq_introduction": self._asq_introduction_exemplar(),
+            "orgsci_abstract": self._orgsci_abstract_exemplar(),
         }
 
     def _abstract_exemplar(self) -> Exemplar:
@@ -262,32 +299,106 @@ The contribution should read as joining a scholarly conversation, not checking b
         )
 
 
+    # --- Journal-specific exemplars ---
+
+    def _asq_abstract_exemplar(self) -> Exemplar:
+        return Exemplar(
+            source="Beane 2023 ASQ (Resourcing a Technological Portfolio)",
+            section="abstract",
+            journal="ASQ",
+            text="""Here I theorize about a common challenge for organizations adopting novel technology: resourcing their growing portfolio of work with appropriately skilled people. I draw on a 30-month, comparative ethnographic study at five surgical training hospitals to show that robotic surgery created an organizational resourcing dilemma...""",
+            notes="""
+ASQ abstract register:
+- Opens with "Here I theorize about..." (research question/theoretical claim)
+- NOT with sample sizes or data descriptions
+- Method stated concisely ("30-month, comparative ethnographic study")
+- Names core concept ("resourcing dilemma")
+- Active voice ("I theorize", "I draw on")
+- Method is one clause, not the lead sentence
+""",
+        )
+
+    def _asq_introduction_exemplar(self) -> Exemplar:
+        return Exemplar(
+            source="Bernstein 2012 ASQ (The Transparency Paradox)",
+            section="introduction",
+            journal="ASQ",
+            text="""A wide range of organizational-design literature advocates open, observable, ''transparent'' work environments. The logic is straightforward: transparency enables learning, coordination, and control. If managers and peers can see what workers are doing, they can correct errors, share knowledge, and ensure accountability. This transparency gospel has driven the design of open offices, digital monitoring systems, and visible workflow tools.
+
+Yet a growing body of evidence suggests that transparency may have unintended consequences. Bernstein and colleagues found that workers actively hide activities from observers, that monitoring can reduce rather than increase performance, and that the very visibility intended to improve outcomes sometimes undermines them. These findings create a puzzle: if transparency is beneficial, why do workers resist it, and why does it sometimes backfire?
+
+This paper explores this puzzle through an ethnographic study of a Chinese manufacturing company...""",
+            notes="""
+ASQ introduction register:
+- Opens with THEORETICAL/CONCEPTUAL claim ("organizational-design literature advocates...")
+- NOT with empirical data or sample sizes
+- Literature engagement starts in paragraph 1 (transparency gospel = prior work)
+- Citations substantive by paragraph 2
+- Empirical setting introduced AFTER theoretical puzzle is established (paragraph 3)
+- The data serves the theory, not the other way around
+""",
+        )
+
+    def _orgsci_abstract_exemplar(self) -> Exemplar:
+        return Exemplar(
+            source="Leonardi 2011 OrgSci (Innovation Blindness)",
+            section="abstract",
+            journal="OrgSci",
+            text="""This paper has three goals. First, to introduce and define the concept of innovation blindness—the systematic inability of organizations to recognize innovations generated by their own members. Second, to develop a theoretical framework explaining why innovation blindness occurs, drawing on the interaction between material affordances and social dynamics. Third, to illustrate this framework through a comparative study of two engineering groups...""",
+            notes="""
+OrgSci abstract register:
+- Opens with paper's theoretical goals, not data
+- Names the core concept ("innovation blindness")
+- Method introduced as "illustration" of framework (theory leads)
+- Theoretical contribution is primary, empirical work supports it
+- Structured around what the paper contributes to theory
+""",
+        )
+
+    # --- End journal-specific exemplars ---
+
+
 # Pre-built database instance
 EXEMPLAR_DB = ExemplarDB()
 
 
-def get_exemplar(section: str) -> Optional[Exemplar]:
-    """Convenience function to get exemplar for a section."""
+def get_exemplar(section: str, journal: Optional[str] = None) -> Optional[Exemplar]:
+    """Convenience function to get exemplar for a section.
+
+    Args:
+        section: Section type (e.g., "abstract", "introduction")
+        journal: Optional target journal for journal-specific exemplar
+    """
+    if journal:
+        return EXEMPLAR_DB.get_for_journal(section, journal)
     return EXEMPLAR_DB.get(section)
 
 
-def get_section_prompt_with_exemplar(section: str) -> str:
+def get_section_prompt_with_exemplar(section: str, journal: Optional[str] = None) -> str:
     """
     Generate a prompt snippet with exemplar for a section.
 
     Returns text that can be injected into a generation prompt.
+    Uses journal-specific exemplar if available.
+
+    Args:
+        section: Section type
+        journal: Optional target journal (e.g., "ASQ", "OrgSci")
     """
-    exemplar = EXEMPLAR_DB.get(section)
+    exemplar = get_exemplar(section, journal)
     if not exemplar:
         return ""
+
+    journal_note = f"\nTARGET JOURNAL: {exemplar.journal}" if exemplar.journal else ""
 
     return f"""
 ## Style Exemplar
 
-The following excerpt demonstrates the target style for this section.
+The following excerpt demonstrates the target style and REGISTER for this section.
 Match this register, voice, and structure (but not content).
+Register = citation density, opening moves, theory-empirics balance.
 
-SOURCE: {exemplar.source}
+SOURCE: {exemplar.source}{journal_note}
 
 ---
 {exemplar.text}

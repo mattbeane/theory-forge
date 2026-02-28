@@ -34,7 +34,7 @@ In late November 2025, I saw a tweet from Aniket Panjwani suggesting that coding
 
 **What I produced in ~3 weeks of part-time work:**
 
-- **Paper 1**: ~~"Wait and See: Why Temporary Workers Don't Flee Impending Automation"~~ → **"Hedging with Talent: How Managers Use Selection to Navigate Novel Technology"** (targeting ASQ). Uses Company X data: temp exit records, automation timelines, and the full qualitative dataset. Core finding: when deploying *novel* technology, managers select temps on reliability and withhold job-threat information—creating a "hedge" that increases tenure 4x at the robot facility while mature-tech sites show no change. *Reframed Jan 2026 after validation revealed the sensemaking mechanism was not supported by the data; hedging-with-talent is the final version.*
+- **Paper 1**: **"Hedging with Talent: How Managers Use Selection to Navigate Novel Technology"** (targeting ASQ). Uses Company X data: temp exit records, automation timelines, and the full qualitative dataset. Core finding: when deploying *novel* technology, managers select temps on reliability and withhold job-threat information—creating a "hedge" that increases tenure 4x at the robot facility while mature-tech sites show no change. *Reframed Jan 2026 after validation revealed the sensemaking mechanism was not supported by the data. Jan 12, 2026: restructured to qual-inductive format with named phenomena ("Reliability Hedging," "Information Shielding," "The Compositional Shift"), expanded to 11K words, 8 extended quotes.*
 
 - **Paper 2**: "Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities" (targeting Management Science). Uses Company X data: daily operational data, separation records, automation timelines, and interviews focused on network planning. Core finding: firms solve the exploration-exploitation dilemma *spatially*—pilot nodes explore, optimization nodes exploit.
 
@@ -107,14 +107,14 @@ My first framing for Paper 1 was "Automation causes turnover among temp workers.
 
 That inversion became the paper: "Why Workers *Stay* in Anticipation of Uncertain Automation."
 
-**Frame shift count across 4 papers**: 23+ total
+**Frame shift count across 4 papers**: 29 total
 
 | Paper | Frame Shifts | Final Title |
 |-------|--------------|-------------|
-| Paper 1 | 5 | Wait and See: Why Temporary Workers Don't Flee Impending Automation |
-| Paper 2 | 8 | Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities |
-| Paper 3 | 5 | When Misfit Motivates: Work Orientation and Responses to Performance Pay |
-| Paper 4 | 5+ | Developmental Uncertainty: When Coordination Demands Enable Occupational Mobility |
+| Paper 1 | 7 | Hedging with Talent: How Managers Use Selection to Navigate Novel Technology |
+| Paper 2 | 10 | Learning to Automate: How Multi-Site Firms Distribute Exploration and Exploitation Across Facilities |
+| Paper 3 | 7 | When Misfit Motivates: Work Orientation and Responses to Performance Pay |
+| Paper 4 | 5 | Developmental Uncertainty: When Coordination Demands Enable Occupational Mobility |
 
 **Your role**: Evaluator. Kill framings that don't survive scrutiny. Recognize when an inversion is more interesting than the original hypothesis.
 
@@ -380,7 +380,7 @@ What it *dramatically accelerates*:
 
 I had data from three field studies that had been sitting dormant for 2-5 years. I hadn't touched them because the analysis-to-paper pipeline felt overwhelming. In ~3 weeks of part-time work, I produced four submission-ready papers with full online appendices:
 
-1. **Paper 1: "Hedging with Talent"** (targeting ASQ) - Managers select temps on reliability and withhold job-threat info when deploying novel technology, creating a workforce "hedge" that increases tenure 4x. Uses Company X data. Complete with diff-in-diff analysis, within-facility variation, and full validation package with quantitative replication. *Reframed from "Wait and See" (Jan 2026) after validation showed sensemaking mechanism unsupported.*
+1. **Paper 1: "Hedging with Talent"** (targeting ASQ) - Managers select temps on reliability and withhold job-threat info when deploying novel technology, creating a workforce "hedge" that increases tenure 4x. Uses Company X data. Complete with diff-in-diff analysis, within-facility variation, and full validation package with quantitative replication. *Reframed from "Wait and See" (Jan 2026) after validation showed sensemaking mechanism unsupported. Jan 12, 2026: restructured to qual-inductive format with named phenomena, expanded to 11K words.*
 
 2. **Paper 2: "Learning to Automate"** (targeting Management Science) - Firms distribute exploration and exploitation across facilities. Uses Company X data. Complete with 9 alternative threshold robustness checks, pre-trend analysis, placebo tests, and replication code.
 
@@ -412,7 +412,8 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 | 3 | "The Anticipation Paradox: Turnover declines before automation" | Evolved: too descriptive |
 | 4 | "Option Cultivation: Why Workers Stay" | Evolved: real options alone didn't explain mechanism |
 | 5 | "Wait and See: Why Temporary Workers Don't Flee Impending Automation" | Killed (Jan 2026): validation revealed sensemaking mechanism not supported—workers couldn't be "making sense" if managers withheld information |
-| 6 | **"Hedging with Talent: How Managers Use Selection to Navigate Novel Technology"** | **Final (Jan 2026)**: Reframed as *hedging-with-talent*. Manager-side mechanism: select on reliability + withhold job-threat info. Novel tech = high uncertainty → tenure 4x increase (21h→84h); mature tech = no change. N=1 robot facility acknowledged as limitation. Diff-in-diff: +74h [95% CI: 62-92h]. Validation package created with full quantitative replication. |
+| 6 | "Hedging with Talent: How Managers Use Selection to Navigate Novel Technology" | Reframed (Jan 2026): Manager-side mechanism: select on reliability + withhold job-threat info. Novel tech = high uncertainty → tenure 4x increase (21h→84h); mature tech = no change. N=1 robot facility acknowledged as limitation. Diff-in-diff: +74h [95% CI: 62-92h]. Validation package created with full quantitative replication. |
+| 7 | **"Hedging with Talent" — Qual-Inductive Restructure** | **Final (Jan 12, 2026)**: Major restructure to align with ASQ/OrgSci inductive theory-building genre. Intro now puzzle-only (removed mechanism preview). Theory section renamed "Prior Work and the Displacement Puzzle" with "What Prior Work Assumes" subsection—ends with research question, not answer. Findings completely restructured around named phenomena: "Reliability Hedging" (selection), "Information Shielding" (withholding implications), "The Compositional Shift" (quant integrated last). Discussion uses named phenomena consistently. Expanded from 6,895 → 11,037 words to meet journal requirements. Quotes increased from 5 → 8. Theory-building language scrub: removed all "validate," "confirm," "test" framing → replaced with "indicate," "suggest," "are consistent with." |
 
 ### Paper 2: Learning to Automate
 
@@ -427,6 +428,7 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 | 7 | Tested facility size × automation interaction | **Statistically significant (p=0.001)** |
 | 8 | **"Learning to Automate"** | **Final**: Spatial ambidexterity—firms solve exploration-exploitation dilemma across geography |
 | 9 | Post-adversarial review feedback (Jan 2026) | Minor refinements: n=1 optimization facility acknowledged; role terminology footnote added; pre-trend narrative nuanced; seasonality controls with analysis; outlier sign flip made explicit; winsorizing added to event study |
+| 10 | **Theory-building language scrub (Jan 9, 2026)** | Removed hypothesis-testing framing: "validated this framework by testing" → "checked whether...aligned"; "validate that the empirical clusters" → "check whether...clusters". Aligns with inductive genre. |
 
 ### Paper 3: When Misfit Motivates
 
@@ -437,7 +439,8 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 | 3 | "Signaling to Escape" | Evolved: only explains one subgroup |
 | 4 | "When Misfit Motivates" (draft 1) | Evolved: too broad |
 | 5 | "When Misfit Motivates: Work Orientation Moderates Misfit Response" | Killed: reviewer feedback—orientation is never directly observed; "moderator" overstates causal claim |
-| 6 | **"When Misfit Motivates: Work Orientation as Interpretive Lens"** | Final (Jan 2026): Primary = misfit can motivate (P-E fit extension); orientation = interpretive lens for heterogeneity; misallocation = evidence firm is blind to patterns. Softened causal language throughout; "Propositions" → "Expected Patterns" |
+| 6 | "When Misfit Motivates: Work Orientation as Interpretive Lens" | Evolved (Jan 2026): Primary = misfit can motivate (P-E fit extension); orientation = interpretive lens for heterogeneity; misallocation = evidence firm is blind to patterns. Softened causal language throughout; "Propositions" → "Expected Patterns" |
+| 7 | **Theory-building language scrub (Jan 9, 2026)** | **Final**: Removed hypothesis-testing framing: "confirms that the signaling channel" → "indicates that the signaling channel"; "Lead-lag tests confirm" → "Lead-lag analyses suggest". Consistent with inductive theory-building genre. |
 
 ### Paper 4: Developmental Uncertainty
 
@@ -481,4 +484,4 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 
 ---
 
-*Document updated January 2026. For questions: mattbeane@ucsb.edu*
+*Document updated January 15, 2026. For questions: mattbeane@ucsb.edu*

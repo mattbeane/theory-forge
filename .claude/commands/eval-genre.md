@@ -367,6 +367,14 @@ Genre and register checks catch framing problems. This section catches **structu
     - Are gap claims typically uncited (author's own assertion)?
     - Are direct quotes reserved for definitions, with page numbers?
 
+15. **Check paragraph granularity**
+    - Sample paragraphs across all sections (intro, theory, methods, findings, discussion)
+    - Flag any single-sentence paragraphs (except block quotes or table/figure notes)
+    - Flag two-sentence paragraphs that lack substantive development
+    - OrgSci / ASQ style: Every paragraph should develop an idea across at minimum 3 sentences (claim, evidence/reasoning, implication or transition)
+    - Exception: A single short transitional sentence between major sections is acceptable if it serves as a signpost, but should be folded into the preceding or following paragraph where possible
+    - Rationale: Short paragraphs signal underdeveloped ideas and read as listicle-style prose, which is inappropriate for top organizational journals
+
 ### Argument Construction Output (add to GENRE_EVAL.md)
 
 ```markdown
@@ -403,6 +411,12 @@ Genre and register checks catch framing problems. This section catches **structu
 **Author-in-prose engagement found?**: [Yes, N instances / No]
 **Gap claims uncited?**: [Yes / No — overcited gaps weaken the claim]
 **Assessment**: [PASS / NEEDS REVISION]
+
+### Paragraph Granularity
+**Paragraphs sampled**: [N]
+**Single-sentence paragraphs**: [N] — [list locations]
+**Two-sentence underdeveloped paragraphs**: [N] — [list locations]
+**Assessment**: [PASS / NEEDS REVISION]
 ```
 
 Add to the Overall Assessment table:
@@ -415,6 +429,7 @@ Add to the Overall Assessment table:
 | Introduction follows WORLD→GAP arc | ✓/✗ |
 | Discussion reconnects puzzle, doesn't summarize | ✓/✗ |
 | Citation functions deployed appropriately | ✓/✗ |
+| All paragraphs ≥3 sentences (no stubs) | ✓/✗ |
 
 ---
 
