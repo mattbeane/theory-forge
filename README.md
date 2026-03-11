@@ -1,10 +1,10 @@
 # Theory Forge
 
-**Systematic quality checks for theory-building research.**
+**AI-assisted theory building from qualitative and mixed-methods data, with systematic quality checks.**
 
-Theory-forge is a collection of AI agents (Claude Code slash commands) for producing theory-building papers from qualitative and mixed-methods data. Each agent handles one analytical task — discovering patterns, building framings, auditing claims. You compose them however your project demands.
+Theory-forge is a collection of AI agents (Claude Code slash commands) that handle the full arc of producing a theory-building paper — discovering patterns, building framings, auditing claims, drafting manuscripts. Each agent handles one analytical task. You compose them however your project demands.
 
-What makes it different: every evaluation runs multiple times through a statistical consensus engine, scores persist across sessions with automatic staleness tracking, and `/check-submission` produces a single submission-readiness verdict. You see exactly where your paper is strong, where it's weak, and what to fix — before reviewers do.
+What makes it different: built-in quality checks that run multiple times through a statistical consensus engine, persist scores across sessions with automatic staleness tracking, and produce a single submission-readiness verdict via `/check-submission`. You see exactly where your paper is strong, where it's weak, and what to fix — before reviewers do.
 
 If you're coming from a software engineering background: think of it as a CI pipeline for research papers — scored rubrics as assertions, consensus stability as flaky-test detection, `/check-submission` as `pytest --verbose`.
 
