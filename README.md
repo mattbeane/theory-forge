@@ -1,10 +1,12 @@
 # Theory Forge
 
-**A test suite for academic research.**
+**Systematic quality checks for theory-building research.**
 
 Theory-forge is a collection of AI agents (Claude Code slash commands) for producing theory-building papers from qualitative and mixed-methods data. Each agent handles one analytical task — discovering patterns, building framings, auditing claims. You compose them however your project demands.
 
-What makes it different: every evaluation runs through a statistical consensus engine (monte-carlo LLM-as-judge), results persist with staleness tracking, and a unified test runner produces a single PASS/FAIL verdict for submission readiness. It's `pytest --verbose` for your paper.
+What makes it different: every evaluation runs multiple times through a statistical consensus engine, scores persist across sessions with automatic staleness tracking, and `/check-submission` produces a single submission-readiness verdict. You see exactly where your paper is strong, where it's weak, and what to fix — before reviewers do.
+
+If you're coming from a software engineering background: think of it as a CI pipeline for research papers — scored rubrics as assertions, consensus stability as flaky-test detection, `/check-submission` as `pytest --verbose`.
 
 ---
 
@@ -20,7 +22,7 @@ Open Claude Code in your project directory, then:
 /init-project          # Set up project structure
 /explore-data          # Start exploring your data
 /status                # Check progress anytime
-/check-submission      # Run the full test suite
+/check-submission      # Submission readiness check
 ```
 
 ---
@@ -48,13 +50,13 @@ Open Claude Code in your project directory, then:
 | `/new-frame` | Archive current framing, start fresh (expect 3-5 reframings) |
 | `/compare-frames` | Side-by-side comparison of framings |
 
-### Test Suite
+### Quality Checks
 
-The core differentiator. Every evaluation persists scores to `state.json`, tracks upstream file changes for staleness, and runs through consensus mode by default.
+Every evaluation persists scores across sessions, tracks upstream file changes for staleness, and runs through consensus mode by default.
 
-| Command | What It Tests | Output |
-|---------|--------------|--------|
-| `/check-submission` | **Unified runner** — orchestrates all tests below | PASS / CONDITIONAL / FAIL |
+| Command | What It Checks | Output |
+|---------|---------------|--------|
+| `/check-submission` | **Submission readiness** — runs all checks below | PASS / CONDITIONAL / FAIL |
 | `/eval-zuckerman` | Framing quality (10 criteria) | Score /50 |
 | `/eval-zuckerman-lite` | Early puzzle check (3 gates) | PASS / FAIL |
 | `/eval-paper-quality` | Argument, evidence, theory, contribution, prose | Score /50 |
@@ -69,7 +71,7 @@ The core differentiator. Every evaluation persists scores to `state.json`, track
 | `/test-counter-evidence` | Counter-evidence documented and addressed? | PASS / FAIL |
 | `/test-alt-interpretations` | Alternative explanations less plausible? | PASS / FAIL |
 | `/test-boundary-conditions` | Scope conditions documented? | PASS / FAIL |
-| `/export-test-report` | Formatted report for coauthors/reviewers/editors | MD or HTML |
+| `/export-test-report` | Quality report for coauthors/reviewers/editors | MD or HTML |
 
 **Thresholds** are configurable per project or per target journal via `rubrics/submission_thresholds.json`, with presets for `top_journal`, `field_journal`, and `working_paper`.
 
@@ -94,7 +96,7 @@ The core differentiator. Every evaluation persists scores to `state.json`, track
 
 ---
 
-## How the Test Suite Works
+## How Quality Checks Work
 
 ### Consensus Mode (Default: On)
 
@@ -119,14 +121,7 @@ Each eval tracks SHA-256 checksums of its upstream files. When you change a draf
 
 ### `/check-submission`
 
-The unified runner. Orchestrates all tests in dependency order:
-
-1. Loads thresholds (defaults, preset, or project overrides)
-2. Determines which tests apply based on contribution type
-3. Checks freshness — skips evals with current results
-4. Runs missing/stale tests with consensus
-5. Compares scores against thresholds
-6. Generates `SUBMISSION_READINESS.md`
+Runs all relevant checks in dependency order, skips anything with current results, and generates `SUBMISSION_READINESS.md` — a single document showing where your paper stands against configurable thresholds.
 
 ```
 /check-submission              # Full suite with consensus
@@ -135,7 +130,7 @@ The unified runner. Orchestrates all tests in dependency order:
 /check-submission --skip citations
 ```
 
-A quality gate hook warns before `/export` if check-submission hasn't passed.
+A quality gate warns before `/export` if submission readiness hasn't been checked.
 
 ---
 
@@ -175,7 +170,7 @@ Most theory-building papers follow: find something → figure out why → frame 
 
 **Frame shifts are normal.** Expect 3-5 complete reframings. `/new-frame` archives everything, marks evals stale, gives you a clean slate for theory while preserving empirical work.
 
-**Extensible.** Add data sources (`/author-data-source`), methodologies (`/author-methodology`), or custom agents (`/create-agent`). Everything registers in `registry.json` for runtime discovery.
+**Extensible.** See below.
 
 ---
 
@@ -188,6 +183,20 @@ Most theory-building papers follow: find something → figure out why → frame 
 | Phenomenon Description | Weick |
 | Methodological | Abbott's heuristics |
 | Practical Insight | Corley & Gioia |
+
+---
+
+## Add Your Own Tools
+
+Theory-forge is designed to be extended. Three commands scaffold new capabilities:
+
+**`/author-data-source [tool-name]`** — Add support for a new data format (Dedoose, NVivo, MAXQDA, Otter.ai, etc.). Creates a Python importer, documentation, and a registry entry so commands like `/explore-data` auto-discover the source.
+
+**`/author-methodology [tradition-name]`** — Add a new evaluation framework or analytical tradition (narrative analysis, process tracing, QCA, etc.). Creates a rubric, an eval command, and documentation. The new eval is immediately available via `/eval [name]` and `/check-submission`.
+
+**`/create-agent`** — Build a bespoke analytical agent for project-specific needs. Custom agents live alongside core commands and register in `registry.json`.
+
+To contribute upstream: run the authoring command, fork the repo, copy the generated files, open a PR. The commands produce everything needed.
 
 ---
 
