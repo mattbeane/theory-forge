@@ -1,359 +1,207 @@
 # Theory Forge
 
-**A buffet of analytical capabilities for qualitative and mixed-methods research.**
+**A test suite for academic research.**
 
-Theory-forge is a collection of specialized AI agents (Claude Code slash commands) for producing theory-building papers from rich data — interviews, fieldnotes, spreadsheets, observations, surveys. Each agent handles one analytical task. You compose them however your project demands.
+Theory-forge is a collection of AI agents (Claude Code slash commands) for producing theory-building papers from qualitative and mixed-methods data. Each agent handles one analytical task — discovering patterns, building framings, auditing claims. You compose them however your project demands.
 
-There's a suggested sequence for researchers who want guidance, but every command works standalone. Use what you need. Skip what you don't. Build your own agents for what's missing.
+What makes it different: every evaluation runs through a statistical consensus engine (monte-carlo LLM-as-judge), results persist with staleness tracking, and a unified test runner produces a single PASS/FAIL verdict for submission readiness. It's `pytest --verbose` for your paper.
 
 ---
 
-## How It Works
-
-Each agent is a slash command you invoke in Claude Code. You stay in control — making judgment calls at every step — while the AI handles systematic work that's laborious by hand: scanning 30 interviews for disconfirming evidence, generating multiple theoretical framings, checking claims against raw data.
-
-### Quick Start
+## Quick Start
 
 ```bash
 git clone https://github.com/mattbeane/theory-forge.git
 ```
 
-Open Claude Code in your project directory (with the `.claude/commands/` folder present), then:
+Open Claude Code in your project directory, then:
 
 ```
 /init-project          # Set up project structure
 /explore-data          # Start exploring your data
 /status                # Check progress anytime
-```
-
-### Project Structure
-
-```
-your-project/
-├── .claude/commands/       # Agent prompts (from this repo)
-├── data/
-│   ├── quant/              # Quantitative data files
-│   └── qual/               # Interviews, field notes
-├── analysis/
-│   ├── exploration/        # /explore-data outputs
-│   ├── patterns/           # /hunt-patterns outputs
-│   ├── framing/            # /style-engine outputs (frame-1/, frame-2/, etc.)
-│   ├── absences/           # /surface-absences outputs
-│   ├── process/            # /trace-process outputs
-│   └── verification/       # Verification packages
-├── literature/             # Theory papers, sensitizing literature, refs.bib
-├── output/                 # Drafts, tables, figures, exports
-├── DECISION_LOG.md         # Auto-tracked decisions
-└── state.json              # Workflow state (auto-managed)
+/check-submission      # Run the full test suite
 ```
 
 ---
 
-## The Commands
+## Commands
 
-### Discovery & Analysis
+### Discovery
 
 | Command | What It Does |
 |---------|-------------|
 | `/explore-data` | Initial reconnaissance — what's in the data, what's interesting |
-| `/hunt-patterns` | Find robust empirical patterns with adaptive stopping (RASC) |
+| `/hunt-patterns` | Find robust empirical patterns with adaptive stopping |
 | `/mine-qual` | Extract mechanism evidence from interviews, with adversarial checks |
 | `/surface-absences` | Identify what's conspicuously *missing* from the data |
-| `/trace-process` | Put data in temporal motion — phases, turning points, drift |
+| `/integrate-quant-qual` | Connect quantitative patterns with qualitative mechanisms |
+| `/measure-at-scale` | Measure constructs across full corpus; [GABRIEL](https://github.com/openai/GABRIEL)-compatible |
 
-### Theory & Framing
+### Framing
 
 | Command | What It Does |
 |---------|-------------|
 | `/find-theory` | Identify which theory your finding violates or extends |
 | `/find-lens` | Find sensitizing literature that explains heterogeneity |
-| `/style-engine` | Generate and evaluate multiple theoretical framings |
+| `/smith-frames` | Generate and evaluate multiple theoretical framings |
 | `/new-frame` | Archive current framing, start fresh (expect 3-5 reframings) |
-| `/compare-frames` | Side-by-side comparison of multiple framings |
+| `/compare-frames` | Side-by-side comparison of framings |
 
-### Evaluation & Verification
+### Test Suite
 
-| Command | What It Does |
-|---------|-------------|
-| `/eval-contribution` | Diagnose contribution type — not all papers are theory violation |
-| `/eval-zuckerman-lite` | Early puzzle check: is this a puzzle? Is the null compelling? |
-| `/eval-zuckerman` | Full 10-criteria Zuckerman check on your framing |
-| `/audit-claims` | Search ALL raw data for supporting AND challenging evidence |
-| `/verify-claims` | Create verification package for external review |
-| `/simulate-review` | Generate adversarial peer reviews before submission |
+The core differentiator. Every evaluation persists scores to `state.json`, tracks upstream file changes for staleness, and runs through consensus mode by default.
 
-### Measurement & Integration
+| Command | What It Tests | Output |
+|---------|--------------|--------|
+| `/check-submission` | **Unified runner** — orchestrates all tests below | PASS / CONDITIONAL / FAIL |
+| `/eval-zuckerman` | Framing quality (10 criteria) | Score /50 |
+| `/eval-zuckerman-lite` | Early puzzle check (3 gates) | PASS / FAIL |
+| `/eval-paper-quality` | Argument, evidence, theory, contribution, prose | Score /50 |
+| `/eval-contribution` | Contribution type diagnosis | Type + confidence |
+| `/eval-becker` | Generalizability | PASS / FAIL |
+| `/eval-genre` | Inductive vs. deductive register | PASS / FAIL |
+| `/eval-limitations` | Boundary conditions in manuscript | PASS / FAIL |
+| `/eval-citations` | Literature coverage | Count + verdict |
+| `/audit-claims` | Raw data audit for all claims | Concern flags |
+| `/verify-claims` | Verification package for external review | Defensibility ratings |
+| `/simulate-review` | Adversarial peer reviews | Fatal flaw count |
+| `/test-counter-evidence` | Counter-evidence documented and addressed? | PASS / FAIL |
+| `/test-alt-interpretations` | Alternative explanations less plausible? | PASS / FAIL |
+| `/test-boundary-conditions` | Scope conditions documented? | PASS / FAIL |
+| `/export-test-report` | Formatted report for coauthors/reviewers/editors | MD or HTML |
 
-| Command | What It Does |
-|---------|-------------|
-| `/measure-at-scale` | Measure discovered constructs across full corpus; GABRIEL-compatible |
-| `/integrate-quant-qual` | Connect quantitative patterns with qualitative mechanisms |
+**Thresholds** are configurable per project or per target journal via `rubrics/submission_thresholds.json`, with presets for `top_journal`, `field_journal`, and `working_paper`.
 
 ### Output
 
 | Command | What It Does |
 |---------|-------------|
 | `/draft-paper` | Generate journal-ready manuscript |
-| `/describe-ai-use` | Generate AI attribution statement for methods section |
-| `/eval-paper-quality` | Systematic quality scoring against rubrics |
-| `/export [format]` | Convert to LaTeX, Word, PDF, HTML |
-| `/package-verification` | Create ZIP with reviewer instructions for external review |
 | `/build-lit-review` | Build bibliography from identified theory/lens |
+| `/export [format]` | Convert to LaTeX, Word, PDF, HTML |
+| `/describe-ai-use` | Generate AI attribution statement for methods section |
 
 ### Project Management
 
 | Command | What It Does |
 |---------|-------------|
-| `/init-project` | Set up project structure and state tracking |
-| `/status` | View workflow progress and next steps |
-| `/create-agent` | Build bespoke analytical agents for project-specific needs |
-| `/consensus-config` | Configure statistical consensus settings |
-| `/student-mode` | Toggle student mode (predictions, explanations, audit trail) |
+| `/status` | Workflow progress, eval results dashboard, staleness indicators |
+| `/consensus-config` | Configure consensus settings (N per stage, thresholds) |
+| `/create-agent` | Build bespoke agents for project-specific needs |
 | `/repair-state` | Diagnose and fix state.json problems |
+| `/student-mode` | Toggle learning scaffolding (predictions, explanations) |
 
 ---
 
-## A Suggested Path (Not the Only One)
+## How the Test Suite Works
 
-Most theory-building papers follow a rough arc: find something interesting → figure out why it matters → frame it → verify it → write it up. Here's one path through the commands that follows this arc:
+### Consensus Mode (Default: On)
+
+Every evaluation runs N times (typically 5-10), computing per-criterion stability:
+
+```
+/eval-zuckerman results:
+  motivate_paper:     4.2/5  (CV: 0.06, 🟢 HIGH)
+  know_audience:      3.8/5  (CV: 0.12, 🟡 MEDIUM)
+  puzzle_in_world:    2.1/5  (CV: 0.31, 🔴 LOW)    ← flag for review
+```
+
+- 🟢 HIGH: CV < 10% — defensible, stable signal
+- 🟡 MEDIUM: CV 10-25% — mostly stable, note variance
+- 🔴 LOW: CV > 25% — ambiguous, requires human judgment
+
+Use `--quick` on any eval for a single run when iterating.
+
+### Staleness Detection
+
+Each eval tracks SHA-256 checksums of its upstream files. When you change a draft or reframe, downstream evals are automatically marked stale. `/check-submission` re-runs only what's changed.
+
+### `/check-submission`
+
+The unified runner. Orchestrates all tests in dependency order:
+
+1. Loads thresholds (defaults, preset, or project overrides)
+2. Determines which tests apply based on contribution type
+3. Checks freshness — skips evals with current results
+4. Runs missing/stale tests with consensus
+5. Compares scores against thresholds
+6. Generates `SUBMISSION_READINESS.md`
+
+```
+/check-submission              # Full suite with consensus
+/check-submission --quick      # Single-run, fast iteration
+/check-submission --preset top_journal
+/check-submission --skip citations
+```
+
+A quality gate hook warns before `/export` if check-submission hasn't passed.
+
+---
+
+## A Suggested Path
+
+Most theory-building papers follow: find something → figure out why → frame it → verify it → write it.
 
 ```
 /explore-data → /hunt-patterns → /eval-zuckerman-lite
                                         │
-                          Is this a puzzle? ──► No? Try a different pattern.
+                          Is this a puzzle? → No? Try a different pattern.
                                         │
                                        Yes
                                         │
-            /find-theory → /find-lens → /mine-qual ↔ /style-engine
+            /find-theory → /find-lens → /mine-qual ↔ /smith-frames
                                                 │
                                         /eval-zuckerman
                                                 │
-                                  Framing solid? ──► No? /new-frame, loop back.
+                                  Framing solid? → No? /new-frame, loop.
                                                 │
                                                Yes
                                                 │
                         /audit-claims → /verify-claims → /draft-paper
-                              ↑
-                     /measure-at-scale (optional but strengthens claims)
+                                                │
+                                    /check-submission → /export
 ```
 
-**But this is just one path.** Your project might need something different:
-
-- **Processual data?** Run `/trace-process` early — the temporal structure may BE the finding.
-- **Not a theory violation?** Skip the Zuckerman gates entirely. Use `/eval-contribution` to figure out what kind of paper you're writing, then evaluate against the appropriate criteria.
-- **Exploratory?** Start with `/surface-absences` — what's conspicuously missing may be more interesting than what's present.
-- **Need a custom analysis?** Use `/create-agent` to build a bespoke agent for your specific analytical need.
-- **Need to show pervasiveness?** Run `/measure-at-scale` after discovering constructs — exhaustive measurement answers "how common is this?" across your full corpus.
-
-The commands are composable. The sequence above is a sensible default for theory-violation papers, not a requirement.
+**This is one path, not the only one.** Every command works standalone. Use `/eval-contribution` to diagnose what kind of paper you're writing — not everything is a theory violation.
 
 ---
 
-## Analytical Foundations
+## Design Principles
 
-Theory-forge encodes analytical moves that have long histories in qualitative research — ethnography, grounded theory, case study methodology, interpretive sociology. The commands accelerate these moves using AI; they don't invent new ones.
+**Adversarial by default.** `/hunt-patterns` documents killed findings. `/mine-qual` requires disconfirming evidence. `/audit-claims` searches all data for challenging evidence. Three standalone adversarial tests check counter-evidence, alternative interpretations, and boundary conditions independently.
 
-### Core Analytical Moves
+**Quality gates are warnings, not walls.** Commands suggest a sequence but don't enforce it. You can proceed past a warning if you have good reason.
 
-| Move | Theory-forge command | Tradition |
-|------|---------------------|-----------|
-| **Interpreting through multiple theoretical frames** | `/style-engine` | Standard across qualitative methods; recently articulated for GenAI contexts |
-| **Identifying conspicuous omissions** | `/surface-absences` | Ethnographic attention to silences and normalized assumptions |
-| **Connecting micro and macro** | `/integrate-quant-qual` | Mixed-methods integration; multi-level analysis |
-| **Adversarial checking of emerging concepts** | `/mine-qual`, `/audit-claims` | Disconfirmation logic in case study and grounded theory |
+**Frame shifts are normal.** Expect 3-5 complete reframings. `/new-frame` archives everything, marks evals stale, gives you a clean slate for theory while preserving empirical work.
 
-Plus **interpretive vigilance** — the researcher's ongoing responsibility to supervise AI output. This is embedded in every command through required researcher review points.
+**Extensible.** Add data sources (`/author-data-source`), methodologies (`/author-methodology`), or custom agents (`/create-agent`). Everything registers in `registry.json` for runtime discovery.
 
-### At-Scale Measurement
+---
 
-`/measure-at-scale` bridges qualitative discovery and systematic measurement. After discovering constructs through `/mine-qual` and `/style-engine`, measure them exhaustively across your full corpus — every interview, every field note. Produces distributions, subgroup variation, and evidence for methods sections. Generates specs compatible with [GABRIEL](https://github.com/openai/GABRIEL) (Asirvatham, Mokski & Shleifer, 2026) for larger corpora.
-
-### Multiple Contribution Types
-
-Not every paper violates a theory. Theory-forge supports multiple contribution types, each with its own evaluation framework:
+## Multiple Contribution Types
 
 | Type | Evaluation Framework |
 |------|---------------------|
 | Theory Violation | Zuckerman's 10 criteria |
-| Theory Elaboration | Fisher & Aguinis criteria |
-| Phenomenon Description | Weick's criteria |
+| Theory Elaboration | Fisher & Aguinis |
+| Phenomenon Description | Weick |
 | Methodological | Abbott's heuristics |
-| Practical Insight | Corley & Gioia criteria |
-
-Run `/eval-contribution` to diagnose which type your paper is before applying evaluation criteria.
+| Practical Insight | Corley & Gioia |
 
 ---
 
-## Key Design Choices
+## Requirements
 
-### Adversarial Evidence Is Standard
-
-Theory-forge is designed to make cherry-picking harder, not easier. Adversarial evidence surfacing is built into the standard workflow:
-
-- `/hunt-patterns` documents "killed findings" that didn't survive controls
-- `/mine-qual` requires a disconfirming evidence section
-- `/audit-claims` explicitly searches ALL data for challenging evidence
-- `/style-engine` evaluates counter-evidence and "survivability" for each framing
-
-The philosophy: reviewers are adversarial. Find problems first, or they will.
-
-### Quality Gates Are Warnings, Not Walls
-
-Commands suggest a sequence but don't enforce it. If you run `/find-theory` before `/hunt-patterns`, you'll get a warning:
-
-```
-⚠️  Quality Gate: /hunt-patterns should be completed before /find-theory.
-    You need robust empirical patterns before identifying which theory they violate.
-```
-
-You can proceed if you have good reason. The gates help prevent wasted effort; they don't assume they know your project better than you do.
-
-### AI Attribution Built In
-
-`/describe-ai-use` generates a methods-section-ready attribution statement based on what you actually did — which commands you ran, what decisions you made, whether you used consensus mode. Based on the attribution approach used in "Developmental Uncertainty" (Beane, submitted to *Organization Science*). See [`templates/AI_ATTRIBUTION_BOILERPLATE.md`](templates/AI_ATTRIBUTION_BOILERPLATE.md) for modular boilerplate components.
-
-### Statistical Consensus Mode
-
-For peer-review-ready analysis, consensus mode runs LLM-dependent stages multiple times:
-
-```
-/consensus-config enable
-```
-
-| Stage | Single Run | Consensus |
-|-------|-----------|-----------|
-| `/hunt-patterns` | β = 0.21 | β = 0.21 (±0.02 SD, n=25) |
-| `/mine-qual` | "Here's a quote" | Quote appeared in 14/15 runs (93% stability) |
-
-LOW stability (CV > 25%) reveals ambiguity rather than hiding it.
-
-### Frame Shifts Are Normal
-
-Expect 3-5 complete reframings per paper. The workflow accommodates this:
-
-```
-/new-frame              # Archive current frame, start fresh
-/new-frame list         # See all your frame attempts
-/new-frame compare      # Compare framings side-by-side
-```
-
-Each frame preserves your empirical work while giving you a clean slate for theory and framing.
-
-### External Verification
-
-`/verify-claims` produces a self-contained package you should send to a *different* AI system or a skeptical colleague. The model that helped build the analysis shouldn't be the only one checking it. `/package-verification` creates the ZIP with checksums and reviewer instructions.
-
----
-
-## Student Mode
-
-For researchers learning the craft or working under supervision:
-
-```
-/student-mode on
-```
-
-This adds prediction prompts (write what you expect before AI runs), explanation layers (AI shows its reasoning), and comparison tables (your predictions vs. AI findings). Integrated into core commands. `/mine-qual` is strictest — requires reading 3-5 interviews manually before AI runs.
-
-Student mode doesn't change the analysis — it adds scaffolding for learning. See [`docs/STUDENT_MODE_FEATURE_OPTIONS.md`](docs/STUDENT_MODE_FEATURE_OPTIONS.md) for design rationale.
-
----
-
-## Living Paper Integration
-
-When you run `/verify-claims`, it automatically creates a [Living Paper](https://github.com/mattbeane/living-paper) verification package — auditable links between claims and evidence, with a standalone HTML reviewer interface. No separate installation needed.
-
----
-
-## Related: Research-Quals
-
-[Research-quals](https://github.com/mattbeane/research-quals) is a separate project developing competency-based training for the research judgment skills that matter when using tools like this. The two projects inform each other but evolve independently. See research-quals for details.
-
----
-
-## Contributing: Add Your Own Data Sources & Methodologies
-
-Theory-forge is extensible. You can add support for new data formats and new methodological traditions without touching core code.
-
-### Add a Data Source
-
-Support a new qualitative/quantitative data tool (Dedoose, NVivo, MAXQDA, Otter.ai, etc.):
-
-```
-/author-data-source [tool-name]
-```
-
-This creates:
-- A Python importer (`tools/importers/[name].py`) that normalizes the format
-- Documentation (`data_sources/[name].md`) with export/import instructions
-- A registry entry so commands like `/explore-data` auto-discover the source
-
-### Add a Methodology
-
-Add a new evaluation framework or analytical tradition (grounded theory, process tracing, narrative analysis, etc.):
-
-```
-/author-methodology [tradition-name]
-```
-
-This creates:
-- An evaluation rubric (`rubrics/[name].json`) with calibrated criteria
-- An eval command (`.claude/commands/eval-[name].md`) runnable via `/eval [name]`
-- Documentation (`methodologies/[name].md`)
-- A registry entry so `/eval-contribution` and `/eval` know about it
-
-### The Registry
-
-`registry.json` in the project root indexes everything extensible: data sources, methodologies, and custom agents. Commands check this file at runtime to discover what's available.
-
-### Contributing Upstream
-
-To share what you've built:
-1. Run `/author-data-source` or `/author-methodology` to generate the files
-2. Fork theory-forge
-3. Copy the generated files into your fork
-4. Open a PR
-
-The commands produce everything needed for a complete contribution — no guessing about which files to create or what format to use.
-
-### Build a Custom Agent
-
-For project-specific analytical needs (not general enough to contribute upstream):
-
-```
-/create-agent
-```
-
-Custom agents are registered in both `state.json` and `registry.json` and live alongside core commands.
-
----
-
-## Technical Requirements
-
-- Claude Code (via Claude Desktop or standalone)
-- Your data in accessible files (CSV, Excel, text files for interviews)
-- Domain expertise (this accelerates your work; it doesn't replace your judgment)
-- **For consensus mode**: Python 3.9+ with `anthropic` or `openai` package
-- **For systematic scoring**: `pip install rubric-eval` + `ANTHROPIC_API_KEY` (optional)
+- Claude Code
+- Your data in accessible files (CSV, Excel, text for interviews)
+- Domain expertise — this accelerates your work, doesn't replace your judgment
+- Python 3.9+ with `anthropic` package (for consensus mode)
 
 ---
 
 ## Origin
 
-Developed by Matt Beane (UC Santa Barbara) while using Claude Code to produce papers from dormant datasets. Theory-forge is a work in progress — the command set, the suggested workflow, and the analytical foundations are all evolving. Contributions, critiques, and alternative approaches are welcome.
+Developed by Matt Beane (UC Santa Barbara) while using Claude Code to produce papers from dormant datasets. See [`CREDITS.md`](CREDITS.md) for acknowledgments.
 
-## Credits
-
-Theory-forge builds on ideas from many scholars and tools. See [`CREDITS.md`](CREDITS.md) for full acknowledgments — evaluation frameworks, AI-augmented research scholarship, technical dependencies, and design influences.
-
----
-
-## License
-
-MIT. Use it, modify it, share it.
-
----
-
-## Questions?
-
-Open an issue or contact mattbeane@ucsb.edu
+MIT License. Questions? Open an issue or contact mattbeane@ucsb.edu.
