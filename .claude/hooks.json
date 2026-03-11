@@ -120,6 +120,18 @@
           "message": "⚠️  Quality Gate: /draft-paper and /eval-genre should be completed before /export.\nManuscript must pass genre evaluation before export."
         }
       }
+    },
+    {
+      "event": "on_command",
+      "matcher": { "command_name": "export" },
+      "action": {
+        "type": "command",
+        "command": "test -f state.json && python3 -c \"import json; s=json.load(open('state.json')); er=s.get('eval_results',{}).get('check_submission',{}); frame='frame_'+str(s.get('current_frame',1)); latest=er.get(frame,{}).get('latest',{}); exit(0 if latest.get('verdict') in ['PASS','CONDITIONAL'] else 1)\"",
+        "on_failure": {
+          "behavior": "warn",
+          "message": "⚠️  Quality Gate: /check-submission has not passed for the current frame.\nRun /check-submission before exporting to verify submission readiness.\nUse /check-submission --quick for a fast check."
+        }
+      }
     }
   ]
 }

@@ -140,3 +140,77 @@ Create `analysis/framing/BECKER_EVAL.md`:
 ## Reference
 
 Becker, Howard S. 1998. *Tricks of the Trade: How to Think About Your Research While You're Doing It.* Chicago: University of Chicago Press. Chapter 3: "Concepts."
+
+---
+
+## Consensus Mode
+
+Check `state.json` → `consensus.enabled` (default: true).
+
+If enabled and `--quick` not specified:
+1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
+2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
+3. For overall verdict: compute agreement rate across runs
+4. Include stability assessment using `lib/consensus/` formatters:
+   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
+   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
+   - 🔴 LOW: CV > 25% or agreement < 70%
+5. Persist consensus stats in eval_results (see State Persistence below)
+
+If `--quick` flag is set: Run once, skip consensus, still persist results.
+
+---
+
+## Staleness Check
+
+Before running this evaluation:
+1. Read `state.json` → `eval_results.becker.frame_[current_frame].latest`
+2. If a previous result exists:
+   a. Compute current SHA-256 of upstream files:
+      ```bash
+      shasum -a 256 analysis/framing/frame-[N]/FRAMING_OPTIONS.md | cut -d' ' -f1
+      ```
+   b. Compare against stored `upstream_checksums`
+   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
+   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
+3. If no previous result exists: proceed with evaluation.
+
+---
+
+## State Persistence
+
+In addition to the workflow state updates above (`eval_becker.complete` and `eval_becker.verdict`), also persist to eval_results for the test suite:
+
+After evaluation completes:
+1. Read `state.json`
+2. Compute SHA-256 checksums of upstream files:
+   - `analysis/framing/frame-[N]/FRAMING_OPTIONS.md`
+3. Write to `eval_results.becker.frame_[current_frame].latest`:
+   ```json
+   {
+     "timestamp": "[current ISO timestamp]",
+     "scores": {
+       "concepts_clarity": N,
+       "abstraction_level": N,
+       "theoretical_utility": N
+     },
+     "total": null,
+     "max_total": null,
+     "verdict": "[PASS|CONDITIONAL|FAIL]",
+     "consensus": {
+       "n_runs": 5,
+       "stability": "[HIGH|MEDIUM|LOW]",
+       "cv": [computed CV],
+       "ci_lower": [lower bound],
+       "ci_upper": [upper bound]
+     },
+     "stale": false,
+     "stale_reason": null,
+     "upstream_checksums": {
+       "analysis/framing/frame-[N]/FRAMING_OPTIONS.md": "sha256:[hash]"
+     },
+     "output_file": "analysis/framing/BECKER_EVAL.md"
+   }
+   ```
+4. Update `updated_at` timestamp
+5. Log to `DECISION_LOG.md`: "becker — [verdict]"

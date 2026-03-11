@@ -444,3 +444,76 @@ Add to the Overall Assessment table:
 **"Quant-report register"**: Paper passes all language checks (no deductive terms) but reads like a research report—data-heavy opening, thin literature engagement, abstract leading with sample sizes. Common in mixed-methods papers written by quantitative researchers. Fix: Restructure abstract to lead with question/claim, add literature engagement to introduction within first 3 paragraphs, ensure theory section has substantive (not string) citations.
 
 **"Front-loaded abstract"**: Abstract opens with discoveries presented as premises. E.g., "Managers cannot evaluate skill fit because..." when "managers decide" and "skill fit evaluation" are themselves discoveries. The paper knew its answer before posing its question. Fix: Identify the naive question ("What happens to workers when X?"), open with that, present the puzzle, THEN reveal what you found. Also check theory sections for the same error—sections that present complete mechanisms before findings should be reframed as "theoretical resources" with tentative language.
+
+---
+
+## Consensus Mode
+
+Check `state.json` → `consensus.enabled` (default: true).
+
+If enabled and `--quick` not specified:
+1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
+2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
+3. For overall verdict: compute agreement rate across runs
+4. Include stability assessment using `lib/consensus/` formatters:
+   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
+   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
+   - 🔴 LOW: CV > 25% or agreement < 70%
+5. Persist consensus stats in eval_results (see State Persistence below)
+
+If `--quick` flag is set: Run once, skip consensus, still persist results.
+
+---
+
+## Staleness Check
+
+Before running this evaluation:
+1. Read `state.json` → `eval_results.genre.frame_[current_frame].latest`
+2. If a previous result exists:
+   a. Compute current SHA-256 of upstream files:
+      ```bash
+      shasum -a 256 output/drafts/*.md | cut -d' ' -f1
+      ```
+      (Use the latest draft file)
+   b. Compare against stored `upstream_checksums`
+   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
+   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
+3. If no previous result exists: proceed with evaluation.
+
+---
+
+## State Persistence
+
+After evaluation completes:
+1. Read `state.json`
+2. Compute SHA-256 checksums of upstream files:
+   - `output/drafts/*.md` (latest draft)
+3. Write to `eval_results.genre.frame_[current_frame].latest`:
+   ```json
+   {
+     "timestamp": "[current ISO timestamp]",
+     "scores": {
+       "register_match": 1|0,
+       "structural_fit": 1|0,
+       "audience_alignment": 1|0
+     },
+     "total": X,
+     "max_total": 3,
+     "verdict": "[PASS|FAIL]",
+     "consensus": {
+       "n_runs": 5,
+       "stability": "[HIGH|MEDIUM|LOW]",
+       "cv": [computed CV],
+       "ci_lower": [lower bound],
+       "ci_upper": [upper bound]
+     },
+     "stale": false,
+     "stale_reason": null,
+     "upstream_checksums": {
+       "output/drafts/[latest_draft].md": "sha256:[hash]"
+     },
+     "output_file": "analysis/framing/GENRE_EVAL.md"
+   }
+   ```
+4. Update `updated_at` timestamp
+5. Log to `DECISION_LOG.md`: "genre scored [total]/3 — [verdict]"

@@ -75,6 +75,22 @@ Progress: ████████████░░░░░░░░ 45% (9/20
 ⚠️  GATE D PENDING: All evaluations must pass before drafting
 
 ─────────────────────────────────────────────────────────────────────
+EVALUATION RESULTS (Frame [N])
+─────────────────────────────────────────────────────────────────────
+
+  Test                    Score       Stability    Status
+  ────                    ─────       ─────────    ──────
+  Zuckerman               39/50       🟢 HIGH      ✓ PASS
+  Paper Quality           37/50       🟢 HIGH      ✓ PASS
+  Becker                  PASS        🟡 MED       ✓ PASS
+  Counter-Evidence        PASS        🟢 HIGH      ✓ PASS
+  Alt Interpretations     —           —            ○ Not run
+  Boundary Conditions     PASS        🟢 HIGH      ⚠ STALE (frame changed)
+
+  Submission Readiness:   CONDITIONAL (last run: 2 days ago)
+  └─ 1 test stale, 1 not run — run /check-submission to update
+
+─────────────────────────────────────────────────────────────────────
 CURRENT FRAME (#2)
 ─────────────────────────────────────────────────────────────────────
 
@@ -138,6 +154,35 @@ QUICK COMMANDS
 - `[→]` - In progress
 - `[ ]` - Pending
 - `[!]` - Blocked (missing prerequisites)
+
+### Evaluation Results Dashboard
+
+If `state.json.eval_results` has any entries for the current frame, display them:
+
+For each eval result:
+- Show score (X/Y for scored, PASS/FAIL for verdict-based)
+- Show stability rating with emoji:
+  - 🟢 HIGH — low coefficient of variation across consensus runs
+  - 🟡 MED — moderate variation
+  - 🔴 LOW — high variation, result is unstable
+- Show status:
+  - `✓ PASS` — meets threshold, current
+  - `✗ FAIL` — below threshold
+  - `⚠ STALE` — upstream changed since eval (e.g., frame shift)
+  - `○ Not run` — no results exist
+
+If `/check-submission` has been run, show its overall verdict (PASS/CONDITIONAL/FAIL).
+If any results are stale, show a warning: "⚠ [N] eval results are stale. Run /check-submission to re-evaluate."
+
+### Next Step: Submission Readiness
+
+In the NEXT STEP section, add this logic: if all workflow stages are complete (explore_data through draft_paper) but `check_submission` status is not "completed" or its verdict is not "PASS", suggest:
+
+```
+→ Run /check-submission to verify submission readiness
+
+All workflow stages are complete. Run the full test suite before exporting.
+```
 
 ## Not Initialized
 

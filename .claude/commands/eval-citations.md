@@ -256,3 +256,82 @@ The other theory-forge evaluations focus on:
 None of these explicitly check whether the paper has *enough* citations or whether claimed literatures are *adequately covered*. A paper can score well on all four and still be under-cited.
 
 This check fills that gap.
+
+---
+
+## Consensus Mode
+
+Check `state.json` → `consensus.enabled` (default: true).
+
+If enabled and `--quick` not specified:
+1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
+2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
+3. For overall verdict: compute agreement rate across runs
+4. Include stability assessment using `lib/consensus/` formatters:
+   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
+   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
+   - 🔴 LOW: CV > 25% or agreement < 70%
+5. Persist consensus stats in eval_results (see State Persistence below)
+
+If `--quick` flag is set: Run once, skip consensus, still persist results.
+
+---
+
+## Staleness Check
+
+Before running this evaluation:
+1. Read `state.json` → `eval_results.citations.frame_[current_frame].latest`
+2. If a previous result exists:
+   a. Compute current SHA-256 of upstream files:
+      ```bash
+      shasum -a 256 output/drafts/*.md literature/refs.bib | cut -d' ' -f1
+      ```
+      (Use the latest draft file for output/drafts/*.md)
+   b. Compare against stored `upstream_checksums`
+   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
+   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
+3. If no previous result exists: proceed with evaluation.
+
+---
+
+## State Persistence
+
+After evaluation completes:
+1. Read `state.json`
+2. Compute SHA-256 checksums of upstream files:
+   - `output/drafts/*.md` (latest draft)
+   - `literature/refs.bib`
+3. Write to `eval_results.citations.frame_[current_frame].latest`:
+   ```json
+   {
+     "timestamp": "[current ISO timestamp]",
+     "scores": {
+       "total_citations": N,
+       "coverage_adequate": 1|0,
+       "recency_ok": 1|0
+     },
+     "total": N,
+     "max_total": null,
+     "verdict": "[PASS|FAIL]",
+     "consensus": {
+       "n_runs": 5,
+       "stability": "[HIGH|MEDIUM|LOW]",
+       "cv": [computed CV],
+       "ci_lower": [lower bound],
+       "ci_upper": [upper bound]
+     },
+     "stale": false,
+     "stale_reason": null,
+     "upstream_checksums": {
+       "output/drafts/[latest_draft].md": "sha256:[hash]",
+       "literature/refs.bib": "sha256:[hash]"
+     },
+     "output_file": "analysis/quality/CITATIONS_EVAL.md"
+   }
+   ```
+4. Update `updated_at` timestamp
+5. Log to `DECISION_LOG.md`: "citations — [total_citations] citations — [verdict]"
+
+Verdict thresholds:
+- PASS if total_citations >= 40 and coverage_adequate
+- FAIL otherwise

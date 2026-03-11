@@ -325,3 +325,87 @@ Generate in `analysis/audit/`:
 - Mark 2 as "challenging" with notes on context
 - Note that challenging evidence comes from Site B workers hired in Phase 3
 - Recommend adding boundary condition about timing
+
+---
+
+## Consensus Mode
+
+Check `state.json` → `consensus.enabled` (default: true).
+
+If enabled and `--quick` not specified:
+1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`) — this applies to the EVAL aspect (concern ratings, evidence classification), not the data search itself
+2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
+3. For overall verdict: compute agreement rate across runs
+4. Include stability assessment using `lib/consensus/` formatters:
+   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
+   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
+   - 🔴 LOW: CV > 25% or agreement < 70%
+5. Persist consensus stats in eval_results (see State Persistence below)
+
+If `--quick` flag is set: Run once, skip consensus, still persist results.
+
+---
+
+## Staleness Check
+
+Before running this evaluation:
+1. Read `state.json` → `eval_results.audit_claims.frame_[current_frame].latest`
+2. If a previous result exists:
+   a. Compute current SHA-256 of upstream files:
+      ```bash
+      shasum -a 256 analysis/framing/frame-[N]/FRAMING_OPTIONS.md data/qual/* | cut -d' ' -f1
+      ```
+   b. Compare against stored `upstream_checksums`
+   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
+   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
+3. If no previous result exists: proceed with evaluation.
+
+---
+
+## State Persistence (eval_results)
+
+In addition to the workflow state updates above (`workflow.audit_claims.*`), also persist to eval_results for the test suite:
+
+After evaluation completes:
+1. Read `state.json`
+2. Compute SHA-256 checksums of upstream files:
+   - `analysis/framing/frame-[N]/FRAMING_OPTIONS.md`
+   - Files in `data/qual/`
+3. Write to `eval_results.audit_claims.frame_[current_frame].latest`:
+   ```json
+   {
+     "timestamp": "[current ISO timestamp]",
+     "scores": {
+       "claims_audited": N,
+       "high_concern": N,
+       "medium_concern": N,
+       "supporting_total": N,
+       "challenging_total": N
+     },
+     "total": null,
+     "max_total": null,
+     "verdict": "[PASS|CONDITIONAL|FAIL]",
+     "consensus": {
+       "n_runs": 5,
+       "stability": "[HIGH|MEDIUM|LOW]",
+       "cv": [computed CV],
+       "ci_lower": [lower bound],
+       "ci_upper": [upper bound]
+     },
+     "stale": false,
+     "stale_reason": null,
+     "upstream_checksums": {
+       "analysis/framing/frame-[N]/FRAMING_OPTIONS.md": "sha256:[hash]",
+       "data/qual/[file1]": "sha256:[hash]",
+       "data/qual/[file2]": "sha256:[hash]"
+     },
+     "output_file": "analysis/audit/AUDIT_REPORT.md"
+   }
+   ```
+4. Update `updated_at` timestamp
+5. Log to `DECISION_LOG.md`: "audit_claims — [verdict] (high_concern: [N], claims_audited: [N])"
+
+Verdict thresholds:
+- PASS if high_concern == 0
+- CONDITIONAL if high_concern <= 1
+- FAIL if high_concern > 1

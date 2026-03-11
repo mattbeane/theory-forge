@@ -5,14 +5,28 @@ These values can be overridden in state.json per-project.
 """
 
 DEFAULT_CONFIG = {
-    # Number of runs per stage
-    "default_n": 10,
+    # Number of runs per stage (eval stages use consensus by default)
+    "default_n": 5,
 
     # Per-stage N overrides (higher N for more critical stages)
     "stage_n": {
-        "hunt_patterns": 25,  # Effect sizes need high confidence
-        "mine_qual": 15,  # Quote stability
+        "hunt_patterns": 10,  # Effect sizes need high confidence
+        "mine_qual": 10,  # Quote stability
         "verify_claims": 10,  # Final verification
+
+        # Eval / test suite stages (consensus by default)
+        "eval_zuckerman": 5,
+        "eval_paper_quality": 5,
+        "eval_becker": 5,
+        "eval_genre": 5,
+        "eval_contribution": 5,
+        "eval_limitations": 5,
+        "eval_citations": 5,
+        "simulate_review": 5,
+        "check_submission": 7,  # Slightly higher for the aggregate runner
+        "test_counter_evidence": 5,
+        "test_alt_interpretations": 5,
+        "test_boundary_conditions": 5,
     },
 
     # CV thresholds for stability ratings (for numeric metrics)

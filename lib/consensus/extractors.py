@@ -229,6 +229,134 @@ def extract_claims(response: str) -> List[Dict]:
     return claims
 
 
+def extract_rubric_scores(response: str) -> Dict[str, float]:
+    """
+    Parse scored rubric output from eval stages.
+
+    Handles formats:
+        | Criterion Name | 4 |          (markdown table)
+        Criterion Name: 4/5
+        **Criterion Name**: 4
+        criterion_name: 4
+
+    Returns:
+        {"criterion_name": 4.0, ...}
+    """
+    scores: Dict[str, float] = {}
+
+    # Pattern 1: Markdown table row  — | Name | 4 |  or  | Name | 4/5 |
+    table_pattern = r'\|\s*([^|]+?)\s*\|\s*(\d+(?:\.\d+)?)\s*(?:/\s*\d+)?\s*\|'
+    for match in re.finditer(table_pattern, response):
+        name = match.group(1).strip()
+        # Skip header-like rows
+        if name.startswith('-') or name.lower() in ('criterion', 'criteria', 'score', 'rating'):
+            continue
+        scores[name] = float(match.group(2))
+
+    # Pattern 2: Criterion Name: 4/5  or  Criterion Name: 4
+    colon_pattern = r'^([A-Z][A-Za-z\s]+?)\s*:\s*(\d+(?:\.\d+)?)\s*(?:/\s*\d+)?$'
+    for match in re.finditer(colon_pattern, response, re.MULTILINE):
+        name = match.group(1).strip()
+        if name not in scores:
+            scores[name] = float(match.group(2))
+
+    # Pattern 3: **Criterion Name**: 4
+    bold_pattern = r'\*\*([^*]+)\*\*\s*:\s*(\d+(?:\.\d+)?)'
+    for match in re.finditer(bold_pattern, response):
+        name = match.group(1).strip()
+        if name not in scores:
+            scores[name] = float(match.group(2))
+
+    # Pattern 4: snake_case key: 4
+    snake_pattern = r'^([a-z][a-z_]+)\s*:\s*(\d+(?:\.\d+)?)$'
+    for match in re.finditer(snake_pattern, response, re.MULTILINE):
+        name = match.group(1).strip()
+        if name not in scores:
+            scores[name] = float(match.group(2))
+
+    return scores
+
+
+def extract_verdict(response: str) -> Dict[str, float]:
+    """
+    Parse PASS/FAIL/CONDITIONAL verdicts from eval output.
+
+    Handles formats:
+        **Verdict:** PASS
+        **Overall:** FAIL
+        PASS ✓
+        CONDITIONAL
+
+    Returns:
+        {"verdict": 1.0}  (PASS=1.0, FAIL=0.0, CONDITIONAL=0.5)
+    """
+    verdict_map = {
+        'PASS': 1.0,
+        'FAIL': 0.0,
+        'CONDITIONAL': 0.5,
+    }
+
+    # Pattern 1: **Verdict:** PASS  or  **Overall:** PASS
+    labeled_pattern = r'\*\*(?:Verdict|Overall)\s*:\*\*\s*(PASS|FAIL|CONDITIONAL)'
+    match = re.search(labeled_pattern, response, re.IGNORECASE)
+    if match:
+        return {"verdict": verdict_map.get(match.group(1).upper(), 0.5)}
+
+    # Pattern 2: PASS ✓  or  FAIL ✗
+    check_pattern = r'\b(PASS|FAIL|CONDITIONAL)\s*[✓✗✔✘☑☒]?'
+    match = re.search(check_pattern, response)
+    if match:
+        return {"verdict": verdict_map.get(match.group(1).upper(), 0.5)}
+
+    # Pattern 3: standalone verdict word on its own line
+    line_pattern = r'^\s*(PASS|FAIL|CONDITIONAL)\s*$'
+    match = re.search(line_pattern, response, re.MULTILINE)
+    if match:
+        return {"verdict": verdict_map.get(match.group(1).upper(), 0.5)}
+
+    return {"verdict": 0.5}  # Default to CONDITIONAL if unparseable
+
+
+def extract_total_score(response: str) -> Dict[str, float]:
+    """
+    Extract total score from eval output.
+
+    Handles formats:
+        Total: 39/50
+        **Total Score:** 39
+        Score: 39 out of 50
+
+    Returns:
+        {"total": 39.0, "max_total": 50.0}  (max_total only if present)
+    """
+    result: Dict[str, float] = {}
+
+    # Pattern 1: Total: 39/50  or  **Total:** 39/50
+    slash_pattern = r'(?:\*\*)?(?:Total(?:\s*Score)?)\s*:?\s*(?:\*\*)?\s*(\d+(?:\.\d+)?)\s*/\s*(\d+(?:\.\d+)?)'
+    match = re.search(slash_pattern, response, re.IGNORECASE)
+    if match:
+        result['total'] = float(match.group(1))
+        result['max_total'] = float(match.group(2))
+        return result
+
+    # Pattern 2: Score: 39 out of 50
+    out_of_pattern = r'(?:Total(?:\s*Score)?|Score)\s*:\s*(\d+(?:\.\d+)?)\s*(?:out\s*of|of)\s*(\d+(?:\.\d+)?)'
+    match = re.search(out_of_pattern, response, re.IGNORECASE)
+    if match:
+        result['total'] = float(match.group(1))
+        result['max_total'] = float(match.group(2))
+        return result
+
+    # Pattern 3: **Total Score:** 39  (no denominator)
+    bare_pattern = r'(?:\*\*)?(?:Total(?:\s*Score)?)\s*:?\s*(?:\*\*)?\s*(\d+(?:\.\d+)?)'
+    match = re.search(bare_pattern, response, re.IGNORECASE)
+    if match:
+        result['total'] = float(match.group(1))
+        return result
+
+    return result
+
+
 def extract_cycle_time(response: str) -> Dict[str, float]:
     """
     Extract cycle time metrics (specialized for workflow analysis).
@@ -278,6 +406,55 @@ STAGE_EXTRACTORS = {
     },
     "verify_claims": {
         "metrics": extract_effect_sizes,
+        "quotes": None,
+    },
+    # Eval / test suite stages
+    "eval_zuckerman": {
+        "metrics": extract_rubric_scores,
+        "quotes": None,
+    },
+    "eval_paper_quality": {
+        "metrics": extract_rubric_scores,
+        "quotes": None,
+    },
+    "eval_becker": {
+        "metrics": extract_verdict,
+        "quotes": None,
+    },
+    "eval_genre": {
+        "metrics": extract_verdict,
+        "quotes": None,
+    },
+    "eval_contribution": {
+        "metrics": extract_rubric_scores,
+        "quotes": None,
+    },
+    "eval_limitations": {
+        "metrics": extract_verdict,
+        "quotes": None,
+    },
+    "eval_citations": {
+        "metrics": extract_total_score,
+        "quotes": None,
+    },
+    "simulate_review": {
+        "metrics": extract_verdict,
+        "quotes": None,
+    },
+    "check_submission": {
+        "metrics": extract_verdict,
+        "quotes": None,
+    },
+    "test_counter_evidence": {
+        "metrics": extract_verdict,
+        "quotes": None,
+    },
+    "test_alt_interpretations": {
+        "metrics": extract_verdict,
+        "quotes": None,
+    },
+    "test_boundary_conditions": {
+        "metrics": extract_verdict,
         "quotes": None,
     },
 }

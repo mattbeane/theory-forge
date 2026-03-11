@@ -178,3 +178,79 @@ If they fail the puzzle check, suggest they either:
 1. Reframe the observation as genuinely surprising
 2. Find a different pattern that IS surprising
 3. Return to `/hunt-patterns` for more exploration
+
+---
+
+## Consensus Mode
+
+Check `state.json` → `consensus.enabled` (default: true).
+
+If enabled and `--quick` not specified:
+1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
+2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
+3. For overall verdict: compute agreement rate across runs
+4. Include stability assessment using `lib/consensus/` formatters:
+   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
+   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
+   - 🔴 LOW: CV > 25% or agreement < 70%
+5. Persist consensus stats in eval_results (see State Persistence below)
+
+If `--quick` flag is set: Run once, skip consensus, still persist results.
+
+---
+
+## Staleness Check
+
+Before running this evaluation:
+1. Read `state.json` → `eval_results.zuckerman_lite.frame_[current_frame].latest`
+2. If a previous result exists:
+   a. Compute current SHA-256 of upstream files:
+      ```bash
+      shasum -a 256 analysis/patterns/PATTERN_REPORT.md | cut -d' ' -f1
+      ```
+   b. Compare against stored `upstream_checksums`
+   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
+   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
+3. If no previous result exists: proceed with evaluation.
+
+---
+
+## State Persistence
+
+After evaluation completes:
+1. Read `state.json`
+2. Compute SHA-256 checksums of upstream files:
+   - `analysis/patterns/PATTERN_REPORT.md`
+3. Write to `eval_results.zuckerman_lite.frame_[current_frame].latest`:
+   ```json
+   {
+     "timestamp": "[current ISO timestamp]",
+     "scores": {
+       "puzzle_in_world": 1|0,
+       "compelling_null": 1|0,
+       "audience_chosen": 1|0
+     },
+     "total": X,
+     "max_total": 3,
+     "verdict": "[PASS|FAIL]",
+     "consensus": {
+       "n_runs": 5,
+       "stability": "[HIGH|MEDIUM|LOW]",
+       "cv": [computed CV],
+       "ci_lower": [lower bound],
+       "ci_upper": [upper bound]
+     },
+     "stale": false,
+     "stale_reason": null,
+     "upstream_checksums": {
+       "analysis/patterns/PATTERN_REPORT.md": "sha256:[hash]"
+     },
+     "output_file": "analysis/framing/PUZZLE_CHECK.md"
+   }
+   ```
+4. Update `updated_at` timestamp
+5. Log to `DECISION_LOG.md`: "zuckerman_lite scored [total]/3 — [verdict]"
+
+Verdict thresholds:
+- PASS if all 3 pass
+- FAIL if any fail

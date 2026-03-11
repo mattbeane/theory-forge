@@ -64,11 +64,13 @@ The user may specify:
 
    ```json
    {
-     "version": "1.1.0",
+     "version": "1.2.0",
      "project_name": "[name]",
      "created_at": "[ISO timestamp]",
      "updated_at": "[ISO timestamp]",
      "current_frame": 1,
+     "eval_results": {},
+     "submission_thresholds": { "preset": null, "overrides": {} },
      "workflow": {
        "explore_data": {
          "status": "pending",
@@ -120,6 +122,12 @@ The user may specify:
          "status": "pending",
          "completed_at": null,
          "outputs": []
+       },
+       "check_submission": {
+         "status": "pending",
+         "completed_at": null,
+         "outputs": [],
+         "verdict": null
        }
      },
      "frames": {
@@ -132,12 +140,24 @@ The user may specify:
        }
      },
      "consensus": {
-       "enabled": false,
+       "enabled": true,
        "default_n": 10,
        "stages": {
          "hunt_patterns": { "n": 25, "enabled": true },
          "mine_qual": { "n": 15, "enabled": true },
-         "verify_claims": { "n": 10, "enabled": true }
+         "verify_claims": { "n": 10, "enabled": true },
+         "eval_zuckerman": { "n": 5, "enabled": true },
+         "eval_paper_quality": { "n": 5, "enabled": true },
+         "eval_becker": { "n": 5, "enabled": true },
+         "eval_genre": { "n": 5, "enabled": true },
+         "eval_contribution": { "n": 5, "enabled": true },
+         "eval_limitations": { "n": 5, "enabled": true },
+         "eval_citations": { "n": 5, "enabled": true },
+         "simulate_review": { "n": 5, "enabled": true },
+         "check_submission": { "n": 7, "enabled": true },
+         "test_counter_evidence": { "n": 5, "enabled": true },
+         "test_alt_interpretations": { "n": 5, "enabled": true },
+         "test_boundary_conditions": { "n": 5, "enabled": true }
        },
        "thresholds": {
          "high_stability_cv": 0.10,
@@ -157,7 +177,7 @@ The user may specify:
    }
    ```
 
-   **Note**: Consensus mode is disabled by default. Run `/consensus-config enable` when preparing for peer review.
+   **Note**: Consensus mode is enabled by default (v1.2.0+). Run `/consensus-config disable` for faster single-run iteration.
 
 4. **Create project_config.yaml**
 
@@ -508,7 +528,20 @@ THE PIPELINE AT A GLANCE:
        ↓
     GATE F: Quality checks pass
        ↓
+  /check-submission  → Run full submission readiness test suite
+       ↓
   READY TO SUBMIT 🎉
+
+### Submission Readiness Testing
+
+After completing your analysis and draft, run `/check-submission` to execute the full test suite:
+- Evaluates paper against all relevant rubrics
+- Runs adversarial tests (counter-evidence, alternative interpretations, boundary conditions)
+- Uses monte-carlo consensus (N runs per test) for stability
+- Produces a single PASS/CONDITIONAL/FAIL verdict
+- Generates `analysis/quality/SUBMISSION_READINESS.md`
+
+Configure thresholds with `/check-submission config` or use presets: `--preset top_journal`, `--preset field_journal`, `--preset working_paper`.
 
 Questions? Run /help or check the documentation.
 Good luck with your paper!

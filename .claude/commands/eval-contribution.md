@@ -520,3 +520,86 @@ If the paper doesn't fit any built-in type but matches a registered methodology,
 **Mixing types without integration**: Paper tries to violate theory, describe a phenomenon, AND guide practice all at once. Fix: Choose a primary contribution type; others can be secondary.
 
 **Ignoring registered methodologies**: If someone has added a methodology via `/author-methodology`, it exists for a reason. Check the registry before defaulting to the 6 built-in types.
+
+---
+
+## Consensus Mode
+
+Check `state.json` → `consensus.enabled` (default: true).
+
+If enabled and `--quick` not specified:
+1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
+2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
+3. For overall verdict: compute agreement rate across runs
+4. Include stability assessment using `lib/consensus/` formatters:
+   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
+   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
+   - 🔴 LOW: CV > 25% or agreement < 70%
+5. Persist consensus stats in eval_results (see State Persistence below)
+
+If `--quick` flag is set: Run once, skip consensus, still persist results.
+
+---
+
+## Staleness Check
+
+Before running this evaluation:
+1. Read `state.json` → `eval_results.contribution.frame_[current_frame].latest`
+2. If a previous result exists:
+   a. Compute current SHA-256 of upstream files:
+      ```bash
+      shasum -a 256 analysis/framing/frame-[N]/FRAMING_OPTIONS.md analysis/patterns/PATTERN_REPORT.md | cut -d' ' -f1
+      ```
+   b. Compare against stored `upstream_checksums`
+   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
+   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
+3. If no previous result exists: proceed with evaluation.
+
+---
+
+## State Persistence
+
+After evaluation completes:
+1. Read `state.json`
+2. Compute SHA-256 checksums of upstream files:
+   - `analysis/framing/frame-[N]/FRAMING_OPTIONS.md`
+   - `analysis/patterns/PATTERN_REPORT.md`
+3. Write to `eval_results.contribution.frame_[current_frame].latest`:
+   ```json
+   {
+     "timestamp": "[current ISO timestamp]",
+     "scores": {
+       "contribution_type": "type_name",
+       "confidence": "HIGH|MEDIUM|LOW",
+       "criteria_1": N,
+       "criteria_2": N,
+       "criteria_3": N,
+       "criteria_4": N,
+       "criteria_5": N
+     },
+     "total": X,
+     "max_total": 25,
+     "verdict": "[PASS|CONDITIONAL|FAIL]",
+     "consensus": {
+       "n_runs": 5,
+       "stability": "[HIGH|MEDIUM|LOW]",
+       "cv": [computed CV],
+       "ci_lower": [lower bound],
+       "ci_upper": [upper bound]
+     },
+     "stale": false,
+     "stale_reason": null,
+     "upstream_checksums": {
+       "analysis/framing/frame-[N]/FRAMING_OPTIONS.md": "sha256:[hash]",
+       "analysis/patterns/PATTERN_REPORT.md": "sha256:[hash]"
+     },
+     "output_file": "analysis/framing/CONTRIBUTION_DIAGNOSIS.md"
+   }
+   ```
+4. Update `updated_at` timestamp
+5. Log to `DECISION_LOG.md`: "contribution scored [total]/25 — [verdict]"
+
+Verdict thresholds:
+- PASS if confidence HIGH
+- CONDITIONAL if confidence MEDIUM
+- FAIL if confidence LOW

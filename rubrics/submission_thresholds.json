@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "description": "Submission readiness thresholds for the /check-submission test suite. Override per-project in state.json submission_thresholds.overrides.",
+  "defaults": {
+    "zuckerman": { "min_score": 35, "max_score": 50, "min_criteria_pass": 7 },
+    "zuckerman_lite": { "min_checks_pass": 3, "max_checks": 3 },
+    "paper_quality": { "min_score": 35, "max_score": 50 },
+    "claim_verification": { "min_score": 28, "max_score": 40 },
+    "contribution": { "min_confidence": "HIGH" },
+    "becker": { "required_verdict": "PASS" },
+    "genre": { "required_verdict": "PASS" },
+    "limitations": { "required_verdict": "PASS" },
+    "citations": { "min_count": 40 },
+    "simulate_review": { "max_fatal_flaws": 0 },
+    "audit_claims": { "max_high_concern": 0 },
+    "counter_evidence": { "required_verdict": "PASS" },
+    "alt_interpretations": { "required_verdict": "PASS" },
+    "boundary_conditions": { "required_verdict": "PASS" }
+  },
+  "presets": {
+    "top_journal": {
+      "description": "Strict thresholds for ASQ, Org Science, AMJ",
+      "zuckerman": { "min_score": 40, "min_criteria_pass": 8 },
+      "paper_quality": { "min_score": 40 },
+      "citations": { "min_count": 60 }
+    },
+    "field_journal": {
+      "description": "Moderate thresholds for domain-specific journals",
+      "zuckerman": { "min_score": 30, "min_criteria_pass": 6 },
+      "paper_quality": { "min_score": 30 },
+      "citations": { "min_count": 30 }
+    },
+    "working_paper": {
+      "description": "Minimum thresholds for working paper/conference submission",
+      "zuckerman": { "min_score": 25, "min_criteria_pass": 5 },
+      "paper_quality": { "min_score": 25 },
+      "citations": { "min_count": 20 },
+      "simulate_review": { "max_fatal_flaws": 1 }
+    }
+  }
+}

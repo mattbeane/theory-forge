@@ -615,3 +615,87 @@ Report to the user:
 
 Tip: Run `/status` anytime to see overall workflow progress.
 Tip: Run `/consensus-config` to enable/disable consensus mode or adjust settings.
+
+---
+
+## Consensus Mode (eval_results)
+
+Check `state.json` → `consensus.enabled` (default: true).
+
+If enabled and `--quick` not specified:
+1. Run this evaluation 10 times (default: 10, configurable via `/consensus-config`) — higher than other evals because this is the final verification gate
+2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
+3. For overall verdict: compute agreement rate across runs
+4. Include stability assessment using `lib/consensus/` formatters:
+   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
+   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
+   - 🔴 LOW: CV > 25% or agreement < 70%
+5. Persist consensus stats in eval_results (see State Persistence below)
+
+If `--quick` flag is set: Run once, skip consensus, still persist results.
+
+This supplements the existing claim-level consensus mode (above) with eval-level consensus for the test suite.
+
+---
+
+## Staleness Check
+
+Before running this evaluation:
+1. Read `state.json` → `eval_results.claim_verification.frame_[current_frame].latest`
+2. If a previous result exists:
+   a. Compute current SHA-256 of upstream files:
+      ```bash
+      shasum -a 256 analysis/audit/claims.jsonl analysis/audit/evidence.jsonl analysis/audit/links.csv | cut -d' ' -f1
+      ```
+   b. Compare against stored `upstream_checksums`
+   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
+   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
+3. If no previous result exists: proceed with evaluation.
+
+---
+
+## State Persistence (eval_results)
+
+In addition to the workflow state updates above (`workflow.verify_claims.*`), also persist to eval_results for the test suite:
+
+After evaluation completes:
+1. Read `state.json`
+2. Compute SHA-256 checksums of upstream files:
+   - `analysis/audit/claims.jsonl`
+   - `analysis/audit/evidence.jsonl`
+   - `analysis/audit/links.csv`
+3. Write to `eval_results.claim_verification.frame_[current_frame].latest`:
+   ```json
+   {
+     "timestamp": "[current ISO timestamp]",
+     "scores": {
+       "claims_defensible": N,
+       "claims_mostly_defensible": N,
+       "claims_not_defensible": N
+     },
+     "total": null,
+     "max_total": null,
+     "verdict": "[PASS|FAIL]",
+     "consensus": {
+       "n_runs": 10,
+       "stability": "[HIGH|MEDIUM|LOW]",
+       "cv": [computed CV],
+       "ci_lower": [lower bound],
+       "ci_upper": [upper bound]
+     },
+     "stale": false,
+     "stale_reason": null,
+     "upstream_checksums": {
+       "analysis/audit/claims.jsonl": "sha256:[hash]",
+       "analysis/audit/evidence.jsonl": "sha256:[hash]",
+       "analysis/audit/links.csv": "sha256:[hash]"
+     },
+     "output_file": "analysis/verification/VERIFICATION_BRIEF.md"
+   }
+   ```
+4. Update `updated_at` timestamp
+5. Log to `DECISION_LOG.md`: "claim_verification — [verdict] (defensible: [N], mostly: [N], not: [N])"
+
+Verdict thresholds:
+- PASS if all claims are defensible or mostly defensible
+- FAIL if any claim is not defensible

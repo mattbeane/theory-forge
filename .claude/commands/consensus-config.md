@@ -40,6 +40,25 @@ STAGE SETTINGS
   verify-claims      10        ✓
 
 ─────────────────────────────────────────────────────────────────────
+EVALUATION STAGES
+─────────────────────────────────────────────────────────────────────
+
+  Stage                    N runs    Enabled
+  ──────────────────────────────────────────
+  eval-zuckerman           5         ✓
+  eval-paper-quality       5         ✓
+  eval-becker              5         ✓
+  eval-genre               5         ✓
+  eval-contribution        5         ✓
+  eval-limitations         5         ✓
+  eval-citations           5         ✓
+  simulate-review          5         ✓
+  check-submission         7         ✓
+  test-counter-evidence    5         ✓
+  test-alt-interpretations 5         ✓
+  test-boundary-conditions 5         ✓
+
+─────────────────────────────────────────────────────────────────────
 STABILITY THRESHOLDS
 ─────────────────────────────────────────────────────────────────────
 
@@ -129,7 +148,19 @@ Consensus configuration lives in `state.json` under the `consensus` key:
       "verify_claims": {
         "n": 10,
         "enabled": true
-      }
+      },
+      "eval_zuckerman": { "n": 5, "enabled": true },
+      "eval_paper_quality": { "n": 5, "enabled": true },
+      "eval_becker": { "n": 5, "enabled": true },
+      "eval_genre": { "n": 5, "enabled": true },
+      "eval_contribution": { "n": 5, "enabled": true },
+      "eval_limitations": { "n": 5, "enabled": true },
+      "eval_citations": { "n": 5, "enabled": true },
+      "simulate_review": { "n": 5, "enabled": true },
+      "check_submission": { "n": 7, "enabled": true },
+      "test_counter_evidence": { "n": 5, "enabled": true },
+      "test_alt_interpretations": { "n": 5, "enabled": true },
+      "test_boundary_conditions": { "n": 5, "enabled": true }
     },
     "thresholds": {
       "high_stability_cv": 0.10,
@@ -194,10 +225,48 @@ async def main():
 asyncio.run(main())
 ```
 
+### Evaluation Stages (NEW)
+
+These stages run evaluations with consensus for the submission test suite:
+
+| Stage | Default N | Purpose |
+|-------|-----------|---------|
+| eval_zuckerman | 5 | Zuckerman 10-criteria evaluation |
+| eval_paper_quality | 5 | Paper quality rubric |
+| eval_becker | 5 | Becker concept evaluation |
+| eval_genre | 5 | Genre consistency check |
+| eval_contribution | 5 | Contribution type diagnosis |
+| eval_limitations | 5 | Limitations framing check |
+| eval_citations | 5 | Citation coverage check |
+| simulate_review | 5 | Simulated peer review |
+| check_submission | 7 | Unified test runner (higher N for aggregate) |
+| test_counter_evidence | 5 | Counter-evidence coverage test |
+| test_alt_interpretations | 5 | Alternative interpretations survivability |
+| test_boundary_conditions | 5 | Boundary conditions documentation |
+
+### Quick Mode
+
+Any command that supports consensus can be run with `--quick` to skip consensus:
+- Runs the evaluation once (N=1)
+- Skips stability computation
+- Still persists results to `state.json.eval_results`
+- Useful during active development/iteration when you want fast feedback
+- NOT recommended for final submission checks
+
+Example: `/eval-zuckerman --quick` or `/check-submission --quick`
+
+### Default: Enabled
+
+As of v1.2.0, consensus mode is **enabled by default** for all stages including evaluations. This means every evaluation runs N times and reports stability metrics. The rationale: a single-run evaluation is like running your test suite once and hoping it passes. Consensus catches evaluation instability — if a criterion scores 5/5 on one run but 2/5 on another, that's a signal the paper's handling of that criterion is ambiguous.
+
+To disable: `/consensus-config disable`
+To run a single eval without consensus: append `--quick` to any eval command
+
 ## Tips
 
-1. **Start with consensus disabled** for exploration, enable for final analysis
+1. **Start with consensus enabled** (default) — disable only for fast iteration
 2. **Higher N = more precision** but diminishing returns past N=50
 3. **LOW stability findings aren't wrong** — they reveal ambiguity in your data
 4. **Quote stability catches cherry-picking** — a quote that appears in 3/15 runs is suspect
 5. **Run `/status`** to see consensus results from previous stages
+6. **Use `--quick` for fast feedback** during active development, full consensus for final checks

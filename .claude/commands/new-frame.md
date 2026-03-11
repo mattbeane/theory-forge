@@ -90,6 +90,18 @@ Create a new frame iteration or manage existing frames.
    - explore_data (data doesn't change)
    - hunt_patterns (empirical findings don't change)
 
+### Mark Eval Results as Stale
+
+When creating a new frame, mark ALL eval results for the CURRENT frame as stale:
+
+1. For each key in `state.json.eval_results`:
+   - Check if `eval_results.[key].frame_[current_frame].latest` exists
+   - If yes, set `stale: true` and `stale_reason: "frame_shift"` on that result
+2. This ensures that `/check-submission` and `/status` know these results are from a previous framing
+3. Note: Results from previous frames (frame_1 when shifting to frame_2) remain as historical record but are not active
+
+**Why this matters**: Without staleness marking, a paper could show "all tests pass" from a previous framing while the current framing hasn't been tested yet. This is the equivalent of changing your code but not re-running the tests.
+
 ### If argument is "list": Show all frames
 
 Display frame history:
