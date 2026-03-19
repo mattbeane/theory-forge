@@ -1,0 +1,158 @@
+{
+  "paper_id": "paper5",
+  "title": "Technological Headroom: How System Configuration Shapes the Value of Additional Team Members",
+  "prior_titles": [
+    "When Technology Creates Roles"
+  ],
+  "target_journal": "Organization Science",
+  "data_source": "Hospital robotic surgery: 836 cases (2012-2015), 52 direct procedure observations, 32 interviews, 19 months ethnographic fieldwork",
+  "events": [
+    {
+      "id": "p5-001",
+      "timestamp": "2025-11-25T00:00:00Z",
+      "level": "major_version",
+      "parent_id": null,
+      "version_number": 1,
+      "version_name": "Initial Exploration: Trainee Cost Variation",
+      "categories": {
+        "framing": "Adding trainees to surgical teams has variable cost depending on technology configuration",
+        "mechanism": "Console configuration (single vs dual) determines whether trainees can take productive roles",
+        "evidence": "836 robotic surgery cases with timing data; 4x cost difference: +100 min (single console) vs +22 min (dual console) for adding 2nd trainee",
+        "claims": "Technology configuration creates or eliminates productive roles for additional team members",
+        "boundaries": "Single hospital, robotic surgery",
+        "architecture": "Standard mixed-methods: quant interaction effect + qual mechanism",
+        "register": "Theory-building",
+        "length": null,
+        "robustness": null,
+        "validation": null,
+        "replication": null,
+        "automation_added": null,
+        "workflow_refinement": null
+      },
+      "summary": "Initial exploration of trainee cost variation in robotic surgery",
+      "detail": "Applied theory-forge pipeline to dormant hospital ethnography data. Found striking 4x interaction: adding a second trainee costs +100 minutes in single-console rooms but only +22 minutes in dual-console rooms. Qualitative fieldwork (52 observations, 32 interviews) reveals mechanism: dual console creates productive trainee roles (proctored operation + dedicated bedside), while single console forces competition for limited action possibilities.",
+      "trigger": "Theory-forge pipeline applied to dormant data from robotic surgery ethnography"
+    },
+    {
+      "id": "p5-002",
+      "timestamp": "2025-12-01T00:00:00Z",
+      "level": "session",
+      "parent_id": "p5-001",
+      "version_number": null,
+      "version_name": null,
+      "categories": {
+        "framing": null,
+        "mechanism": "Theory identified: Process Losses (Steiner 1972) extended with technology affordances boundary condition",
+        "evidence": null,
+        "claims": null,
+        "boundaries": null,
+        "architecture": null,
+        "register": null,
+        "length": null,
+        "robustness": null,
+        "validation": null,
+        "replication": null,
+        "automation_added": null,
+        "workflow_refinement": null
+      },
+      "summary": "Theory development: Process Losses + Technology Affordances",
+      "detail": "Identified primary theory violated: Process Losses/Coordination Costs (Steiner 1972). Extended with Gibson (1979) and Leonardi (2011) affordance theory. Key insight: coordination costs are not inherent to team size — they depend on whether technology affords productive roles for additional members.",
+      "trigger": "Theory-forge /find-theory and /find-lens pipeline"
+    },
+    {
+      "id": "p5-003",
+      "timestamp": "2025-12-05T00:00:00Z",
+      "level": "session",
+      "parent_id": "p5-001",
+      "version_number": null,
+      "version_name": null,
+      "categories": {
+        "framing": null,
+        "mechanism": null,
+        "evidence": "35 supporting quotes, 2 challenging. Smoking gun: 'I can't teach you and this is not a dual console. Take your head out.'",
+        "claims": null,
+        "boundaries": null,
+        "architecture": null,
+        "register": null,
+        "length": null,
+        "robustness": null,
+        "validation": null,
+        "replication": null,
+        "automation_added": null,
+        "workflow_refinement": null
+      },
+      "summary": "Qualitative mining: 35 supporting quotes found",
+      "detail": "Mined 32 interview transcripts and 52 observation field notes. Found 35 supporting evidence items, 2 challenging. Key quotes: surgeon explicitly refusing to teach in single-console room; dual-console described as enabling concurrent training; bedside role teaching captured in detail.",
+      "trigger": "Theory-forge /mine-qual"
+    },
+    {
+      "id": "p5-004",
+      "timestamp": "2025-12-09T00:00:00Z",
+      "level": "session",
+      "parent_id": "p5-001",
+      "version_number": null,
+      "version_name": null,
+      "categories": {
+        "framing": null,
+        "mechanism": null,
+        "evidence": null,
+        "claims": null,
+        "boundaries": null,
+        "architecture": null,
+        "register": null,
+        "length": null,
+        "robustness": null,
+        "validation": "Claims audit: 35 supporting, 2 challenging, 0 high-concern claims",
+        "replication": null,
+        "automation_added": null,
+        "workflow_refinement": null
+      },
+      "summary": "Claims audit completed: strong evidence base",
+      "detail": "Adversarial audit of all claims against qualitative evidence. 35 supporting items, 2 challenging, 0 high-concern. Evidence base is unusually strong due to direct ethnographic observation of the mechanism in action.",
+      "trigger": "Theory-forge /audit-claims"
+    },
+    {
+      "id": "p5-005",
+      "timestamp": "2026-01-06T00:00:00Z",
+      "level": "major_version",
+      "parent_id": "p5-001",
+      "version_number": 2,
+      "version_name": "Technological Headroom: Full Manuscript Draft",
+      "categories": {
+        "framing": "Named concept: 'Technological Headroom' — the capacity of a technology configuration to afford productive roles for additional participants",
+        "mechanism": "Dual console creates headroom (productive trainee roles); single console creates congestion (pure coordination loss)",
+        "evidence": null,
+        "claims": null,
+        "boundaries": null,
+        "architecture": "Full manuscript: Abstract, Intro, Theory, Methods, Findings, Discussion",
+        "register": "Theory-building",
+        "length": "~11,500 words, 840 lines",
+        "robustness": null,
+        "validation": "Becker generalization PASS; Genre evaluation PASS (fixed hypo-deductive framing issue)",
+        "replication": null,
+        "automation_added": null,
+        "workflow_refinement": null
+      },
+      "summary": "Full manuscript drafted with named concept",
+      "detail": "Complete manuscript drafted at ~11,500 words. Named concept 'technological headroom' coined to describe the capacity of technology configurations to afford productive roles. Becker generalization test passed. Genre evaluation passed after fixing hypo-deductive framing. Bibliography has 9 citations (likely needs expansion for OrgSci).",
+      "trigger": "Theory-forge /draft-paper pipeline completion"
+    }
+  ],
+  "summary_statistics": {
+    "total_events": 5,
+    "major_versions": 2,
+    "sessions": 3,
+    "commits": 0,
+    "frame_shifts": 1,
+    "claims_killed": 0,
+    "claims_added": 1,
+    "hallucinations_discovered": 0,
+    "zip_critiques": 0,
+    "automation_tools_built": 0,
+    "date_range": {
+      "start": "2025-11-25",
+      "end": "2026-01-06"
+    },
+    "total_duration_days": 42
+  }
+}

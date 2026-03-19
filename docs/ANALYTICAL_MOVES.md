@@ -2,7 +2,7 @@
 
 Theory-forge encodes four core analytical moves and a governing principle. These moves have deep roots in qualitative research traditions — ethnography, grounded theory, case study methodology, interpretive sociology. AI accelerates them; it didn't invent them.
 
-Recent scholarship has usefully articulated how GenAI fits into these moves (notably Glaser & First Loan, forthcoming in *Strategic Organization*; Reimer & Peter in IS). Their articulations informed theory-forge's command design. But the moves belong to the qualitative tradition, not to any single paper. See `CREDITS.md` for full acknowledgments.
+Recent scholarship has usefully articulated how GenAI fits into these moves (notably Glaser & First Loan, forthcoming in *Strategic Organization*; Reimer & Peter in IS). Their articulations informed theory-forge's skill design. But the moves belong to the qualitative tradition, not to any single paper. See `CREDITS.md` for full acknowledgments.
 
 ---
 
@@ -16,7 +16,7 @@ Recent scholarship has usefully articulated how GenAI fits into these moves (not
 
 **Theory-forge implementation**:
 
-| Command | How It Implements This Move |
+| Skill | How It Implements This Move |
 |---------|---------------------------|
 | `/style-engine` | **Primary.** Generates 3-5 theoretical framings of the same finding, each varying the lead, theory, contribution, and audience. Evaluates on novelty, robustness, coherence, and journal fit. |
 | `/find-theory` | Identifies the primary theory being violated — the first lens. |
@@ -36,7 +36,7 @@ Recent scholarship has usefully articulated how GenAI fits into these moves (not
 
 **Theory-forge implementation**:
 
-| Command | How It Implements This Move |
+| Skill | How It Implements This Move |
 |---------|---------------------------|
 | `/surface-absences` | **Primary.** Systematically scans data for conspicuous omissions, categorizes them (normalized, political, structural, temporal, actor, conceptual), and assesses analytical significance. |
 | `/audit-claims` | Searches for evidence that CHALLENGES claims, which can reveal what's missing from the current interpretation. |
@@ -44,7 +44,7 @@ Recent scholarship has usefully articulated how GenAI fits into these moves (not
 
 **Why AI helps here**: Absences are especially hard for embedded researchers to see because familiarity normalizes what's missing. AI brings an outsider's perspective — it knows what's typical in similar settings and can flag what's conspicuously absent.
 
-**What `/surface-absences` adds over existing commands**: Dedicated focus on "what SHOULD be here but isn't?" — distinct from "what contradicts my claims?" (audit-claims) or "what challenges my interpretation?" (mine-qual).
+**What `/surface-absences` adds over existing skills**: Dedicated focus on "what SHOULD be here but isn't?" — distinct from "what contradicts my claims?" (audit-claims) or "what challenges my interpretation?" (mine-qual).
 
 ---
 
@@ -56,7 +56,7 @@ Recent scholarship has usefully articulated how GenAI fits into these moves (not
 
 **Theory-forge implementation**:
 
-| Command | How It Implements This Move |
+| Skill | How It Implements This Move |
 |---------|---------------------------|
 | `/integrate-quant-qual` | **Primary.** Maps quantitative patterns (macro) to qualitative mechanisms (micro). Identifies convergence, divergence, and gaps between levels. |
 | `/trace-process` | Traces how micro-level events aggregate into macro-level phase transitions and vice versa. |
@@ -74,7 +74,7 @@ Recent scholarship has usefully articulated how GenAI fits into these moves (not
 
 **Theory-forge implementation**:
 
-| Command | How It Implements This Move |
+| Skill | How It Implements This Move |
 |---------|---------------------------|
 | `/mine-qual` | Tests mechanism hypotheses against data — supporting AND challenging evidence for each category. |
 | `/eval-becker` | Becker's generalization test: checks whether categories are genuinely general or domain-specific. |
@@ -104,7 +104,7 @@ This isn't a single command — it's the architecture of the system:
 
 ## Scholarship That Informed This Design
 
-- **Glaser & First Loan** (forthcoming, *Strategic Organization*) — Articulated four "abductive moves" for AI-augmented qualitative analysis that map to theory-forge's command structure. Their emphasis on interpretive vigilance resonates with theory-forge's gate and verification architecture.
+- **Glaser & First Loan** (forthcoming, *Strategic Organization*) — Articulated four "abductive moves" for AI-augmented qualitative analysis that map to theory-forge's skill structure. Their emphasis on interpretive vigilance resonates with theory-forge's gate and verification architecture.
 - **Reimer & Peter** (IS research) — Conceptualized GenAI as a "style engine" that renders the same empirical reality through multiple theoretical styles. This metaphor clarified what `/style-engine` does.
 - **Nguyen & Welch** (2025) — Critique of autonomous AI coding that motivated hypothesis-driven design, adversarial defaults, and external verification.
 - The broader qualitative methods tradition — ethnography, grounded theory, case study methodology — where these moves originated.

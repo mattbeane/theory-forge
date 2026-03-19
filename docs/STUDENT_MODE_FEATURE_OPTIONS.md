@@ -23,17 +23,17 @@ The risks aren't about AI accuracy. They're about **what students fail to develo
 
 #### 1.1 Mandatory Prediction Prompts
 **What**: Before AI runs analysis, student must write what they expect to find.
-**How**: Each command shows prompt, waits for text input, logs to `STUDENT_WORK.md`, then runs.
+**How**: Each skill shows prompt, waits for text input, logs to `STUDENT_WORK.md`, then runs.
 **Why it works**: Forces engagement with the question before seeing the answer. Creates documentation of pre-AI thinking.
 **Risk addressed**: #1 (deskilling), #4 (iteration muscle)
-**Implementation**: 2-3 hours per command
+**Implementation**: 2-3 hours per skill
 
 #### 1.2 Explanation Layers (AI Shows Reasoning)
 **What**: Every AI output includes "Why I Did This" section explaining reasoning.
-**How**: Append to command prompts: "After output, explain your reasoning: what you looked for, key judgment calls, alternatives you considered."
+**How**: Append to skill prompts: "After output, explain your reasoning: what you looked for, key judgment calls, alternatives you considered."
 **Why it works**: Makes the black box transparent. Student learns the process, not just the output.
 **Risk addressed**: #2 (automating taste)
-**Implementation**: 1-2 hours per command
+**Implementation**: 1-2 hours per skill
 
 #### 1.3 Adversarial Evidence Surfacing
 **What**: AI actively searches for evidence that contradicts emerging theory.
@@ -44,7 +44,7 @@ The risks aren't about AI accuracy. They're about **what students fail to develo
 
 #### 1.4 Audit Trail Documentation
 **What**: Auto-log what student did vs. what AI did to `DECISION_LOG.md`.
-**How**: Each command appends: timestamp, command run, student input (if any), AI output summary, student decision.
+**How**: Each command appends: timestamp, skill run, student input (if any), AI output summary, student decision.
 **Why it works**: Creates reviewable record. Advisor can see what happened. Methods section writes itself.
 **Risk addressed**: #8 (methods section)
 **Implementation**: Already exists; enhance with student-specific fields
@@ -55,12 +55,12 @@ The risks aren't about AI accuracy. They're about **what students fail to develo
 *These might work but have significant uncertainties*
 
 #### 2.1 Staged Command Unlocking
-**What**: Certain commands locked until student demonstrates prior work.
+**What**: Certain skills locked until student demonstrates prior work.
 **How**: `/smith-frames` won't run until student has uploaded their own 1-paragraph framing attempt to `analysis/student_framing/`.
 **Why it works**: Forces student to try before seeing AI alternatives.
 **Risk addressed**: #1 (deskilling), #2 (taste)
 **Uncertainty**: Students might write garbage just to unlock. No verification of quality.
-**Implementation**: 3-4 hours per gated command
+**Implementation**: 3-4 hours per gated skill
 
 #### 2.2 Advisor Notification at Gates
 **What**: Optional email/webhook to advisor when student passes major gates.
@@ -84,7 +84,7 @@ The risks aren't about AI accuracy. They're about **what students fail to develo
 **Why it works**: Makes learning explicit. Student sees gaps in their own analysis.
 **Risk addressed**: #1, #4
 **Uncertainty**: Useful only if student engages with the comparison. Many will skip.
-**Implementation**: 2-3 hours per command
+**Implementation**: 2-3 hours per skill
 
 ---
 
@@ -102,7 +102,7 @@ The risks aren't about AI accuracy. They're about **what students fail to develo
 **Implementation**: High effort, low confidence
 
 #### 3.2 Time-Based Delays
-**What**: Force minimum time between commands (e.g., must wait 2 hours between `/explore-data` and `/hunt-patterns`).
+**What**: Force minimum time between skills (e.g., must wait 2 hours between `/explore-data` and `/hunt-patterns`).
 **How**: State.json tracks timestamps; commands check elapsed time.
 **Why it doesn't work**:
 - Arbitrary; doesn't ensure engagement

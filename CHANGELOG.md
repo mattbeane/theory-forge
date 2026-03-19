@@ -38,8 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Automatic preservation of empirical work (data exploration, patterns) across frames
 
 #### Quality Gates (Hooks)
-- Pre-command validation via `.claude/hooks.json`
-- Warns when running commands out of sequence
+- Pre-skill validation via `.claude/hooks.json`
+- Warns when running skills out of sequence
 - Checks for required prerequisite outputs before proceeding
 - Non-blocking warnings (can still proceed if needed)
 
@@ -62,11 +62,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 #### Existing Commands Updated
-- All 8 original commands now include State Management sections
+- All 8 original skills now include State Management sections
 - Commands read/write to `state.json` on completion
 - Commands append to `DECISION_LOG.md` automatically
 - Frame-aware output paths for theory/lens/qual/framing stages
-- `/status` tip added to all command completion messages
+- `/status` tip added to all skill completion messages
 
 #### Directory Structure Enhanced
 ```

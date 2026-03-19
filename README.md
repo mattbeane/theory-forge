@@ -2,7 +2,7 @@
 
 **AI-assisted theory building from qualitative and mixed-methods data, with systematic quality checks.**
 
-Theory-forge is a collection of AI agents (Claude Code slash commands) that handle the full arc of producing a theory-building paper — discovering patterns, building framings, auditing claims, drafting manuscripts. Each agent handles one analytical task. You compose them however your project demands.
+Theory-forge is a collection of AI agents (Claude Code skills) that handle the full arc of producing a theory-building paper — discovering patterns, building framings, auditing claims, drafting manuscripts. Each agent handles one analytical task. You compose them however your project demands.
 
 What makes it different: built-in quality checks that run multiple times through a statistical consensus engine, persist scores across sessions with automatic staleness tracking, and produce a single submission-readiness verdict via `/check-submission`. You see exactly where your paper is strong, where it's weak, and what to fix — before reviewers do.
 
@@ -27,11 +27,11 @@ Open Claude Code in your project directory, then:
 
 ---
 
-## Commands
+## Skills
 
 ### Discovery
 
-| Command | What It Does |
+| Skill | What It Does |
 |---------|-------------|
 | `/explore-data` | Initial reconnaissance — what's in the data, what's interesting |
 | `/hunt-patterns` | Find robust empirical patterns with adaptive stopping |
@@ -42,7 +42,7 @@ Open Claude Code in your project directory, then:
 
 ### Framing
 
-| Command | What It Does |
+| Skill | What It Does |
 |---------|-------------|
 | `/find-theory` | Identify which theory your finding violates or extends |
 | `/find-lens` | Find sensitizing literature that explains heterogeneity |
@@ -54,7 +54,7 @@ Open Claude Code in your project directory, then:
 
 Every evaluation persists scores across sessions, tracks upstream file changes for staleness, and runs through consensus mode by default.
 
-| Command | What It Checks | Output |
+| Skill | What It Checks | Output |
 |---------|---------------|--------|
 | `/check-submission` | **Submission readiness** — runs all checks below | PASS / CONDITIONAL / FAIL |
 | `/eval-zuckerman` | Framing quality (10 criteria) | Score /50 |
@@ -77,7 +77,7 @@ Every evaluation persists scores across sessions, tracks upstream file changes f
 
 ### Output
 
-| Command | What It Does |
+| Skill | What It Does |
 |---------|-------------|
 | `/draft-paper` | Generate journal-ready manuscript |
 | `/build-lit-review` | Build bibliography from identified theory/lens |
@@ -86,7 +86,7 @@ Every evaluation persists scores across sessions, tracks upstream file changes f
 
 ### Project Management
 
-| Command | What It Does |
+| Skill | What It Does |
 |---------|-------------|
 | `/status` | Workflow progress, eval results dashboard, staleness indicators |
 | `/consensus-config` | Configure consensus settings (N per stage, thresholds) |
@@ -158,7 +158,7 @@ Most theory-building papers follow: find something → figure out why → frame 
                                     /check-submission → /export
 ```
 
-**This is one path, not the only one.** Every command works standalone. Use `/eval-contribution` to diagnose what kind of paper you're writing — not everything is a theory violation.
+**This is one path, not the only one.** Every skill works standalone. Use `/eval-contribution` to diagnose what kind of paper you're writing — not everything is a theory violation.
 
 ---
 
@@ -166,7 +166,7 @@ Most theory-building papers follow: find something → figure out why → frame 
 
 **Adversarial by default.** `/hunt-patterns` documents killed findings. `/mine-qual` requires disconfirming evidence. `/audit-claims` searches all data for challenging evidence. Three standalone adversarial tests check counter-evidence, alternative interpretations, and boundary conditions independently.
 
-**Quality gates are warnings, not walls.** Commands suggest a sequence but don't enforce it. You can proceed past a warning if you have good reason.
+**Quality gates are warnings, not walls.** Skills suggest a sequence but don't enforce it. You can proceed past a warning if you have good reason.
 
 **Frame shifts are normal.** Expect 3-5 complete reframings. `/new-frame` archives everything, marks evals stale, gives you a clean slate for theory while preserving empirical work.
 
@@ -188,15 +188,15 @@ Most theory-building papers follow: find something → figure out why → frame 
 
 ## Add Your Own Tools
 
-Theory-forge is designed to be extended. Three commands scaffold new capabilities:
+Theory-forge is designed to be extended. Three skills scaffold new capabilities:
 
-**`/author-data-source [tool-name]`** — Add support for a new data format (Dedoose, NVivo, MAXQDA, Otter.ai, etc.). Creates a Python importer, documentation, and a registry entry so commands like `/explore-data` auto-discover the source.
+**`/author-data-source [tool-name]`** — Add support for a new data format (Dedoose, NVivo, MAXQDA, Otter.ai, etc.). Creates a Python importer, documentation, and a registry entry so skills like `/explore-data` auto-discover the source.
 
-**`/author-methodology [tradition-name]`** — Add a new evaluation framework or analytical tradition (narrative analysis, process tracing, QCA, etc.). Creates a rubric, an eval command, and documentation. The new eval is immediately available via `/eval [name]` and `/check-submission`.
+**`/author-methodology [tradition-name]`** — Add a new evaluation framework or analytical tradition (narrative analysis, process tracing, QCA, etc.). Creates a rubric, an eval skill, and documentation. The new eval is immediately available via `/eval [name]` and `/check-submission`.
 
-**`/create-agent`** — Build a bespoke analytical agent for project-specific needs. Custom agents live alongside core commands and register in `registry.json`.
+**`/create-agent`** — Build a bespoke analytical agent for project-specific needs. Custom agents live alongside core skills and register in `registry.json`.
 
-To contribute upstream: run the authoring command, fork the repo, copy the generated files, open a PR. The commands produce everything needed.
+To contribute upstream: run the authoring skill, fork the repo, copy the generated files, open a PR. The skills produce everything needed.
 
 ---
 

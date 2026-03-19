@@ -4,7 +4,7 @@ Theory-forge commands now surface **confidence and stability information** direc
 
 ## Overview
 
-When consensus mode is enabled, commands that run N-run analysis will include confidence assessment sections in their output. This makes the uncertainty visible and helps researchers make informed decisions.
+When consensus mode is enabled, skills that run N-run analysis will include confidence assessment sections in their output. This makes the uncertainty visible and helps researchers make informed decisions.
 
 ### Stability Badges
 
@@ -155,7 +155,7 @@ Enable/disable consensus mode via `/consensus-config` or directly in state.json:
 }
 ```
 
-## Related Commands
+## Related Skills
 
 - `/consensus-config` - Enable/disable consensus mode, adjust settings
 - `/hunt-patterns` - Pattern hunting with metric stability

@@ -16,7 +16,7 @@
 - `docs/` - Newcomer documentation (GETTING_STARTED.md, FOR_REVIEWERS.md, CONCEPTS.md)
 - `examples/` - Sample data for learning
 
-**Commands**: init, ingest, lint, export, verify-export, prereview
+**Skills**: init, ingest, lint, export, verify-export, prereview
 
 ---
 
@@ -35,7 +35,7 @@
 - `entities_example.yaml` - Template for PII mappings
 - Actual paper data in `analysis/`
 
-**Additional Commands**: migrate-redact, export-html, export-package
+**Additional Skills**: migrate-redact, export-html, export-package
 
 ---
 

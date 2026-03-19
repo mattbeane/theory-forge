@@ -307,7 +307,7 @@
       "name": "10. Never Write Literature Reviews",
       "max_points": 5,
       "description": "Review literature not as an end in itself but to show what's compelling but flawed about existing answers. Research that doesn't pertain to that objective can remain unmentioned.",
-      "evidence_guidance": "Look for: purpose of literature discussion. Check whether literature is reviewed comprehensively (as end in itself) vs. selectively (to show compelling-but-flawed alternatives).",
+      "evidence_guidance": "Look for: purpose of literature discussion. Check whether literature is reviewed comprehensively (as end in itself) vs. selectively (to show compelling-but-flawed alternatives). ALSO CHECK: Does the theory section preview the paper's findings by building a complete mechanism identical to what findings will show? If the theory section names new concepts, extends frameworks to the paper's case, or describes mechanisms that match the findings, it is front-loading findings as theory — this is a different failure mode from 'too much lit' but equally damaging and should cap the score at 2 (Weak).",
       "rating_levels": [
         {
           "name": "Strong",

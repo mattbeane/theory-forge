@@ -15,7 +15,7 @@ replication_package/
 ├── PUBLIC/                          # Anyone can access
 │   ├── code/
 │   │   ├── analysis/                # All analysis scripts
-│   │   ├── prompts/                 # Slash command templates used
+│   │   ├── prompts/                 # Skill templates used
 │   │   └── requirements.txt         # Dependencies
 │   ├── data_synthetic/
 │   │   ├── quant_synthetic.csv      # Preserves distributions, correlations

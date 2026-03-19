@@ -13,7 +13,7 @@
 
 ### 1.2 Guided First Project Experience
 **Status:** ✅ Complete
-**Why:** Current onboarding assumes expertise. New users see wall of commands.
+**Why:** Current onboarding assumes expertise. New users see wall of skills.
 
 **Implementation:**
 - ✅ Added `--guided` flag to `/init-project`
@@ -42,7 +42,7 @@
 **Why:** Researchers with existing papers should be able to run just `/eval-genre` without full pipeline.
 
 **Implementation:**
-- ✅ Created `/eval` command for running any evaluation independently
+- ✅ Created `/eval` skill for running any evaluation independently
 - ✅ Usage: `/eval genre`, `/eval zuckerman --file paper.md`, `/eval becker --quick`
 - ✅ `--quick` flag for verdict-only output
 - ✅ `--fix` flag to generate suggested fixes
@@ -85,7 +85,7 @@
 **Implementation:**
 - ✅ Created `lib/consensus/formatters.py` with markdown formatting functions
 - ✅ Stability badges: 🟢 HIGH, 🟡 MEDIUM, 🔴 LOW, ⚪ UNKNOWN
-- ✅ Full confidence section formatter for command output
+- ✅ Full confidence section formatter for skill output
 - ✅ Quote stability display for qualitative mining
 - ✅ Flagged items callout for items needing review
 - ✅ Updated `/hunt-patterns` to use formatters
@@ -106,7 +106,7 @@
 - ✅ export_with_bibliography() includes refs from state.json
 - ✅ Created `tools/exporters/pdf.py` - PDF export via pandoc/LaTeX
 - ✅ export_to_latex() for Overleaf with companion .bib file
-- ✅ Updated `/import-refs` and `/export` commands
+- ✅ Updated `/import-refs` and `/export` skills
 - ⏳ NVivo import (future)
 - ⏳ Direct Overleaf push (future)
 
@@ -124,7 +124,7 @@
 - ✅ format_audit_trail() for markdown output
 - ✅ format_methods_appendix() for paper supplementary materials
 - ✅ Claude Code history linkage via ~/.claude/history.jsonl
-- ✅ Created `/audit-trail` command with filtering and export options
+- ✅ Created `/audit-trail` skill with filtering and export options
 
 ---
 
@@ -181,7 +181,7 @@
 ## Technical Debt
 
 ### T1: Consistent Output Formats
-All commands should produce consistent markdown/JSON.
+All skills should produce consistent markdown/JSON.
 
 ### T2: Error Handling
 Graceful failures with helpful messages.
@@ -190,7 +190,7 @@ Graceful failures with helpful messages.
 Automated tests for pipeline stages.
 
 ### T4: Documentation Audit
-Ensure all commands are documented with examples.
+Ensure all skills are documented with examples.
 
 ---
 

@@ -1,0 +1,52 @@
+{
+  "paper_id": "paper6",
+  "title": "Individual Differences in Human-Robot Interaction: Who Adapts to Changing Automation, and How?",
+  "prior_titles": [],
+  "target_journal": "Undecided (Organization Science, ASQ, AMJ, or HRI venue)",
+  "data_source": "JointBot: 26.7M second-by-second HRI phase records, 79 named operators, 16 months (Nov 2017-Feb 2019), shared with Developmental Uncertainty paper",
+  "events": [
+    {
+      "id": "p6-001",
+      "timestamp": "2025-12-10T00:00:00Z",
+      "level": "major_version",
+      "parent_id": null,
+      "version_number": 1,
+      "version_name": "Scoping: Individual Variation in Automation Adaptation",
+      "categories": {
+        "framing": "Three candidate framings: (A) Human Capital Formation Under Automation, (B) Individual Adaptability to Technological Change, (C) Cohort Effects in Technology Adoption",
+        "mechanism": "Undecided — entry timing and individual characteristics predict divergent behavioral adaptation to maturing automation",
+        "evidence": "26.7M HRI records, 79 operators, 51 with ≥10 hours. Skill-building time ranges 5.8%-50.6% (M=28.9%, SD=8.9%). 13 operators traversed all 3 phases with dramatically divergent trajectories (+31.5pp to -38.3pp).",
+        "claims": "Early-entry operators get broader skill diets (motor + judgment + problem-solving). Late-entry operators get narrower (judgment only). Individual trajectories diverge dramatically within same organization.",
+        "boundaries": "Single organization (Kindred/JointBot). Observational data. Skill-building time ≠ skill acquisition.",
+        "architecture": null,
+        "register": null,
+        "length": null,
+        "robustness": null,
+        "validation": null,
+        "replication": null,
+        "automation_added": null,
+        "workflow_refinement": null
+      },
+      "summary": "Scoping phase: analysis complete, three candidate framings",
+      "detail": "Preliminary analysis of JointBot HRI telemetry at individual operator level (disaggregated from Developmental Uncertainty paper which uses aggregate data). Striking finding: among 13 operators who worked through all 3 technology phases, trajectories diverge dramatically — jessie went from 19.8% to 51.3% skill-building time while david.hallock went from 45.6% to 7.3%. Entry cohort determines skill composition: late joiners got fundamentally narrower skill diets (GRASPING and REACTING near zero). Analysis scripts complete, figures generated, but no manuscript drafted. LinkedIn data collection planned but not executed.",
+      "trigger": "Theory-forge pipeline applied to disaggregated JointBot data"
+    }
+  ],
+  "summary_statistics": {
+    "total_events": 1,
+    "major_versions": 1,
+    "sessions": 0,
+    "commits": 0,
+    "frame_shifts": 0,
+    "claims_killed": 0,
+    "claims_added": 3,
+    "hallucinations_discovered": 0,
+    "zip_critiques": 0,
+    "automation_tools_built": 0,
+    "date_range": {
+      "start": "2025-12-10",
+      "end": "2025-12-10"
+    },
+    "total_duration_days": 1
+  }
+}

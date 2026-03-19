@@ -18,7 +18,7 @@ Product roadmap for paper-mining-agent-suite and the living-paper ecosystem.
 ### Living Paper Integration
 - ✅ Bundled `living_paper/` — no separate install needed
 - ✅ `/audit-claims` generates LP-compatible files (claims.jsonl, evidence.jsonl, links.csv)
-- ✅ `/verify-claims` auto-runs LP commands (init, ingest, lint, export-package)
+- ✅ `/verify-claims` auto-runs LP skills (init, ingest, lint, export-package)
 - ✅ Reviewer packages: standalone HTML, double-click launchers, no CLI for reviewers
 - ✅ Entity redaction tools for IRB compliance
 - ✅ Contradiction badges in reviewer interface
@@ -35,7 +35,7 @@ Product roadmap for paper-mining-agent-suite and the living-paper ecosystem.
 
 ### Adoption & Onboarding
 - 📋 **Golden path demo**: `examples/` folder with sample dataset + expected outputs
-- 📋 **`make demo`** or **`/demo`** command to generate sample project end-to-end
+- 📋 **`make demo`** or **`/demo`** skill to generate sample project end-to-end
 - 📋 **Quickstart video** (3-5 min) showing clone → first pattern report
 
 ### Data Governance
@@ -45,7 +45,7 @@ Product roadmap for paper-mining-agent-suite and the living-paper ecosystem.
 
 ### Quality of Life
 - 📋 **Better error messages**: When agents fail, explain why and suggest fixes
-- 📋 **`/doctor` command**: Diagnose common setup issues (missing files, bad state, etc.)
+- 📋 **`/doctor` skill**: Diagnose common setup issues (missing files, bad state, etc.)
 
 ---
 

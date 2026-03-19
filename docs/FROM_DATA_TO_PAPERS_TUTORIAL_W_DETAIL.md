@@ -72,7 +72,7 @@ None of this requires you to be a methods expert. It requires you to be a *domai
 
 ## The 9-Phase Process (Now Codified as Agents)
 
-Each phase below now has a corresponding slash command in the paper-mining-agent-suite. You can use the workflow manually (as I did initially) or use the structured agents.
+Each phase below now has a corresponding skills in the paper-mining-agent-suite. You can use the workflow manually (as I did initially) or use the structured agents.
 
 ### Phase 1: Data Exploration (`/explore-data`)
 
@@ -458,7 +458,7 @@ Those judgment calls—what framing to pursue, what sensitizing literature to us
 
 ### paper-mining-agent-suite
 
-**What it is**: A structured Claude Code workflow with slash commands for each phase.
+**What it is**: A structured Claude Code workflow with skills for each phase.
 
 **Key features**:
 - Quality gates (warns if out of sequence)

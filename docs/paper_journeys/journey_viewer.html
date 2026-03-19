@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Revision Journey Viewer</title>
+    <style>
+        :root {
+            --framing: #3b82f6;
+            --mechanism: #10b981;
+            --evidence: #f59e0b;
+            --claims: #ef4444;
+            --boundaries: #8b5cf6;
+            --architecture: #06b6d4;
+            --register: #ec4899;
+            --length: #6b7280;
+            --robustness: #14b8a6;
+            --validation: #f97316;
+            --replication: #84cc16;
+            --automation: #a855f7;
+            --workflow: #64748b;
+
+            --milestone-color: #f59e0b;
+            --session-color: #3b82f6;
+            --commit-color: #64748b;
+            --tooling-color: #a855f7;
+
+            /* Critical event types */
+            --hallucination-color: #dc2626;
+            --zip-critique-color: #0891b2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: #f8fafc;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .view-toggle button {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #3b82f6;
+            background: transparent;
+            color: #3b82f6;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .view-toggle button.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .view-toggle button:hover:not(.active) {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .controls button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .controls button.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .controls button:not(.active) {
+            background: #1e293b;
+            color: #94a3b8;
+        }
+
+        .controls button:hover:not(.active) {
+            background: #334155;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            padding: 1rem;
+            background: #1e293b;
+            border-radius: 0.75rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .legend-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .legend-group-title {
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        /* Milestone marker - diamond/star shape */
+        .legend-marker.milestone {
+            width: 20px;
+            height: 20px;
+            background: var(--milestone-color);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        /* Session marker - circle */
+        .legend-marker.session {
+            width: 14px;
+            height: 14px;
+            background: var(--session-color);
+            border-radius: 50%;
+        }
+
+        /* Commit marker - small square */
+        .legend-marker.commit {
+            width: 8px;
+            height: 8px;
+            background: var(--commit-color);
+            border-radius: 2px;
+        }
+
+        /* Tooling marker - hexagon */
+        .legend-marker.tooling {
+            width: 16px;
+            height: 14px;
+            background: var(--tooling-color);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stat {
+            background: #1e293b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .stat-label {
+            font-size: 0.6875rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Milestone events - full width, prominent */
+        .milestone-event {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .milestone-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .milestone-marker {
+            width: 32px;
+            height: 32px;
+            background: var(--milestone-color);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .milestone-title-block {
+            flex: 1;
+        }
+
+        .milestone-date {
+            font-size: 0.75rem;
+            color: var(--milestone-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .milestone-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        .milestone-version {
+            display: inline-block;
+            font-size: 0.6875rem;
+            padding: 0.125rem 0.5rem;
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--milestone-color);
+            border-radius: 9999px;
+            margin-left: 0.5rem;
+            font-weight: 600;
+        }
+
+        .milestone-content {
+            background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-left: 2.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .milestone-content:hover {
+            border-color: rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, #243044 0%, #1e293b 100%);
+        }
+
+        .milestone-summary {
+            color: #e2e8f0;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        /* Critical event styling - HALLUCINATION */
+        .milestone.hallucination .milestone-marker {
+            background: var(--hallucination-color);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+            animation: pulse-red 2s infinite;
+        }
+
+        .milestone.hallucination .milestone-content {
+            border: 2px solid rgba(220, 38, 38, 0.5);
+            background: linear-gradient(135deg, #2d1f1f 0%, #1e1414 100%);
+        }
+
+        .milestone.hallucination .milestone-date,
+        .milestone.hallucination .milestone-version {
+            color: var(--hallucination-color);
+        }
+
+        .milestone.hallucination .milestone-version {
+            background: rgba(220, 38, 38, 0.2);
+        }
+
+        /* Critical event styling - ZIP CRITIQUE */
+        .session-event.zip-critique .session-marker {
+            background: var(--zip-critique-color);
+        }
+
+        .session-event.zip-critique .session-content {
+            border: 1px solid rgba(8, 145, 178, 0.4);
+            background: linear-gradient(135deg, #1e2a35 0%, #162028 100%);
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.5); }
+            50% { box-shadow: 0 0 35px rgba(220, 38, 38, 0.8); }
+        }
+
+        /* Nested events container */
+        .nested-events {
+            margin-left: 2.5rem;
+            padding-left: 1.5rem;
+            border-left: 2px solid #334155;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Session events */
+        .session-event {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+
+        .session-event::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 2px;
+            background: #334155;
+        }
+
+        .session-marker-container {
+            display: flex;
+            align-items: flex-start;
+            padding-top: 0.25rem;
+        }
+
+        .session-marker {
+            width: 14px;
+            height: 14px;
+            background: var(--session-color);
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .session-content {
+            flex: 1;
+            background: #1e293b;
+            border-radius: 0.5rem;
+            padding: 0.875rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .session-content:hover {
+            background: #283548;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.25rem;
+        }
+
+        .session-title {
+            font-weight: 600;
+            color: #f8fafc;
+            font-size: 0.875rem;
+        }
+
+        .session-date {
+            font-size: 0.6875rem;
+            color: #64748b;
+        }
+
+        .session-summary {
+            color: #94a3b8;
+            font-size: 0.8125rem;
+        }
+
+        /* Commit events */
+        .commit-event {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            margin-left: 1rem;
+            position: relative;
+        }
+
+        .commit-event::before {
+            content: '';
+            position: absolute;
+            left: -1rem;
+            top: 0.375rem;
+            width: 0.75rem;
+            height: 1px;
+            background: #475569;
+        }
+
+        .commit-marker {
+            width: 8px;
+            height: 8px;
+            background: var(--commit-color);
+            border-radius: 2px;
+            flex-shrink: 0;
+            margin-top: 0.375rem;
+        }
+
+        .commit-content {
+            flex: 1;
+            padding: 0.375rem 0.75rem;
+            background: rgba(100, 116, 139, 0.1);
+            border-radius: 0.375rem;
+            border-left: 2px solid var(--commit-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .commit-content:hover {
+            background: rgba(100, 116, 139, 0.2);
+        }
+
+        .commit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .commit-summary {
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+
+        .commit-hash {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.625rem;
+            color: #64748b;
+            background: #1e293b;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+        }
+
+        /* Tooling events - distinct styling */
+        .tooling-event {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .tooling-marker-container {
+            display: flex;
+            align-items: flex-start;
+            padding-top: 0.25rem;
+        }
+
+        .tooling-marker {
+            width: 20px;
+            height: 18px;
+            background: var(--tooling-color);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+        }
+
+        .tooling-content {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, #1e293b 100%);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tooling-content:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, #243044 100%);
+        }
+
+        .tooling-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .tooling-title {
+            font-weight: 600;
+            color: #e9d5ff;
+            font-size: 0.9375rem;
+        }
+
+        .tooling-date {
+            font-size: 0.6875rem;
+            color: #a855f7;
+        }
+
+        .tooling-problem {
+            color: #c4b5fd;
+            font-size: 0.8125rem;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .tooling-trigger {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .tooling-trigger strong {
+            color: #a855f7;
+        }
+
+        /* Expanded detail view */
+        .event-detail {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #334155;
+        }
+
+        .expanded .event-detail {
+            display: block;
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .category-tag {
+            font-size: 0.6875rem;
+            padding: 0.1875rem 0.5rem;
+            border-radius: 0.25rem;
+            color: white;
+            font-weight: 500;
+        }
+
+        .category-tag.framing { background: var(--framing); }
+        .category-tag.mechanism { background: var(--mechanism); }
+        .category-tag.evidence { background: var(--evidence); }
+        .category-tag.claims { background: var(--claims); }
+        .category-tag.boundaries { background: var(--boundaries); }
+        .category-tag.architecture { background: var(--architecture); }
+        .category-tag.register { background: var(--register); }
+        .category-tag.length { background: var(--length); }
+        .category-tag.robustness { background: var(--robustness); }
+        .category-tag.validation { background: var(--validation); }
+        .category-tag.replication { background: var(--replication); }
+        .category-tag.automation_added { background: var(--automation); }
+        .category-tag.workflow_refinement { background: var(--workflow); }
+
+        .category-details {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .category-item {
+            padding: 0.5rem 0.75rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0.375rem;
+        }
+
+        .category-label {
+            font-weight: 600;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .category-text {
+            font-size: 0.8125rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .tools-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+            margin-top: 0.5rem;
+        }
+
+        .tool-tag {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.6875rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(168, 85, 247, 0.2);
+            color: #e9d5ff;
+            border-radius: 0.25rem;
+        }
+
+        .detail-text {
+            font-size: 0.8125rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-top: 0.75rem;
+        }
+
+        /* Hidden state for filtering */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Parallel tracks view for tooling */
+        .parallel-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .track {
+            position: relative;
+        }
+
+        .track-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #334155;
+        }
+
+        .track-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        .track-subtitle {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+            .parallel-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Paper Revision Journey</h1>
+    <p class="subtitle">Tracking the evolution of research papers through drafts, revisions, and tooling</p>
+
+    <div class="view-toggle">
+        <button class="active" data-view="paper1">Paper 1: Hedging with Talent</button>
+        <button data-view="paper2">Paper 2: Learning to Automate</button>
+        <button data-view="tooling">Tooling Timeline</button>
+        <button data-view="parallel">Paper 1 + Tooling</button>
+    </div>
+
+    <div class="controls" id="level-controls">
+        <button class="active" data-level="all">All Events</button>
+        <button data-level="milestones">Milestones Only</button>
+        <button data-level="work">Milestones + Sessions</button>
+    </div>
+
+    <div class="legend">
+        <div class="legend-group">
+            <div class="legend-group-title">Paper Events</div>
+            <div class="legend-items">
+                <div class="legend-item"><span class="legend-marker milestone"></span> Milestone (new frame/structure)</div>
+                <div class="legend-item"><span class="legend-marker session"></span> Work Session</div>
+                <div class="legend-item"><span class="legend-marker commit"></span> Git Commit</div>
+            </div>
+        </div>
+        <div class="legend-group">
+            <div class="legend-group-title">Meta</div>
+            <div class="legend-items">
+                <div class="legend-item"><span class="legend-marker tooling"></span> Automation Built</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="stats" class="stats"></div>
+
+    <div id="timeline" class="timeline-container"></div>
+
+    <script>
+        // Data
+        const paper1Journey = {
+            "paper_id": "paper1",
+            "title": "Hedging with Talent",
+            "events": [
+                {"id":"p1-001","timestamp":"2025-11-21","level":"major_version","version_number":1,"version_name":"Automation's Hidden Labor Churn","categories":{"framing":"Automation causes turnover among temp workers (H1-H5)","mechanism":"Direct causal effect: automation → job threat → exit","register":"Hypothesis-testing"},"summary":"Initial draft: 9 sections in one day. Hypothesis-testing paper targeting ManSci/JLE.","detail":"Core claim: automation displaces workers, who flee approaching job threats. Data: 59K temp exits, 21 automation projects."},
+                {"id":"p1-002","timestamp":"2025-12-09","level":"major_version","version_number":2,"version_name":"External Review Devastates Claims","categories":{"evidence":"Core finding KILLED: 'automation increases turnover' collapses with volume control (p=0.63)","validation":"External review: 'expect hard reject at ASQ/ManSci'"},"summary":"Headline finding killed by volume controls. Only pre-treatment pattern survives.","detail":"Without volume control: +50% exits (p=0.003). WITH volume control: +4-5% exits (p=0.63). Sites with more volume have more exits AND automate more."},
+                {"id":"p1-003","timestamp":"2025-12-09T12:00","level":"major_version","version_number":3,"version_name":"The Anticipation Paradox","categories":{"framing":"Workers don't flee—they stay. The puzzle is why.","mechanism":"Multiple candidates: option value, selection, job lock"},"summary":"Reframed around surviving pattern: voluntary exits decrease before automation.","detail":"Sorter facilities: -19.1pp. Robot facilities: -18.3pp. Built paper around this robust pre-treatment pattern."},
+                {"id":"p1-004","timestamp":"2025-12-13","level":"session","categories":{"validation":"Comprehensive audit completed","automation_added":"Living Paper system built"},"summary":"Built claim-evidence traceability for IRB-protected data.","detail":"Created /audit-claims command. Bidirectional links between claims and hashed evidence."},
+                {"id":"p1-005","timestamp":"2026-01-06","level":"session","categories":{"evidence":"Mosio SMS survey added (156 workers)","mechanism":"'Intuitive awareness' vs explicit knowledge"},"summary":"Integrated survey data. Only 6% mentioned automation explicitly.","detail":"Job search declined during implementation (29.8%→24%). Workers framed changes operationally, not technologically."},
+                {"id":"p1-006","timestamp":"2026-01-08","level":"major_version","version_number":4,"version_name":"Wait and See → Hedging with Talent","categories":{"framing":"KILLED: Wait and See. NEW: Hedging with Talent (manager-side)","mechanism":"Managers select on reliability + withhold job-threat info","evidence":"Tenure diff-in-diff: +66h at robot facilities"},"summary":"Complete mechanism reversal: worker-side → manager-side.","detail":"Debunked Wait and See via seasonality confound. Validation revealed workers couldn't 'make sense' if managers withheld info."},
+                {"id":"p1-007","timestamp":"2026-01-08T08:00","level":"session","categories":{"mechanism":"Selection under technological uncertainty","boundaries":"Permanents show opposite pattern (more info/agency)","automation_added":"/eval-zuckerman-lite completed"},"summary":"Theory formalized via /find-theory and /find-lens.","detail":"Primary theory violated: Job Insecurity/Displacement. Sensitizing lit: Org Learning + Labor Sorting."},
+                {"id":"p1-008","timestamp":"2026-01-09T10:07","level":"commit","hash":"164da3e","summary":"Initial commit: manuscripts only"},
+                {"id":"p1-009","timestamp":"2026-01-09T10:50","level":"commit","hash":"78cb070","categories":{"register":"'validates' → 'indicates'; 'confirms' → 'suggests'"},"summary":"Theory-building language scrub","detail":"Systematic replacement of hypothesis-testing language."},
+                {"id":"p1-010","timestamp":"2026-01-12T06:55","level":"major_version","version_number":5,"version_name":"Qual-Inductive Restructure","categories":{"mechanism":"Named phenomena: Reliability Hedging, Information Shielding, Compositional Shift","architecture":"Intro puzzle-only. Theory ends with question. Findings = theory.","automation_added":"Qual-inductive rubric (10 criteria, 50 pts)"},"summary":"Major restructure to ASQ/OrgSci inductive genre.","detail":"Prior ~24/50 on qual-inductive criteria → ~40-45/50. Complete structural transformation."},
+                {"id":"p1-011","timestamp":"2026-01-12T07:26","level":"commit","hash":"f102d69","categories":{"length":"6,895 → 11,037 words. Quotes: 5 → 8"},"summary":"Expanded to meet ASQ word count"},
+                {"id":"p1-012","timestamp":"2026-01-12T07:29","level":"commit","hash":"13f44c0","categories":{"evidence":"11 bibliography entries added"},"summary":"Bibliography completed"}
+            ],
+            "summary_statistics": {"total_events":12,"milestones":5,"sessions":3,"commits":4,"frame_shifts":7,"duration_days":52}
+        };
+
+        const paper2Journey = {
+            "paper_id": "paper2",
+            "title": "Learning to Automate",
+            "events": [
+                {"id":"p2-001","timestamp":"2025-11-25","level":"major_version","version_number":1,"version_name":"Initial Exploration","categories":{"framing":"Purely descriptive: seasonal staffing and productivity"},"summary":"Early exploration of PPH data. No theoretical framing yet."},
+                {"id":"p2-002","timestamp":"2025-11-27","level":"session","categories":{"framing":"Turnover contagion frame attempted"},"summary":"Tried turnover contagion. Abandoned: one finding, not full story."},
+                {"id":"p2-003","timestamp":"2025-11-29","level":"session","categories":{"framing":"Seasonal Paradox frame attempted"},"summary":"Tried seasonal paradox. Abandoned: staffing isn't main story."},
+                {"id":"p2-004","timestamp":"2025-12-01","level":"major_version","version_number":2,"version_name":"Automation Architectures","categories":{"framing":"Documenting automation outcome heterogeneity","evidence":"Same tech → different outcomes across facilities"},"summary":"Still descriptive but now focused on automation."},
+                {"id":"p2-005","timestamp":"2025-12-03","level":"session","categories":{"mechanism":"Thompson buffering REJECTED: CV identical (~0.59)"},"summary":"Tested Thompson (1967) buffering. KILLED BY DATA."},
+                {"id":"p2-006","timestamp":"2025-12-04","level":"session","categories":{"mechanism":"'Gallatin develops, Fresno perfects'","evidence":"Qualitative evidence of deliberate role assignment"},"summary":"Qual mining reveals intentional role differentiation."},
+                {"id":"p2-007","timestamp":"2025-12-05","level":"session","categories":{"evidence":"Size × automation interaction (p=0.001)","boundaries":"Larger facilities show worse outcomes"},"summary":"Size moderation discovered."},
+                {"id":"p2-008","timestamp":"2025-12-06","level":"major_version","version_number":3,"version_name":"Learning to Automate","categories":{"framing":"Spatial ambidexterity: exploration-exploitation across geography","mechanism":"Deliberate learning roles. Pooling → null effects.","claims":"Heterogeneous effects explain null pooled effects"},"summary":"Final frame: spatial ambidexterity.","detail":"Core insight: 'null effect of automation' is artifact of pooling heterogeneous roles."},
+                {"id":"p2-009","timestamp":"2025-12-09","level":"major_version","version_number":4,"version_name":"Zuckerman + External Review","categories":{"claims":"Propositions consolidated: 5 → 3","validation":"9/10 criteria met. Central vulnerability: ex-post roles.","automation_added":"/eval-zuckerman built"},"summary":"Built up null hypothesis. Made 'spatial ambidexterity' memorable."},
+                {"id":"p2-010","timestamp":"2025-12-09T12:00","level":"session","categories":{"robustness":"Placebo test BROKEN (all iterations identical)","validation":"5 vulnerabilities identified"},"summary":"Adversarial review finds critical issues.","detail":"Only 1 optimization facility. Pre-trends low-power. Size moderation underdocumented."},
+                {"id":"p2-011","timestamp":"2025-12-10","level":"session","categories":{"validation":"Critique verification: confirmed bugs are real"},"summary":"Independently verified reviewer claims."},
+                {"id":"p2-012","timestamp":"2025-12-13","level":"session","categories":{"validation":"3,949 evidence items linked to 9 claims","replication":"Living Paper artifacts created"},"summary":"Claims audit and Living Paper integration."},
+                {"id":"p2-013","timestamp":"2025-12-13T12:00","level":"session","categories":{"evidence":"Site selection: proximity to vendor > strategy","claims":"CLM-006 revised: 'deliberately selected, pragmatically located'"},"summary":"Audit finding revised claim about site selection."},
+                {"id":"p2-014","timestamp":"2026-01-06","level":"session","categories":{"replication":"Validation package created (1.4 MB)"},"summary":"Prepared validation package for submission."},
+                {"id":"p2-015","timestamp":"2026-01-09T10:07","level":"commit","hash":"164da3e","summary":"Initial commit"},
+                {"id":"p2-016","timestamp":"2026-01-09T10:18","level":"commit","hash":"f8e0839","summary":"Capitalization fix"},
+                {"id":"p2-017","timestamp":"2026-01-09T10:50","level":"major_version","version_number":5,"version_name":"Theory-Building Language Scrub","categories":{"register":"'validated by testing' → 'checked whether aligned'"},"summary":"Aligned with inductive genre."},
+                {"id":"p2-018","timestamp":"2026-01-09T12:00","level":"session","categories":{"boundaries":"N=1 optimization explicitly acknowledged","robustness":"Pre-trend narrative nuanced. Seasonality controls added."},"summary":"Post-adversarial refinements."},
+                {"id":"p2-019","timestamp":"2026-01-13T15:42","level":"commit","hash":"final","categories":{"length":"80 KB main.tex"},"summary":"Final manuscript prepared"}
+            ],
+            "summary_statistics": {"total_events":19,"milestones":6,"sessions":10,"commits":3,"frame_shifts":10,"duration_days":49}
+        };
+
+        const toolingJourney = {
+            "tooling_id": "theory-forge",
+            "title": "Theory-Forge Tooling",
+            "events": [
+                {"id":"tf-001","timestamp":"2025-11-25","tool_name":"Initial Pipeline","triggered_by":"Need structured workflow","tools":["8 core agents"],"detail":"Released /explore-data, /hunt-patterns, /find-theory, /find-lens, /mine-qual, /smith-frames, /verify-claims, /draft-paper"},
+                {"id":"tf-002","timestamp":"2025-12-08","tool_name":"State Persistence","triggered_by":"Lost track of frame iterations across 4 papers","triggered_by_paper":"All 4 papers","tools":["/init-project","/status","state.json"],"detail":"Papers required 5-8 reframings each. Needed to save empirical work while pivoting theory."},
+                {"id":"tf-003","timestamp":"2025-12-09","tool_name":"Zuckerman Evaluation","triggered_by":"Invested weeks in non-puzzles (literature gaps)","triggered_by_paper":"Paper 1","tools":["/eval-zuckerman","/eval-zuckerman-lite"],"detail":"Early gate AFTER pattern discovery, BEFORE theory investment."},
+                {"id":"tf-004","timestamp":"2025-12-10","tool_name":"Style Enforcer","triggered_by":"Claude defaulted to wrong genre (bullets, passive, hallucinated stats)","triggered_by_paper":"All 4 papers","tools":["style_enforcer/"],"detail":"Gap analysis comparing published papers to Claude drafts."},
+                {"id":"tf-005","timestamp":"2025-12-13","tool_name":"Living Paper","triggered_by":"IRB-protected data can't be shared; claims look unsupported","triggered_by_paper":"All papers","tools":["/audit-claims","living_paper/"],"detail":"Bidirectional claim-evidence traceability within privacy constraints."},
+                {"id":"tf-006","timestamp":"2025-12-14","tool_name":"Reviewer Interface","triggered_by":"Non-technical reviewers need HTML, not CLI","tools":["reviewer_app.py","contradiction badges"]},
+                {"id":"tf-007","timestamp":"2025-12-29","tool_name":"Consensus Mode","triggered_by":"Single-run LLM analysis is non-reproducible","triggered_by_paper":"All papers","tools":["/consensus-config","lib/consensus/"],"detail":"N-run execution with stability ratings. Catches cherry-picking."},
+                {"id":"tf-008","timestamp":"2025-12-31","tool_name":"Rubric-Eval","triggered_by":"Manual quality assessment is inconsistent","tools":["/eval-paper-quality"],"detail":"Systematic scoring prevents cherry-picking best version."},
+                {"id":"tf-009","timestamp":"2026-01-12","tool_name":"Qual-Inductive Rubric","triggered_by":"Generic rubrics failed qual papers","triggered_by_paper":"Paper 1","tools":["qual_inductive_criteria.json"],"detail":"Inductive papers have different structures: theory develops THROUGH findings."},
+                {"id":"tf-010","timestamp":"2026-01-13","tool_name":"Coherence Validator","triggered_by":"LLM accidentally wrote confirmatory-style in inductive papers","triggered_by_paper":"Paper 1","tools":["coherence_validator"],"detail":"Semantic analysis catching hypo-deductive framing in inductive papers."}
+            ],
+            "summary_statistics": {"total_events":10,"major_tools":10}
+        };
+
+        let currentView = 'paper1';
+        let currentLevel = 'all';
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function getActiveCategories(categories) {
+            if (!categories) return [];
+            return Object.entries(categories)
+                .filter(([key, value]) => value !== null && value !== undefined)
+                .map(([key, value]) => ({ key, value }));
+        }
+
+        function renderMilestone(event, index) {
+            const activeCategories = getActiveCategories(event.categories);
+            const isHallucination = (event.summary && event.summary.includes('HALLUCINATION')) ||
+                                   (event.version_name && event.version_name.includes('HALLUCINATION'));
+            return `
+                <div class="milestone-event ${isHallucination ? 'milestone hallucination' : ''}" data-level="major_version" data-id="${event.id}">
+                    <div class="milestone-header">
+                        <div class="milestone-marker"></div>
+                        <div class="milestone-title-block">
+                            <div class="milestone-date">${formatDate(event.timestamp)}</div>
+                            <div class="milestone-title">
+                                ${event.version_name || event.summary}
+                                ${event.version_number ? `<span class="milestone-version">v${event.version_number}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="milestone-content" onclick="toggleEvent('${event.id}')">
+                        <div class="milestone-summary">${event.summary}</div>
+                        <div class="event-detail">
+                            ${activeCategories.length > 0 ? `
+                                <div class="categories">
+                                    ${activeCategories.map(c => `<span class="category-tag ${c.key}">${c.key.replace(/_/g, ' ')}</span>`).join('')}
+                                </div>
+                                <div class="category-details">
+                                    ${activeCategories.map(c => `
+                                        <div class="category-item">
+                                            <div class="category-label" style="color: var(--${c.key})">${c.key.replace(/_/g, ' ')}</div>
+                                            <div class="category-text">${c.value}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                            ${event.detail ? `<div class="detail-text">${event.detail}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSession(event) {
+            const activeCategories = getActiveCategories(event.categories);
+            const isZipCritique = event.summary && (event.summary.toLowerCase().includes('zip critique') ||
+                                                    event.summary.toLowerCase().includes('zip_critique'));
+            return `
+                <div class="session-event ${isZipCritique ? 'zip-critique' : ''}" data-level="session" data-id="${event.id}">
+                    <div class="session-marker-container">
+                        <div class="session-marker"></div>
+                    </div>
+                    <div class="session-content" onclick="toggleEvent('${event.id}')">
+                        <div class="session-header">
+                            <div class="session-title">${event.summary}</div>
+                            <div class="session-date">${formatDate(event.timestamp)}</div>
+                        </div>
+                        <div class="event-detail">
+                            ${activeCategories.length > 0 ? `
+                                <div class="categories">
+                                    ${activeCategories.map(c => `<span class="category-tag ${c.key}">${c.key.replace(/_/g, ' ')}</span>`).join('')}
+                                </div>
+                                <div class="category-details">
+                                    ${activeCategories.map(c => `
+                                        <div class="category-item">
+                                            <div class="category-label" style="color: var(--${c.key})">${c.key.replace(/_/g, ' ')}</div>
+                                            <div class="category-text">${c.value}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                            ${event.detail ? `<div class="detail-text">${event.detail}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCommit(event) {
+            const activeCategories = getActiveCategories(event.categories);
+            return `
+                <div class="commit-event" data-level="commit" data-id="${event.id}">
+                    <div class="commit-marker"></div>
+                    <div class="commit-content" onclick="toggleEvent('${event.id}')">
+                        <div class="commit-header">
+                            <div class="commit-summary">${event.summary}</div>
+                            ${event.hash ? `<div class="commit-hash">${event.hash.slice(0,7)}</div>` : ''}
+                        </div>
+                        <div class="event-detail">
+                            ${activeCategories.length > 0 ? `
+                                <div class="category-details">
+                                    ${activeCategories.map(c => `
+                                        <div class="category-item">
+                                            <div class="category-label" style="color: var(--${c.key})">${c.key.replace(/_/g, ' ')}</div>
+                                            <div class="category-text">${c.value}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTooling(event) {
+            return `
+                <div class="tooling-event" data-id="${event.id}">
+                    <div class="tooling-marker-container">
+                        <div class="tooling-marker"></div>
+                    </div>
+                    <div class="tooling-content" onclick="toggleEvent('${event.id}')">
+                        <div class="tooling-header">
+                            <div class="tooling-title">${event.tool_name}</div>
+                            <div class="tooling-date">${formatDate(event.timestamp)}</div>
+                        </div>
+                        <div class="tooling-problem">"${event.triggered_by}"</div>
+                        ${event.triggered_by_paper ? `<div class="tooling-trigger"><strong>Triggered by:</strong> ${event.triggered_by_paper}</div>` : ''}
+                        <div class="event-detail">
+                            ${event.tools ? `
+                                <div class="tools-list">
+                                    ${event.tools.map(t => `<span class="tool-tag">${t}</span>`).join('')}
+                                </div>
+                            ` : ''}
+                            ${event.detail ? `<div class="detail-text">${event.detail}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPaperTimeline(data) {
+            let html = '';
+            let currentMilestoneChildren = [];
+
+            data.events.forEach((event, i) => {
+                if (event.level === 'major_version') {
+                    // Flush previous milestone's children
+                    if (currentMilestoneChildren.length > 0) {
+                        html += `<div class="nested-events">${currentMilestoneChildren.join('')}</div>`;
+                        currentMilestoneChildren = [];
+                    }
+                    html += renderMilestone(event, i);
+                } else if (event.level === 'session') {
+                    currentMilestoneChildren.push(renderSession(event));
+                } else if (event.level === 'commit') {
+                    currentMilestoneChildren.push(renderCommit(event));
+                }
+            });
+
+            // Flush any remaining children
+            if (currentMilestoneChildren.length > 0) {
+                html += `<div class="nested-events">${currentMilestoneChildren.join('')}</div>`;
+            }
+
+            return html;
+        }
+
+        function renderToolingTimeline(data) {
+            return data.events.map(e => renderTooling(e)).join('');
+        }
+
+        function renderStats(data, isTooling = false) {
+            const stats = data.summary_statistics;
+            if (isTooling) {
+                return `
+                    <div class="stat"><div class="stat-value">${stats.total_events}</div><div class="stat-label">Tools Built</div></div>
+                `;
+            }
+            return `
+                <div class="stat"><div class="stat-value">${stats.milestones}</div><div class="stat-label">Milestones</div></div>
+                <div class="stat"><div class="stat-value">${stats.sessions || 0}</div><div class="stat-label">Sessions</div></div>
+                <div class="stat"><div class="stat-value">${stats.commits || 0}</div><div class="stat-label">Commits</div></div>
+                <div class="stat"><div class="stat-value">${stats.frame_shifts}</div><div class="stat-label">Frame Shifts</div></div>
+                <div class="stat"><div class="stat-value">${stats.duration_days}d</div><div class="stat-label">Duration</div></div>
+            `;
+        }
+
+        function render() {
+            const timeline = document.getElementById('timeline');
+            const statsEl = document.getElementById('stats');
+            const levelControls = document.getElementById('level-controls');
+
+            if (currentView === 'parallel') {
+                levelControls.style.display = 'none';
+                statsEl.innerHTML = '';
+                timeline.innerHTML = `
+                    <div class="parallel-container">
+                        <div class="track">
+                            <div class="track-header">
+                                <div class="track-title">Paper 1: Hedging with Talent</div>
+                                <div class="track-subtitle">7 frame shifts over 52 days</div>
+                            </div>
+                            ${renderPaperTimeline(paper1Journey)}
+                        </div>
+                        <div class="track">
+                            <div class="track-header">
+                                <div class="track-title">Tooling Built</div>
+                                <div class="track-subtitle">Automation triggered by paper challenges</div>
+                            </div>
+                            ${renderToolingTimeline(toolingJourney)}
+                        </div>
+                    </div>
+                `;
+            } else if (currentView === 'tooling') {
+                levelControls.style.display = 'none';
+                statsEl.innerHTML = renderStats(toolingJourney, true);
+                timeline.innerHTML = renderToolingTimeline(toolingJourney);
+            } else {
+                levelControls.style.display = 'flex';
+                const data = currentView === 'paper1' ? paper1Journey : paper2Journey;
+                statsEl.innerHTML = renderStats(data);
+                timeline.innerHTML = renderPaperTimeline(data);
+                applyLevelFilter();
+            }
+        }
+
+        function applyLevelFilter() {
+            document.querySelectorAll('[data-level]').forEach(el => {
+                const level = el.dataset.level;
+                if (currentLevel === 'all') {
+                    el.classList.remove('hidden');
+                } else if (currentLevel === 'milestones') {
+                    el.classList.toggle('hidden', level !== 'major_version');
+                } else if (currentLevel === 'work') {
+                    el.classList.toggle('hidden', level === 'commit');
+                }
+            });
+
+            // Also hide nested containers if all children hidden
+            document.querySelectorAll('.nested-events').forEach(container => {
+                const visibleChildren = container.querySelectorAll('[data-level]:not(.hidden)');
+                container.classList.toggle('hidden', visibleChildren.length === 0);
+            });
+        }
+
+        function toggleEvent(id) {
+            const content = document.querySelector(`[data-id="${id}"] > .milestone-content, [data-id="${id}"] > .session-content, [data-id="${id}"] > .commit-content, [data-id="${id}"] > .tooling-content`);
+            if (content) {
+                content.classList.toggle('expanded');
+            }
+        }
+
+        // View toggle
+        document.querySelectorAll('.view-toggle button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentView = btn.dataset.view;
+                render();
+            });
+        });
+
+        // Level filter
+        document.querySelectorAll('.controls button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLevel = btn.dataset.level;
+                applyLevelFilter();
+            });
+        });
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>

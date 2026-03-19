@@ -1877,7 +1877,7 @@ knowledge-backlog-processor/
 │   │
 │   └── cli/                       # Command-line interface
 │       ├── src/
-│       │   ├── commands/
+│       │   ├── skills/
 │       │   │   ├── process.ts         # Process backlog items
 │       │   │   ├── validate.ts        # Validate outputs
 │       │   │   ├── review.ts          # Generate review packages

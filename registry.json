@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Theory-forge extensibility registry. Commands check this file to discover available data sources, methodologies, and custom agents. Use /author-data-source and /author-methodology to add entries.",
+  "description": "Theory-forge extensibility registry. Skills check this file to discover available data sources, methodologies, and custom agents. Use /author-data-source and /author-methodology to add entries.",
 
   "data_sources": [
     {
@@ -11,7 +11,7 @@
       "importer": null,
       "doc": null,
       "builtin": true,
-      "notes": "Native support — no importer needed. Handled directly by /explore-data and analysis commands."
+      "notes": "Native support — no importer needed. Handled directly by /explore-data and analysis skills."
     },
     {
       "id": "plaintext-transcripts",
@@ -42,8 +42,8 @@
       "tradition": "Deductive framing of inductive findings",
       "description": "Paper shows established theory makes a prediction that is WRONG under certain conditions. The dominant frame for top management/org journals.",
       "rubric": "rubrics/zuckerman_criteria.json",
-      "eval_command": "eval-zuckerman",
-      "lite_command": "eval-zuckerman-lite",
+      "eval_skill": "eval-zuckerman",
+      "lite_skill": "eval-zuckerman-lite",
       "contribution_type": 1,
       "criteria_count": 10,
       "pass_threshold": "7/10 criteria",
@@ -56,13 +56,13 @@
       "tradition": "Mechanism specification and boundary precision",
       "description": "Paper adds PRECISION to existing theory — clarifies mechanisms, specifies moderators, unpacks processes without contradicting core predictions.",
       "rubric": null,
-      "eval_command": null,
+      "eval_skill": null,
       "contribution_type": 2,
       "criteria_count": 5,
       "pass_threshold": "4/5 criteria",
       "exemplar_journals": ["AMR", "Organization Science", "Strategic Management Journal"],
       "builtin": true,
-      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval skill."
     },
     {
       "id": "phenomenon-description",
@@ -70,13 +70,13 @@
       "tradition": "Rich description as contribution",
       "description": "The phenomenon itself IS the contribution. Theory is sensitizing, not predictive. Rich description enables future theorizing.",
       "rubric": null,
-      "eval_command": null,
+      "eval_skill": null,
       "contribution_type": 3,
       "criteria_count": 5,
       "pass_threshold": "4/5 criteria",
       "exemplar_journals": ["ASQ", "Organization Studies", "Ethnography"],
       "builtin": true,
-      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval skill."
     },
     {
       "id": "methodological",
@@ -84,13 +84,13 @@
       "tradition": "Method as contribution",
       "description": "Paper develops or demonstrates a new way of studying something. Method IS the contribution; substantive findings may be secondary.",
       "rubric": null,
-      "eval_command": null,
+      "eval_skill": null,
       "contribution_type": 4,
       "criteria_count": 5,
       "pass_threshold": "4/5 criteria",
       "exemplar_journals": ["Sociological Methods & Research", "Organizational Research Methods", "Research Policy"],
       "builtin": true,
-      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval skill."
     },
     {
       "id": "practical-insight",
@@ -98,13 +98,13 @@
       "tradition": "Actionable knowledge for practitioners",
       "description": "Primary value is applied. Clear prescriptive implications, accessible to non-academics.",
       "rubric": null,
-      "eval_command": null,
+      "eval_skill": null,
       "contribution_type": 5,
       "criteria_count": 5,
       "pass_threshold": "4/5 criteria",
       "exemplar_journals": ["HBR", "SMR", "California Management Review", "Academy of Management Perspectives"],
       "builtin": true,
-      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval skill."
     },
     {
       "id": "literature-integration",
@@ -112,13 +112,13 @@
       "tradition": "Synthesis and reconciliation",
       "description": "Paper organizes, synthesizes, or reconciles existing work. No new data — value is in conceptual organization.",
       "rubric": null,
-      "eval_command": null,
+      "eval_skill": null,
       "contribution_type": 6,
       "criteria_count": 5,
       "pass_threshold": "4/5 criteria",
       "exemplar_journals": ["AMR", "Journal of Management", "Annual Review of Sociology"],
       "builtin": true,
-      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval command."
+      "notes": "Currently evaluated inline by /eval-contribution. Candidate for standalone rubric JSON + eval skill."
     },
     {
       "id": "paper-quality",
@@ -126,7 +126,7 @@
       "tradition": "Cross-cutting quality assessment",
       "description": "General paper quality rubric covering structure, argumentation, evidence, and writing. Not contribution-type specific.",
       "rubric": "rubrics/paper_quality.json",
-      "eval_command": "eval-paper-quality",
+      "eval_skill": "eval-paper-quality",
       "contribution_type": null,
       "criteria_count": null,
       "pass_threshold": null,
@@ -139,7 +139,7 @@
       "tradition": "Claim-evidence integrity",
       "description": "Checks that claims are honestly matched to evidence. Used by /audit-claims and /verify-claims.",
       "rubric": "rubrics/claim_verification.json",
-      "eval_command": null,
+      "eval_skill": null,
       "contribution_type": null,
       "criteria_count": null,
       "pass_threshold": null,
@@ -152,7 +152,7 @@
       "tradition": "Inductive qualitative research quality",
       "description": "Evaluation criteria specific to inductive qualitative papers — data access, analytical transparency, theoretical contribution.",
       "rubric": "rubrics/qual_inductive_criteria.json",
-      "eval_command": null,
+      "eval_skill": null,
       "contribution_type": null,
       "criteria_count": null,
       "pass_threshold": null,

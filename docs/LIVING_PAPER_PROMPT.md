@@ -30,7 +30,7 @@ Now I want to build infrastructure for "living papers"—research artifacts that
 - My PhD students are potential early users/contributors. The system should be learnable by smart people who aren't software engineers.
 
 **What I already have:**
-- Paper-mining-agents repo with slash commands for the full data-to-paper pipeline
+- Paper-mining-agents repo with skills for the full data-to-paper pipeline
 - Extraction schema that structures how claims and evidence are captured
 - Style enforcer module that validates manuscript output
 - Multiple datasets in various states (some analyzed, some dormant)
@@ -49,7 +49,7 @@ Now I want to build infrastructure for "living papers"—research artifacts that
    - How do I verify claims against protected data without exposing it?
    - How do I version a living paper when claims change?
 
-5. **Sketch the implementation**: What would V0.1 actually look like as code? Give me enough to start building—file structures, key functions, integration points with existing slash commands.
+5. **Sketch the implementation**: What would V0.1 actually look like as code? Give me enough to start building—file structures, key functions, integration points with existing skills.
 
 Be direct. Tell me what's feasible and what's fantasy. I'd rather have a working V0.1 than a beautiful spec for V2.0.
 
