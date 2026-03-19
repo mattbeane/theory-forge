@@ -27,76 +27,8 @@ Run this AFTER `/draft-paper` produces a complete or near-complete manuscript. T
 
 Run BEFORE final submission to catch fixable problems.
 
-## Reviewer Personas
+For detailed reviewer persona definitions, see [reviewer-personas.md](reviewer-personas.md)
 
-### Reviewer 1: The Hostile Expert
-
-**Mindset**: "Why should I believe this? What's the author hiding?"
-
-**Looks for**:
-- Overclaims (evidence doesn't support the claim)
-- Alternative explanations not considered
-- Methodology weaknesses
-- Missing literature (especially things that challenge the argument)
-- Theoretical inconsistencies
-- "So what?" (contribution isn't clear or significant)
-
-**Tone**: Direct, skeptical, sometimes dismissive. Assumes competence but questions judgment.
-
-**Typical concerns**:
-- "The authors claim X, but their evidence only shows Y"
-- "The entire argument rests on assuming Z, which is contested"
-- "Why didn't the authors consider [alternative]?"
-- "This contribution is incremental at best"
-
----
-
-### Reviewer 2: The Supportive Rigorist
-
-**Mindset**: "I want to like this, but I need to be convinced"
-
-**Looks for**:
-- Places where the paper almost works but needs tightening
-- Potential that isn't fully realized
-- Methodological choices that could be justified better
-- Framing that could be sharpened
-- Discussion that undersells the contribution
-
-**Tone**: Constructive, engaged, pushing for improvement.
-
-**Typical concerns**:
-- "The core insight is interesting, but the framing buries it"
-- "The methods are reasonable but the rationale for [choice] isn't clear"
-- "The discussion could go further in articulating implications"
-- "With revision, this could be a strong contribution"
-
----
-
-### Reviewer 3: The Confused Reader
-
-**Mindset**: "I'm trying to follow, but I keep getting lost"
-
-**Looks for**:
-- Places where the reader might lose the thread
-- Jargon that isn't defined
-- Logical jumps that skip steps
-- Structural issues (information in wrong place)
-- Missing roadmaps or signposting
-- Paragraphs that open with citations instead of claims
-- Missing transitions (conceptual jumps between paragraphs)
-- Introduction that starts with literature instead of puzzle
-- Discussion that ends with summary instead of zoom-out
-- Citation deployment that's all parenthetical (no engagement with key works)
-
-**Tone**: Genuinely puzzled, asks "naive" questions that reveal real problems.
-
-**Typical concerns**:
-- "I lost track of the argument around page X"
-- "How does this finding relate to the earlier claim about Y?"
-- "What exactly is meant by [term]?"
-- "The transition from [section] to [section] was jarring"
-
----
 
 ## Steps
 
@@ -181,166 +113,14 @@ Create `analysis/review/SIMULATED_REVIEWS.md`:
 
 ---
 
-## Reviewer 1: The Hostile Expert
+For the Hostile Expert review template, see [review-hostile-expert.md](review-hostile-expert.md)
 
-### Overall Assessment
 
-**Recommendation**: [Reject / Major Revision / Minor Revision / Accept]
+For the Supportive Rigorist review template, see [review-supportive-rigorist.md](review-supportive-rigorist.md)
 
-**Summary**: [2-3 sentence overall view]
 
----
+For the Confused Reader review template, see [review-confused-reader.md](review-confused-reader.md)
 
-### Major Concerns
-
-**1. [Concern Title]**
-
-> [Quote from paper that triggers this concern]
-
-The authors claim [X], but the evidence only supports [Y]. Specifically:
-
-- [Point 1]
-- [Point 2]
-- [Point 3]
-
-This is problematic because [explanation of why this matters].
-
-**What would address this**: [Specific revision or additional evidence needed]
-
----
-
-**2. [Concern Title]**
-
-[Same structure]
-
----
-
-### Minor Concerns
-
-**1. [Concern]**: [Brief explanation]
-
-**2. [Concern]**: [Brief explanation]
-
----
-
-### What This Reviewer Liked
-
-- [Strength acknowledged even by hostile reviewer]
-- [Another strength]
-
----
-
-### Decision Rationale
-
-"I recommend [rejection/revision] because [core reason]. While the paper has [strength], [fatal flaw] undermines the contribution. The authors would need to [major action] before this could be reconsidered."
-
----
-
-## Reviewer 2: The Supportive Rigorist
-
-### Overall Assessment
-
-**Recommendation**: [Reject / Major Revision / Minor Revision / Accept]
-
-**Summary**: [2-3 sentence overall view]
-
----
-
-### Potential Seen
-
-"This paper tackles [important question] with [interesting approach]. The core insight—that [X]—is valuable and could contribute to our understanding of [field]."
-
----
-
-### Major Concerns
-
-**1. [Concern Title]**
-
-The paper's framing of [X] doesn't fully capitalize on the insight. Currently it's positioned as [current positioning], but it would be stronger framed as [suggested reframing].
-
-**Specific suggestions**:
-- [Suggestion 1]
-- [Suggestion 2]
-
----
-
-**2. [Concern Title]**
-
-[Same structure]
-
----
-
-### Minor Concerns
-
-**1. [Concern]**: [Brief explanation with fix]
-
-**2. [Concern]**: [Brief explanation with fix]
-
----
-
-### Path to Acceptance
-
-"With the following revisions, I would enthusiastically support this paper:
-
-1. [Key revision 1]
-2. [Key revision 2]
-3. [Key revision 3]
-
-The authors have done strong work; these refinements would let it shine."
-
----
-
-## Reviewer 3: The Confused Reader
-
-### Overall Assessment
-
-**Recommendation**: [Reject / Major Revision / Minor Revision / Accept]
-
-**Summary**: [2-3 sentence overall view focusing on readability]
-
----
-
-### Where I Got Lost
-
-**1. [Location/Section]**
-
-"I was following the argument until [point], but then the paper jumps to [topic] without explaining the connection. I found myself re-reading this section several times."
-
-**What would help**: [Specific clarification needed]
-
----
-
-**2. [Location/Section]**
-
-"The term '[jargon]' is introduced on page X but never defined. I think it means [guess], but I'm not sure. If readers like me miss this definition, they'll miss the rest of the argument."
-
-**What would help**: [Add definition, provide example, etc.]
-
----
-
-### Structural Issues
-
-**1. Information in Wrong Place**
-
-"The explanation of [X] comes in the Discussion, but I needed it in the Theory section to follow the hypotheses/findings."
-
-**Suggestion**: Move [content] to [earlier location]
-
----
-
-**2. Missing Roadmap**
-
-"The paper transitions from [section A] to [section B] without signposting. A sentence like 'Having established X, we now turn to Y' would help."
-
----
-
-### Questions Left Unanswered
-
-1. [Question a reader might have that the paper doesn't address]
-2. [Another question]
-3. [Another question]
-
----
 
 ## Argument Construction Issues
 
@@ -529,80 +309,14 @@ Use this as one input, not a definitive prediction. It's better at identifying o
 
 ---
 
-## Consensus Mode
+For consensus mode behavior, see [../../_shared/consensus-mode.md](../../_shared/consensus-mode.md)
+For staleness detection, see [../../_shared/staleness-check.md](../../_shared/staleness-check.md)
+For eval result persistence, see [../../_shared/eval-persistence.md](../../_shared/eval-persistence.md)
 
-Check `state.json` → `consensus.enabled` (default: true).
+### Skill-Specific Persistence
 
-If enabled and `--quick` not specified:
-1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
-2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
-3. For overall verdict: compute agreement rate across runs
-4. Include stability assessment using `lib/consensus/` formatters:
-   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
-   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
-   - 🔴 LOW: CV > 25% or agreement < 70%
-5. Persist consensus stats in eval_results (see State Persistence below)
-
-If `--quick` flag is set: Run once, skip consensus, still persist results.
-
----
-
-## Staleness Check
-
-Before running this evaluation:
-1. Read `state.json` → `eval_results.simulate_review.frame_[current_frame].latest`
-2. If a previous result exists:
-   a. Compute current SHA-256 of upstream files:
-      ```bash
-      shasum -a 256 output/drafts/*.md | cut -d' ' -f1
-      ```
-      (Use the latest draft file)
-   b. Compare against stored `upstream_checksums`
-   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
-   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
-3. If no previous result exists: proceed with evaluation.
-
----
-
-## State Persistence (eval_results)
-
-In addition to the workflow state updates above (`workflow.simulate_review.*`), also persist to eval_results for the test suite:
-
-After evaluation completes:
-1. Read `state.json`
-2. Compute SHA-256 checksums of upstream files:
-   - `output/drafts/*.md` (latest draft)
-3. Write to `eval_results.simulate_review.frame_[current_frame].latest`:
-   ```json
-   {
-     "timestamp": "[current ISO timestamp]",
-     "scores": {
-       "fatal_flaws": N,
-       "major_concerns": N,
-       "minor_concerns": N
-     },
-     "total": null,
-     "max_total": null,
-     "verdict": "[PASS|CONDITIONAL|FAIL]",
-     "consensus": {
-       "n_runs": 5,
-       "stability": "[HIGH|MEDIUM|LOW]",
-       "cv": [computed CV],
-       "ci_lower": [lower bound],
-       "ci_upper": [upper bound]
-     },
-     "stale": false,
-     "stale_reason": null,
-     "upstream_checksums": {
-       "output/drafts/[latest_draft].md": "sha256:[hash]"
-     },
-     "output_file": "analysis/review/SIMULATED_REVIEWS.md"
-   }
-   ```
-4. Update `updated_at` timestamp
-5. Log to `DECISION_LOG.md`: "simulate_review — [verdict] (fatal: [N], major: [N], minor: [N])"
-
-Verdict thresholds:
-- PASS if fatal_flaws == 0 and major_concerns <= 2
-- CONDITIONAL if fatal_flaws == 0 but major_concerns > 2
-- FAIL if fatal_flaws > 0
+- **eval_results key**: `simulate_review`
+- **Upstream files**: `analysis/manuscript/DRAFT.md`
+- **Scores**: `fatal_flaws`, `major_concerns`, `minor_issues`
+- **Verdict**: PASS if 0 fatal flaws; CONDITIONAL if 1; FAIL if 2+
+- **Default consensus N**: 5

@@ -143,19 +143,8 @@ For each paper, note:
 - Relevance (why cite this?)
 - Category (foundational, review, recent, bridge, target journal)
 
-## Output Format
+For the output format template, see [output-template.md](output-template.md)
 
-Create `analysis/literature/BIBLIOGRAPHY_PLAN.md`:
-
-```markdown
-# Bibliography Plan
-
-**Date**: [Date]
-**Primary Theory**: [Name]
-**Sensitizing Literature**: [Name]
-**Target Journal**: [If specified]
-
----
 
 ## Executive Summary
 

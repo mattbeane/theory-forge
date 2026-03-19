@@ -31,43 +31,8 @@ After completing:
 
 ---
 
-## Student Mode Behavior
+For student mode behavior, see [student-mode-behavior.md](student-mode-behavior.md) and [../../_shared/student-mode.md](../../_shared/student-mode.md)
 
-If `state.json.student_mode.enabled === true`, add these steps:
-
-### Before Running Analysis
-
-Prompt the user:
-
-```
-📚 STUDENT MODE: Before I mine your qualitative data, show me YOUR coding.
-
-**This is the most important student mode checkpoint.** Qualitative coding is where deep understanding develops.
-
-Please do the following:
-
-1. **Read 3-5 interviews yourself** (choose varied informants)
-2. **Write down the mechanisms you see** in STUDENT_WORK.md:
-   - What mechanisms do informants describe?
-   - What quotes would you use to support them?
-   - What surprised you in the interviews?
-
-3. **Identify potential disconfirming evidence**:
-   - Any informants who experienced it differently?
-   - Any quotes that challenge your emerging interpretation?
-
-Take 1-2 hours on this. This is not optional in student mode—the skill of seeing mechanisms in qualitative data cannot be outsourced.
-
-[When done, say "continue" and I'll process the remaining interviews]
-```
-
-Wait for user response. **Do not proceed until they provide substantive coding notes.**
-
-### After Running Analysis
-
-Add a **"Why I Did This"** section to your output:
-
-```markdown
 ## Why I Did This (Explanation Layer)
 
 **How I generated mechanism hypotheses:**
@@ -339,97 +304,14 @@ Themes that emerged but weren't in original hypotheses:
 
 ---
 
-## Consensus Mode
+For consensus mode behavior, see [../../_shared/consensus-mode.md](../../_shared/consensus-mode.md)
+For staleness detection, see [../../_shared/staleness-check.md](../../_shared/staleness-check.md)
+For eval result persistence, see [../../_shared/eval-persistence.md](../../_shared/eval-persistence.md)
 
-If `state.json` has `consensus.stages.mine_qual.enabled = true`:
+### Skill-Specific Persistence
 
-### How It Works
-
-1. **Run qualitative mining N times** (default: 15, configurable in state.json)
-2. **Track which quotes appear in each run**
-3. **Compute quote stability**:
-   - Appearances / N runs = stability percentage
-   - ≥75%: HIGH stability — include confidently
-   - 50-74%: MEDIUM stability — note in paper, still usable
-   - <50%: LOW stability — possible cherry-picking, review carefully
-4. **Flag low-stability quotes** in output
-
-### Why Quote Stability Matters
-
-Single-run extraction: "Here are the best quotes supporting the mechanism"
-- Different run → different quotes
-- Cherry-picking risk: did you find what you wanted to find?
-- Reviewers can't verify quote selection
-
-Consensus extraction: "Quote X appeared in 14/15 runs (93% stability)"
-- Reproducible: quote selection is consistent
-- Defensible: high-stability quotes are robust to prompt variation
-- Honest: low-stability quotes flagged as potentially cherry-picked
-
-### Quote Stability Categories
-
-| Stability | Appearance Rate | Meaning | Recommendation |
-|-----------|-----------------|---------|----------------|
-| HIGH ✓ | ≥75% | Quote robustly emerges | Include with confidence |
-| MEDIUM ~ | 50-74% | Quote appears often | Include, note it's one of several |
-| LOW ⚠️ | <50% | Quote is inconsistent | Review: drop, or note as illustrative |
-
-### Running Consensus Analysis
-
-```python
-from lib.consensus import ConsensusEngine, extract_quotes, get_stage_n
-
-engine = ConsensusEngine(provider="anthropic")
-n = get_stage_n("mine_qual")  # Default: 15
-
-result = await engine.run_with_consensus(
-    system_prompt="[qual mining system prompt]",
-    user_prompt="[qual data + hypotheses]",
-    n=n,
-    extract_quotes_fn=extract_quotes,
-)
-
-# Result contains:
-# - result.quotes: List of QuoteConsensus objects with appearance_rate, stability
-# - result.flagged_items: List of LOW stability warnings
-```
-
-### Formatting Quote Stability Output
-
-Use the formatters to surface quote stability in markdown output:
-
-```python
-from lib.consensus import (
-    format_confidence_section,
-    format_quote_list_with_stability,
-    format_flagged_items_callout,
-    stability_emoji,
-)
-
-# Full confidence section (for end of report)
-confidence_md = format_confidence_section(result, include_metrics=False, include_quotes=True)
-
-# Quote list with stability indicators
-quote_list = format_quote_list_with_stability(result.quotes, warn_low_stability=True)
-
-# For individual quotes in prose
-emoji = stability_emoji(quote.stability)  # Returns 🟢, 🟡, 🔴, or ⚪
-```
-
-**Always include quote stability** when consensus mode is enabled. Each quote in QUAL_EVIDENCE_REPORT.md should show its stability badge (🟢 HIGH, 🟡 MEDIUM, 🔴 LOW).
-
----
-
-## After You're Done
-
-Tell the user:
-- Which mechanisms have strong qualitative support
-- What disconfirming evidence exists
-- Any unexpected findings that might enrich the story
-- The best quotes for the paper
-- **If consensus enabled**: quote stability summary and any flagged quotes
-
-Then suggest they review and, when ready, run `/smith-frames` to generate theoretical framings (if not already done).
-
-Tip: Run `/status` anytime to see overall workflow progress.
-Tip: Run `/consensus-config` to enable/disable consensus mode or adjust settings.
+- **eval_results key**: `mine_qual (workflow only)`
+- **Upstream files**: qualitative data files
+- **Scores**: mechanism counts, quote stability
+- **Verdict**: N/A (discovery, not evaluation)
+- **Default consensus N**: 15

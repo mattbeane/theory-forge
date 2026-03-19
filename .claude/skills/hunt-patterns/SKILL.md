@@ -28,36 +28,8 @@ After completing:
 
 ---
 
-## Student Mode Behavior
+For student mode behavior, see [student-mode-behavior.md](student-mode-behavior.md) and [../../_shared/student-mode.md](../../_shared/student-mode.md)
 
-If `state.json.student_mode.enabled === true`, add these steps:
-
-### Before Running Analysis
-
-Prompt the user:
-
-```
-📚 STUDENT MODE: Before I hunt for patterns, document your predictions.
-
-Please write in STUDENT_WORK.md (or tell me now):
-
-1. **What patterns do you expect to find?** (List 3-5 specific hypotheses)
-2. **Which pattern do you think will be strongest?** (And why)
-3. **What would surprise you?** (What finding would challenge your priors)
-4. **What patterns would be most theoretically interesting?** (And for what literature)
-
-This forces you to form expectations before seeing AI output. Take 10-15 minutes.
-
-[When ready, say "continue" and I'll run the pattern search]
-```
-
-Wait for user response before proceeding.
-
-### After Running Analysis
-
-Add a **"Why I Did This"** section to your output:
-
-```markdown
 ## Why I Did This (Explanation Layer)
 
 **Patterns I tested and why:**
@@ -302,94 +274,14 @@ Findings with LOW stability should be flagged as tentative or investigated furth
 
 ---
 
-## Consensus Mode
+For consensus mode behavior, see [../../_shared/consensus-mode.md](../../_shared/consensus-mode.md)
+For staleness detection, see [../../_shared/staleness-check.md](../../_shared/staleness-check.md)
+For eval result persistence, see [../../_shared/eval-persistence.md](../../_shared/eval-persistence.md)
 
-If `state.json` has `consensus.stages.hunt_patterns.enabled = true`:
+### Skill-Specific Persistence
 
-### How It Works
-
-1. **Run pattern analysis N times** (default: 25, configurable in state.json)
-2. **Extract effect sizes from each run**: β, OR, p-values, R², etc.
-3. **Compute statistics across runs**:
-   - Mean, SD, 95% confidence interval
-   - Coefficient of variation (CV = SD/Mean)
-4. **Rate stability**:
-   - CV < 10%: HIGH stability — defensible
-   - CV 10-25%: MEDIUM stability — note variance in paper
-   - CV > 25%: LOW stability — flag for review, may be ambiguous
-5. **Include stability data in PATTERN_REPORT.md**
-
-### Running Consensus Analysis
-
-Use the consensus engine in `lib/consensus/`:
-
-```python
-from lib.consensus import ConsensusEngine, extract_effect_sizes, get_stage_n
-
-engine = ConsensusEngine(provider="anthropic")
-n = get_stage_n("hunt_patterns")  # Default: 25
-
-result = await engine.run_with_consensus(
-    system_prompt="[pattern hunting system prompt]",
-    user_prompt="[data + analysis request]",
-    n=n,
-    extract_metrics_fn=extract_effect_sizes,
-)
-
-# Result contains:
-# - result.metrics: Dict of MetricConsensus objects with mean, SD, CI, CV, stability
-# - result.flagged_items: List of LOW stability warnings
-# - result.overall_stability: HIGH/MEDIUM/LOW
-```
-
-### Formatting Confidence Output
-
-Use the formatters to surface confidence data in markdown output:
-
-```python
-from lib.consensus import (
-    format_confidence_section,
-    format_stability_summary,
-    format_flagged_items_callout,
-)
-
-# Full confidence section (for end of report)
-confidence_md = format_confidence_section(result)
-
-# Brief summary (for inline references)
-summary = format_stability_summary(result)  # e.g., "🟢 HIGH (3 metrics, 0 flags)"
-
-# Warning callout for flagged items
-if result.flagged_items:
-    callout = format_flagged_items_callout(result)
-```
-
-**Always include confidence output** when consensus mode is enabled. The `format_confidence_section()` output should appear at the end of PATTERN_REPORT.md.
-
-### Why This Matters
-
-Single-run analysis: "Effect is β = 0.21"
-- Non-reproducible
-- Different prompt → different answer
-- Reviewers can't verify
-
-Consensus analysis: "Effect is β = 0.21 (±0.02 SD, 95% CI: [0.18, 0.24], n=25)"
-- Reproducible: "We ran this 25 times"
-- Defensible: confidence intervals for peer review
-- Honest: LOW stability findings flagged, not hidden
-
----
-
-## After You're Done
-
-Tell the user:
-- Which patterns survived and which died
-- Which findings violate theoretical predictions (most valuable)
-- Where you found heterogeneity
-- How many patterns triggered RASC early stop (efficiency wins)
-- **If consensus enabled**: stability summary and any flagged metrics
-
-Then suggest they review and select which finding(s) to pursue. When ready, run `/find-theory` to identify the established theory being violated.
-
-Tip: Run `/status` anytime to see overall workflow progress.
-Tip: Run `/consensus-config` to enable/disable consensus mode or adjust settings.
+- **eval_results key**: `hunt_patterns (workflow only)`
+- **Upstream files**: data source files
+- **Scores**: pattern counts, effect sizes
+- **Verdict**: N/A (discovery, not evaluation)
+- **Default consensus N**: 25

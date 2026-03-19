@@ -145,18 +145,8 @@ For each strong convergence, draft an integrated claim:
 
 "[Pattern X] appears in the quantitative data (β = Y, p < Z). Qualitative analysis reveals that [Mechanism A] drives this effect. [Specific quote/evidence] illustrates how [mechanism operates]. This effect is strongest for [subgroup], consistent with the mechanism's emphasis on [factor]."
 
-## Output Format
+For the output format template, see [output-template.md](output-template.md)
 
-Create `analysis/integration/INTEGRATION_REPORT.md`:
-
-```markdown
-# Quantitative-Qualitative Integration Report
-
-**Date**: [Date]
-**Pattern Report**: analysis/patterns/PATTERN_REPORT.md
-**Mechanism Report**: analysis/mechanisms/MECHANISM_REPORT.md
-
----
 
 ## Executive Summary
 

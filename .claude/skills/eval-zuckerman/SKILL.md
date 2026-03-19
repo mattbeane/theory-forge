@@ -112,151 +112,8 @@ Create `analysis/framing/ZUCKERMAN_EVAL.md`:
 
 ---
 
-## Detailed Evaluation
+For the detailed per-criterion evaluation instructions, see [detailed-criteria.md](detailed-criteria.md)
 
-### 1. Motivate the Paper
-
-**Rating**: [✓/⚠️/✗]
-
-**Evidence**:
-> [Quote from intro that shows motivation—or lack thereof]
-
-**Analysis**: [Why this rating? Is the intro exciting? Does it promise something new?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 2. Know Your Audience
-
-**Rating**: [✓/⚠️/✗]
-
-**Row or Column?**: [Which audience is this paper targeting?]
-
-**Evidence**:
-> [Quote showing audience awareness—or confusion]
-
-**Analysis**: [Is the paper consistently framed for one audience? Or trying to please everyone?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 3. Use Substantive Motivations
-
-**Rating**: [✓/⚠️/✗]
-
-**Evidence**:
-> [Quote showing substantive (or aesthetic) motivation]
-
-**Analysis**: [Is the motivation about explaining the world, or about tribal preferences?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 4. Frame Around the Dependent Variable
-
-**Rating**: [✓/⚠️/✗]
-
-**What is the DV (the larger pattern)?**: [One sentence]
-
-**Evidence**:
-> [Quote showing how the paper opens—with question or answer?]
-
-**Analysis**: [Does the paper start with a puzzle, or with a theory/answer?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 5. Frame Around a Puzzle in the World
-
-**Rating**: [✓/⚠️/✗]
-
-**What is the puzzle?**: [One sentence—if there is one]
-
-**Evidence**:
-> [Quote showing puzzle framing—or literature-gap framing]
-
-**Analysis**: [Is this a real-world puzzle, or just "the literature hasn't looked at X"?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 6. One Hypothesis (or Few Tightly Related)
-
-**Rating**: [✓/⚠️/✗]
-
-**How many hypotheses/propositions?**: [Count]
-
-**The core idea**: [One sentence—what will people remember?]
-
-**Analysis**: [Are hypotheses tightly related? Could the paper be remembered for one idea?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 7. Build Up the Null Hypothesis
-
-**Rating**: [✓/⚠️/✗]
-
-**What is the null?**: [One sentence]
-
-**Evidence**:
-> [Quote showing how the null is presented—compelling or straw man?]
-
-**Analysis**: [Is the null genuinely compelling? Would a smart person believe it?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 8. Save the Null
-
-**Rating**: [✓/⚠️/✗]
-
-**When is the null right?**: [One sentence—if the paper says]
-
-**Evidence**:
-> [Quote showing how the null is "saved" under certain conditions]
-
-**Analysis**: [Does the paper explain when the null holds and when it doesn't?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 9. Orient the Reader
-
-**Rating**: [✓/⚠️/✗]
-
-**Is there a clear roadmap?**: [Yes/No]
-
-**Narrative arc**: [One sentence—what's the arc from puzzle to finding?]
-
-**Analysis**: [Does the reader always know where they are? Or do they get lost?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
-
-### 10. Never Write Literature Reviews
-
-**Rating**: [✓/⚠️/✗]
-
-**Theory section length**: [Approximate word count or page count]
-
-**Evidence**:
-> [Quote showing focused review—or comprehensive survey]
-
-**Analysis**: [Is literature reviewed to show what's compelling-but-flawed, or as an end in itself?]
-
-**Suggestion** (if ⚠️ or ✗): [Specific fix]
-
----
 
 ## Top 3 Priorities for Revision
 
@@ -282,69 +139,9 @@ Create `analysis/framing/ZUCKERMAN_EVAL.md`:
 3. [Specific action]
 ```
 
-## Quantitative Scoring with rubric-eval
+For quantitative scoring with rubric-eval, see [rubric-eval-scoring.md](rubric-eval-scoring.md)
 
-For systematic scoring with statistical confidence, use rubric-eval.
 
-### Step 1: Check for rubric-eval
-
-```bash
-which rubric-eval
-```
-
-**If not found**: Fall back to qualitative ratings (✓/⚠️/✗) above, and note to user:
-> "Install rubric-eval for quantitative scoring: `pip install rubric-eval`"
-
-### Step 2: Run rubric-eval
-
-```bash
-rubric-eval eval output/manuscript.pdf rubrics/zuckerman_criteria.json \
-  --type academic_paper \
-  --loader pdf \
-  --runs 5 \
-  --model claude-3-5-haiku-20241022
-```
-
-For markdown files:
-```bash
-rubric-eval eval output/manuscript.md rubrics/zuckerman_criteria.json \
-  --type academic_paper \
-  --loader text \
-  --runs 5 \
-  --model claude-3-5-haiku-20241022
-```
-
-### Step 3: Interpret scores
-
-The rubric produces 50 points total (10 criteria × 5 points each):
-
-| Score Range | Interpretation |
-|-------------|----------------|
-| 45-50 | Excellent framing - ready for submission |
-| 35-44 | Good framing - minor adjustments needed |
-| 25-34 | Adequate - some criteria need work |
-| 15-24 | Weak - significant reframing required |
-| 0-14 | Major issues - consider `/smith-frames` again |
-
-### Step 4: Flag weak criteria
-
-Any criterion scoring 0-2 (Absent or Weak) should be prioritized:
-
-```bash
-rubric-eval flagged <session_id>
-```
-
-Common patterns:
-- **Low puzzle_in_world + Low frame_around_dv**: Literature-gap framing problem
-- **Low compelling_null + Low save_null**: Not engaging with alternatives
-- **Low motivate_paper + Low orient_reader**: Structural/narrative issues
-- **Low know_audience**: Trying to please everyone
-
-### Step 5: Add to evaluation report
-
-Include quantitative scores in `ZUCKERMAN_EVAL.md`:
-
-```markdown
 ## Quantitative Score (rubric-eval)
 
 **Total**: X / 50 points
@@ -387,84 +184,14 @@ If the paper scores poorly on criteria 4-5 (framing around DV, puzzle in world),
 
 ---
 
-## Consensus Mode
+For consensus mode behavior, see [../../_shared/consensus-mode.md](../../_shared/consensus-mode.md)
+For staleness detection, see [../../_shared/staleness-check.md](../../_shared/staleness-check.md)
+For eval result persistence, see [../../_shared/eval-persistence.md](../../_shared/eval-persistence.md)
 
-Check `state.json` → `consensus.enabled` (default: true).
+### Skill-Specific Persistence
 
-If enabled and `--quick` not specified:
-1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
-2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
-3. For overall verdict: compute agreement rate across runs
-4. Include stability assessment using `lib/consensus/` formatters:
-   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
-   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
-   - 🔴 LOW: CV > 25% or agreement < 70%
-5. Persist consensus stats in eval_results (see State Persistence below)
-
-If `--quick` flag is set: Run once, skip consensus, still persist results.
-
----
-
-## Staleness Check
-
-Before running this evaluation:
-1. Read `state.json` → `eval_results.zuckerman.frame_[current_frame].latest`
-2. If a previous result exists:
-   a. Compute current SHA-256 of upstream files:
-      ```bash
-      shasum -a 256 analysis/framing/frame-[N]/FRAMING_OPTIONS.md | cut -d' ' -f1
-      ```
-   b. Compare against stored `upstream_checksums`
-   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
-   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
-3. If no previous result exists: proceed with evaluation.
-
----
-
-## State Persistence
-
-After evaluation completes:
-1. Read `state.json`
-2. Compute SHA-256 checksums of upstream files:
-   - `analysis/framing/frame-[N]/FRAMING_OPTIONS.md`
-3. Write to `eval_results.zuckerman.frame_[current_frame].latest`:
-   ```json
-   {
-     "timestamp": "[current ISO timestamp]",
-     "scores": {
-       "motivate_paper": N,
-       "know_audience": N,
-       "substantive_motivation": N,
-       "frame_around_dv": N,
-       "puzzle_in_world": N,
-       "few_hypotheses": N,
-       "compelling_null": N,
-       "save_null": N,
-       "orient_reader": N,
-       "no_lit_reviews": N
-     },
-     "total": X,
-     "max_total": 50,
-     "verdict": "[PASS|CONDITIONAL|FAIL]",
-     "consensus": {
-       "n_runs": 5,
-       "stability": "[HIGH|MEDIUM|LOW]",
-       "cv": [computed CV],
-       "ci_lower": [lower bound],
-       "ci_upper": [upper bound]
-     },
-     "stale": false,
-     "stale_reason": null,
-     "upstream_checksums": {
-       "analysis/framing/frame-[N]/FRAMING_OPTIONS.md": "sha256:[hash]"
-     },
-     "output_file": "analysis/framing/ZUCKERMAN_EVAL.md"
-   }
-   ```
-4. Update `updated_at` timestamp
-5. Log to `DECISION_LOG.md`: "zuckerman scored [total]/50 — [verdict]"
-
-Verdict thresholds:
-- PASS if total >= 35
-- FAIL if total < 25
-- CONDITIONAL otherwise
+- **eval_results key**: `zuckerman`
+- **Upstream files**: `analysis/framing/frame-{N}/FRAMING_OPTIONS.md`
+- **Scores**: 10 criteria: `motivate_paper`, `know_audience`, etc.
+- **Verdict**: PASS >= 35/50; FAIL < 25/50; CONDITIONAL otherwise
+- **Default consensus N**: 5

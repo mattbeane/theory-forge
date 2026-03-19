@@ -313,80 +313,14 @@ This check fills that gap.
 
 ---
 
-## Consensus Mode
+For consensus mode behavior, see [../../_shared/consensus-mode.md](../../_shared/consensus-mode.md)
+For staleness detection, see [../../_shared/staleness-check.md](../../_shared/staleness-check.md)
+For eval result persistence, see [../../_shared/eval-persistence.md](../../_shared/eval-persistence.md)
 
-Check `state.json` → `consensus.enabled` (default: true).
+### Skill-Specific Persistence
 
-If enabled and `--quick` not specified:
-1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
-2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
-3. For overall verdict: compute agreement rate across runs
-4. Include stability assessment using `lib/consensus/` formatters:
-   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
-   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
-   - 🔴 LOW: CV > 25% or agreement < 70%
-5. Persist consensus stats in eval_results (see State Persistence below)
-
-If `--quick` flag is set: Run once, skip consensus, still persist results.
-
----
-
-## Staleness Check
-
-Before running this evaluation:
-1. Read `state.json` → `eval_results.citations.frame_[current_frame].latest`
-2. If a previous result exists:
-   a. Compute current SHA-256 of upstream files:
-      ```bash
-      shasum -a 256 output/drafts/*.md literature/refs.bib | cut -d' ' -f1
-      ```
-      (Use the latest draft file for output/drafts/*.md)
-   b. Compare against stored `upstream_checksums`
-   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
-   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
-3. If no previous result exists: proceed with evaluation.
-
----
-
-## State Persistence
-
-After evaluation completes:
-1. Read `state.json`
-2. Compute SHA-256 checksums of upstream files:
-   - `output/drafts/*.md` (latest draft)
-   - `literature/refs.bib`
-3. Write to `eval_results.citations.frame_[current_frame].latest`:
-   ```json
-   {
-     "timestamp": "[current ISO timestamp]",
-     "scores": {
-       "total_citations": N,
-       "coverage_adequate": 1|0,
-       "recency_ok": 1|0
-     },
-     "total": N,
-     "max_total": null,
-     "verdict": "[PASS|FAIL]",
-     "consensus": {
-       "n_runs": 5,
-       "stability": "[HIGH|MEDIUM|LOW]",
-       "cv": [computed CV],
-       "ci_lower": [lower bound],
-       "ci_upper": [upper bound]
-     },
-     "stale": false,
-     "stale_reason": null,
-     "upstream_checksums": {
-       "output/drafts/[latest_draft].md": "sha256:[hash]",
-       "literature/refs.bib": "sha256:[hash]"
-     },
-     "output_file": "analysis/quality/CITATIONS_EVAL.md"
-   }
-   ```
-4. Update `updated_at` timestamp
-5. Log to `DECISION_LOG.md`: "citations — [total_citations] citations — [verdict]"
-
-Verdict thresholds:
-- PASS if total_citations >= 40 and coverage_adequate and all core theory cites peer-reviewed
-- CONDITIONAL if total_citations >= 40 and coverage_adequate but non-peer-reviewed core cite flagged
-- FAIL otherwise
+- **eval_results key**: `citations`
+- **Upstream files**: `analysis/manuscript/DRAFT.md`, `analysis/framing/frame-{N}/FRAMING_OPTIONS.md`
+- **Scores**: `total_cited`, `missing_critical`, `coverage_score`
+- **Verdict**: PASS if coverage_score >= threshold; FAIL otherwise
+- **Default consensus N**: 5

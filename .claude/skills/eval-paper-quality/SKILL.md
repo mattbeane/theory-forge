@@ -305,80 +305,14 @@ Search the manuscript for:
 
 ---
 
-## Consensus Mode
+For consensus mode behavior, see [../../_shared/consensus-mode.md](../../_shared/consensus-mode.md)
+For staleness detection, see [../../_shared/staleness-check.md](../../_shared/staleness-check.md)
+For eval result persistence, see [../../_shared/eval-persistence.md](../../_shared/eval-persistence.md)
 
-Check `state.json` → `consensus.enabled` (default: true).
+### Skill-Specific Persistence
 
-If enabled and `--quick` not specified:
-1. Run this evaluation 5 times (default: 5, configurable via `/consensus-config`)
-2. For each scored criterion: compute mean, SD, 95% CI, CV across runs
-3. For overall verdict: compute agreement rate across runs
-4. Include stability assessment using `lib/consensus/` formatters:
-   - 🟢 HIGH: CV < 10% or agreement ≥ 90%
-   - 🟡 MEDIUM: CV 10-25% or agreement 70-89%
-   - 🔴 LOW: CV > 25% or agreement < 70%
-5. Persist consensus stats in eval_results (see State Persistence below)
-
-If `--quick` flag is set: Run once, skip consensus, still persist results.
-
----
-
-## Staleness Check
-
-Before running this evaluation:
-1. Read `state.json` → `eval_results.paper_quality.frame_[current_frame].latest`
-2. If a previous result exists:
-   a. Compute current SHA-256 of upstream files:
-      ```bash
-      shasum -a 256 output/drafts/*.md | cut -d' ' -f1
-      ```
-      (Use the latest draft file)
-   b. Compare against stored `upstream_checksums`
-   c. If ALL match: "Previous results are current (ran [timestamp]). Re-run anyway? [Y/n]"
-   d. If ANY differ: "Upstream files changed since last eval. Running fresh evaluation."
-3. If no previous result exists: proceed with evaluation.
-
----
-
-## State Persistence
-
-After evaluation completes:
-1. Read `state.json`
-2. Compute SHA-256 checksums of upstream files:
-   - `output/drafts/*.md` (latest draft)
-3. Write to `eval_results.paper_quality.frame_[current_frame].latest`:
-   ```json
-   {
-     "timestamp": "[current ISO timestamp]",
-     "scores": {
-       "argument_clarity": N,
-       "evidence_quality": N,
-       "theoretical_grounding": N,
-       "contribution_significance": N,
-       "prose_quality": N
-     },
-     "total": X,
-     "max_total": 50,
-     "verdict": "[PASS|CONDITIONAL|FAIL]",
-     "consensus": {
-       "n_runs": 5,
-       "stability": "[HIGH|MEDIUM|LOW]",
-       "cv": [computed CV],
-       "ci_lower": [lower bound],
-       "ci_upper": [upper bound]
-     },
-     "stale": false,
-     "stale_reason": null,
-     "upstream_checksums": {
-       "output/drafts/[latest_draft].md": "sha256:[hash]"
-     },
-     "output_file": "analysis/quality/QUALITY_EVAL_REPORT.md"
-   }
-   ```
-4. Update `updated_at` timestamp
-5. Log to `DECISION_LOG.md`: "paper_quality scored [total]/50 — [verdict]"
-
-Verdict thresholds:
-- PASS if total >= 35
-- FAIL if total < 25
-- CONDITIONAL otherwise
+- **eval_results key**: `paper_quality`
+- **Upstream files**: `analysis/manuscript/DRAFT.md`
+- **Scores**: 10 criteria from `rubrics/paper_quality.json`
+- **Verdict**: PASS >= 35/50; FAIL < 25/50; CONDITIONAL otherwise
+- **Default consensus N**: 5
