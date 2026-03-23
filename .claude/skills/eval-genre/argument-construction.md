@@ -8,8 +8,14 @@ Genre and register checks catch framing problems. This section catches **structu
     - Sample 10+ paragraphs across all sections
     - Does each open with a CLAIM (contestable statement)?
     - Flag citation-first openings: "Author (Year) argued..." or "(Author, Year) found..."
-    - Flag narration openings: "In this section, we..."
+    - Flag narration openings: "In this section, we..." / "Before presenting X, we establish Y" / "We now turn to..."
     - Flag vague openings: "Several scholars have studied..."
+    - **Findings section specific:** Opening sentences of findings subsections must state the finding directly, not narrate the paper's structure
+    - BAD: "Before presenting quantitative patterns, we establish that role differentiation is deliberate"
+    - BAD: "We now present evidence that managers assign roles"
+    - GOOD: "Facility role differentiation was deliberate rather than emergent"
+    - GOOD: "Managers explicitly coordinated facility learning roles"
+    - Rationale: Meta-narration ("we establish," "we present evidence") puts the author's process center stage instead of the finding itself. The reader should encounter claims about the world, not descriptions of what the paper does.
     - Exception: Cold opens (max 1-2 paragraphs) may lead with data/quotes
 
 11. **Check transitions between paragraphs**
@@ -56,6 +62,12 @@ Genre and register checks catch framing problems. This section catches **structu
     - GOOD: "Facility Roles in Automation Implementation" (names what's covered without stating the conclusion)
     - GOOD: "Types of Virtual Work" (Bailey/Barley/Leonardi — descriptive, not conclusory)
     - GOOD: "Problem Construction" (Leonardi 2011 — names the phenomenon)
+    - **Findings subsection titles** should be **declarative findings**, not meta-narration about what kind of evidence follows
+    - BAD: "Evidence of deliberate role assignment" (describes the evidence type, not the finding)
+    - BAD: "Quantitative patterns in facility outcomes" (describes what the section contains)
+    - GOOD: "Facilities were deliberately assigned roles" (states what was found)
+    - GOOD: "Three facility role clusters emerged" (declarative)
+    - Rationale: Subsection titles in findings are micro-claims. Each one should tell the reader what the paper discovered, not what kind of evidence they're about to see. "Evidence of X" is a container; "X happened" is a finding.
     - Rationale: In top OrgSci/ASQ papers, section titles are argument-advancing, not containers. They compress the paper's intellectual terrain into a phrase. Generic titles ("Theoretical Background," "Findings") waste the reader's attention and signal boilerplate structure rather than directed argumentation.
     - Exception: "Theoretical Background" is used occasionally (Leonardi 2011) — flag as WEAK rather than FAIL
 
