@@ -43,6 +43,22 @@ Genre and register checks catch framing problems. This section catches **structu
     - Exception: A single short transitional sentence between major sections is acceptable if it serves as a signpost, but should be folded into the preceding or following paragraph where possible
     - Rationale: Short paragraphs signal underdeveloped ideas and read as listicle-style prose, which is inappropriate for top organizational journals
 
+16. **Check section titles for argument-advancing quality**
+    - Theory/lit review section title should name **the existing scholarly conversation** the paper enters — the research area or problem space the literature addresses — NOT the paper's contribution or finding
+    - BAD: "Theoretical Background," "Literature Review," "Theory" (generic containers)
+    - BAD: "Distributed Learning Across Sites" (names the contribution, not the conversation)
+    - GOOD: "Managing Exploration and Exploitation in Multi-Unit Organizations" (names the problem space)
+    - GOOD: "Alignment of Technology and Structure" (Barley 1990 — names the scholarly conversation)
+    - GOOD: "Relevant Perspectives on Careers" (O'Mahoney & Bechky 2006 — names the literature streams)
+    - Findings/results section title should **describe the empirical terrain or phenomenon** without revealing the theoretical punchline
+    - BAD: "Findings," "Results" (generic containers — acceptable but signals missed opportunity)
+    - BAD: "How Firms Distribute Learning" (front-loads the contribution)
+    - GOOD: "Facility Roles in Automation Implementation" (names what's covered without stating the conclusion)
+    - GOOD: "Types of Virtual Work" (Bailey/Barley/Leonardi — descriptive, not conclusory)
+    - GOOD: "Problem Construction" (Leonardi 2011 — names the phenomenon)
+    - Rationale: In top OrgSci/ASQ papers, section titles are argument-advancing, not containers. They compress the paper's intellectual terrain into a phrase. Generic titles ("Theoretical Background," "Findings") waste the reader's attention and signal boilerplate structure rather than directed argumentation.
+    - Exception: "Theoretical Background" is used occasionally (Leonardi 2011) — flag as WEAK rather than FAIL
+
 ### Argument Construction Output (add to GENRE_EVAL.md)
 
 ```markdown

@@ -84,6 +84,30 @@ The most dangerous form of front-loading is **findings masquerading as theory**.
 | "We extend this framework to automation..." | "This framework has not been applied to same-function units implementing the same technology" |
 | "Averaging across roles will understate..." | "If role differentiation occurs, it could have implications for how pooled estimates are interpreted" |
 
+### Section Title Red Flags
+
+Section titles in top OrgSci/ASQ papers are **argument-advancing**, not generic containers. Flag the following:
+
+| Generic (FLAG as WEAK) | Argument-Advancing (GOOD) |
+|------------------------|---------------------------|
+| "Theoretical Background" | "Managing Exploration and Exploitation in Multi-Unit Organizations" |
+| "Literature Review" | "Alignment of Technology and Structure" (Barley 1990) |
+| "Theory" | "Relevant Perspectives on Careers" (O'Mahoney & Bechky 2006) |
+| "Findings" | "Facility Roles in Automation Implementation" |
+| "Results" | "Types of Virtual Work" (Bailey/Barley/Leonardi) |
+
+**Theory section title rule:** Should name the **existing scholarly conversation** the paper enters — the problem space or research area — NOT the paper's contribution.
+- BAD: "Distributed Learning Across Sites" (that's the contribution)
+- GOOD: "Coordinating Distributed Knowledge Work Through Technology" (Beane & Orlikowski 2015 — names the research area)
+
+**Findings section title rule:** Should **describe the empirical terrain or phenomenon** without revealing the theoretical punchline.
+- BAD: "How Firms Distribute Learning" (front-loads the conclusion)
+- GOOD: "Problem Construction" (Leonardi 2011 — names what's examined)
+
+**Detection:** Search for `\section{Theoretical Background}`, `\section{Literature Review}`, `\section{Findings}`, `\section{Results}` (with or without `*`). Any match is a flag.
+
+**Exception:** "Theoretical Background" appears occasionally even in top papers (Leonardi 2011). Flag as WEAK, not FAIL.
+
 ### Temporal Logic Red Flags
 
 Discovery papers should read as if the researcher learned things in sequence:
