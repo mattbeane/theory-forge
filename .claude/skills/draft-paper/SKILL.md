@@ -111,9 +111,13 @@ After completing:
 
    **Introduction** (arc: WORLD → PROBLEM → GAP → QUESTION → PREVIEW):
    - Opening sentence: Broad Declarative, Trend Claim, or Literary Hook (never literature review)
-   - Gap must be about process/mechanism (never "more research needed")
+   - Stakes escalate: practical → theoretical → broader (calibrate emphasis to journal)
+   - Gap must be about process/mechanism (never "more research needed") — identify gap TYPE (absence, mechanism, framing, boundary, integration, inadequacy) and match to contribution type
    - Citation functions shift across the arc: consensus → steelman → absence → tension
    - One Turn only — don't pivot back and forth
+   - Research question form must match methodology (open → inductive; closed → deductive)
+   - Preview contributions (2-3) must map 1:1 to discussion contributions
+   - See `docs/ARGUMENT_CONSTRUCTION_RULES.md` sections 3.1.1-3.1.7 for full guidance on reader psychology, gap typology, paragraph budgets, and failure modes
 
    **Theory/Literature Review**:
    - Subsection opens: definitional/consensus claim with 2-4 foundational citations
@@ -311,6 +315,8 @@ Tell the user:
 - Word count
 - Any sections that need human review/polish
 - How to create the Overleaf package
+
+Suggest running `/eval-introduction` for deep introduction-specific feedback before full paper evaluation.
 
 Remind them that this is a DRAFT—they should read carefully, especially:
 - Claims match verification

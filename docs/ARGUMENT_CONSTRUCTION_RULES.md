@@ -131,11 +131,139 @@ Use the last sentence of one subsection and the first sentence of the next to cr
 2. **Trend Claim**: Names a contemporary movement, cited. "In the past decade, two major structural developments intersected."
 3. **Literary/Narrative Hook**: Epigraph, analogy, or story. Rare — use when you have a memorable frame the entire paper will orbit.
 
+#### 3.1.1 Reader Psychology: The Emotional Arc
+
+The introduction's structural moves (WORLD → PROBLEM → GAP → QUESTION → PREVIEW) have corresponding persuasive functions. Each step should produce a specific cognitive-emotional response in the reader:
+
+| Step | Structural function | Reader should feel | Test question |
+|------|--------------------|--------------------|---------------|
+| WORLD | Establish phenomenon | **Recognition**: "Yes, I know this" | Would my reader nod along? |
+| PROBLEM | Deepen stakes | **Concern**: "Hmm, that IS a problem" | Does this feel consequential? |
+| GAP | Show what's missing | **Surprise/frustration**: "Wait, we really DON'T know this?" | Would my reader be startled by the absence? |
+| QUESTION | State the research question | **Curiosity**: "How DOES this work?" | Is the reader now hooked? |
+| PREVIEW | Foreshadow contribution | **Anticipation**: "Tell me what you found" | Has the reader committed to the paper? |
+
+**The inevitability principle**: By the end of the introduction, the reader should feel that OF COURSE this study needed to be done. If the reader shrugs at the gap, the introduction has failed — even if structurally correct.
+
+**The Davis test** (Davis 1971, "That's Interesting!"): The most compelling papers challenge assumptions the audience didn't know they held. The WORLD step establishes the assumption. The PROBLEM step destabilizes it. The GAP shows nobody has resolved the destabilization. A competent introduction presents a gap; a great introduction makes the reader realize they've been wrong about something.
+
+**The Locke & Golden-Biddle test** (1997): The introduction must construct an "opportunity for contribution" — not merely identify a topic that hasn't been studied, but show that the absence matters for how we understand the world. The gap must feel like a wound in our collective understanding, not a blank spot on a map.
+
+#### 3.1.2 Stakes Escalation
+
+The PROBLEM step must deepen stakes progressively. Three layers, deployed in order:
+
+1. **Practical stakes**: Real organizations/people are affected. "Workers face displacement." "Hospitals adopt technology without understanding its effects on training." Grounds the problem in lived experience.
+
+2. **Theoretical stakes**: Our theories can't explain what's happening. "Existing frameworks predict X, but we observe Y." "The dominant account assumes conditions that no longer hold." Shows the problem isn't just practical — it reveals a gap in how we think.
+
+3. **Broader scholarly stakes**: The problem challenges assumptions across multiple literatures or reframes a foundational question. "If this assumption fails here, it likely fails in other domains too." Optional — not every paper needs this layer, but the strongest introductions reach it.
+
+**Calibration by journal**:
+
+| Journal | Practical stakes | Theoretical stakes | Broader stakes |
+|---------|-----------------|-------------------|---------------|
+| ASQ | Brief (1-2 sentences) | Dominant | Optional but valued |
+| Organization Science | Moderate | Dominant | Valued |
+| AMJ | Substantial (equal weight) | Required | Light |
+| ManSci | Economic/efficiency framing | Brief | Rare |
+
+**The scope-credibility tradeoff**: Bigger stakes are more persuasive but harder to deliver. The gap must be big enough that filling it matters, but small enough that one paper can credibly address it. If the stakes paragraph promises to revolutionize organizational theory, the paper had better deliver. If it promises to extend one concept to a new context, the reader will expect modest but solid contribution.
+
+**Anti-pattern: The defensive introduction**: An introduction that spends 500+ words justifying why the study matters before saying what it IS. This signals that the author knows the stakes are weak and is compensating. If the problem is genuinely important, stating it clearly is sufficient.
+
+#### 3.1.3 Gap Construction Typology
+
+Not all gaps are the same. Each type requires different construction and has different vulnerabilities.
+
+**Based on Locke & Golden-Biddle (1997), operationalized for practice:**
+
+| Gap type | Logic | Construction | Vulnerability | Defense |
+|----------|-------|-------------|---------------|---------|
+| **True absence** | "Nobody has studied X" | Show that adjacent work exists, but the specific phenomenon/process is unstudied | Reviewer cites a paper you missed | Acknowledge adjacent work explicitly; show why it doesn't address your specific question |
+| **Mechanism gap** | "We know X happens but not HOW" | Cite outcome studies, show the process is a black box | "The mechanism is obvious" | Show competing plausible mechanisms; demonstrate that the outcome literature assumes rather than demonstrates mechanism |
+| **Framing gap** | "We know X but haven't looked through lens Y" | Engage lens Y seriously, show it predicts different things | "Why does the new lens matter?" | Demonstrate that lens Y generates different predictions or reveals dynamics invisible under prior lenses |
+| **Boundary condition gap** | "X holds in context A but not B" | Establish X's domain, show B differs on theoretically relevant dimensions | "B is just a minor variant" | Argue that the difference between A and B is theoretically generative, not just empirically different |
+| **Integration gap** | "Literatures A and B both address X but haven't been combined" | Engage both literatures, show each has a blind spot the other fills | "This is just a lit review mashup" | Demonstrate that the combination produces novel insight neither literature alone generates |
+| **Inadequacy gap** | "The consensus view of X is wrong or incomplete" | Build up the consensus (steelman), then show the crack | "You're misrepresenting the literature" | Engage the strongest version of the view you're challenging; concede what it gets right |
+
+**Which gap type to use**:
+- **Mechanism gap** is the bread and butter of ASQ and OrgSci process papers
+- **Boundary condition gap** is common in AMJ
+- **True absence** is strongest when genuine, but rarest — most "absences" turn out to be mechanism or framing gaps on closer inspection
+- **Integration gap** requires genuine synthesis, not just "these two literatures exist" — the combination must produce something neither generates alone
+- **Inadequacy gap** is the hardest to execute because you must steelman the view you're challenging (Zuckerman criteria 7-8: build up and save the null)
+
 **Gap statement rules**:
 - Name the prior literature specifically
 - State what it has NOT done (not "more research is needed")
 - The absence must be about process or mechanism
 - Gap claims are author assertions, typically uncited
+- **Match the gap type to the contribution**: A mechanism gap promises process theory. A boundary condition gap promises contingency. An integration gap promises synthesis. If the gap and contribution don't match, the introduction will feel incoherent.
+
+#### 3.1.4 Paragraph Budget
+
+The 1500-2000 word introduction needs deliberate allocation. These are guidelines, not rigid prescriptions — but substantial deviations signal structural problems.
+
+| Arc step | Typical paragraphs | Word budget | Function |
+|----------|-------------------|-------------|----------|
+| WORLD | 1-2 | 200-400 | Establish shared understanding |
+| PROBLEM | 1-2 | 300-500 | Escalate stakes (practical → theoretical) |
+| GAP | 1 | 150-300 | Name what's missing (gap typology) |
+| QUESTION | 0.5-1 | 100-200 | State research question |
+| PREVIEW | 1-2 | 300-500 | Foreshadow contributions and study |
+
+**Budget shifts by journal**:
+- **ASQ**: WORLD and PROBLEM get more space (up to 900 words); PREVIEW is brief (200-300). Theory leads.
+- **Organization Science**: Roughly even distribution. Theoretical novelty emphasized in PREVIEW.
+- **AMJ**: PROBLEM gets substantial space (practical + theoretical motivation); PREVIEW includes practical implications.
+- **ManSci**: Compressed WORLD and PROBLEM (400-500 total); longer PREVIEW with identification strategy hint (300-400).
+
+**Budget diagnostic**: If WORLD exceeds 500 words, you're probably doing a literature review in the introduction. If GAP exceeds 300 words, you're being defensive. If PREVIEW exceeds 600 words, you're writing the abstract again.
+
+#### 3.1.5 Research Question Formulation
+
+The research question bridges GAP and PREVIEW. It constrains the paper's scope and signals methodology.
+
+**Open vs. closed form**:
+- **Open**: "How do organizations manage X?" — signals inductive/qual. Appropriate for ASQ, OrgSci theory-building papers. Admits you don't know the answer.
+- **Closed**: "Does X affect Y?" or "Under what conditions does X lead to Y?" — signals deductive/quant. Appropriate for AMJ, ManSci hypothesis-testing papers. Admits you have a prediction.
+- **Mixed**: "How and when does X shape Y?" — signals mixed-methods. Combines process and contingency.
+
+**Rules**:
+- One research question is ideal. Two is acceptable if they're sequential (descriptive + explanatory: "What happens? And why?"). Three signals unfocused thinking.
+- The RQ must be answerable by the study described in the PREVIEW. If the RQ implies a population study but the PREVIEW describes an ethnography, something is wrong.
+- The RQ should make the paper's scope obvious. If the RQ could generate 10 different papers, it's too broad.
+- The RQ is typically uncited — it's the author's assertion of what matters. But it should be clearly motivated by the GAP that precedes it.
+
+**The constraint test**: A good research question, read alone, should tell a colleague in your field roughly what kind of paper to expect (topic, method family, contribution type). If it doesn't, tighten it.
+
+#### 3.1.6 Contribution Preview (PREVIEW Step)
+
+The PREVIEW foreshadows what the paper delivers. It must be precise enough to create anticipation but not so detailed that it spoils the findings.
+
+**What to include**:
+1. **Study description** (1-2 sentences): Setting, method family, scale. "Drawing on a two-year ethnography of..." or "Using 59,000 separation records across six facilities..."
+2. **Core finding or concept** (1-2 sentences): Tease the mechanism or name the concept. "We find that..." or "I identify a process I call..."
+3. **Contributions** (2-4 sentences): Which scholarly conversations does this paper advance, and how?
+
+**How much to reveal**:
+- **Tease, don't spoil**: "We show how X unfolds through Y" previews the contribution type without giving away the full mechanism. "We find that X causes Y through Z mediated by W" is a spoiler — save it for the findings.
+- **Name the concept** if you're coining one: "I call this process 'shadow learning'" in the introduction is powerful — it gives the reader a handle.
+- **Don't pre-argue**: The PREVIEW states contributions; it doesn't defend them. Defense is for the discussion.
+
+**Number of contributions**:
+- ASQ/OrgSci: 2-3 contributions typical. More than 3 signals unfocused.
+- AMJ: 2-3 theoretical + 1 practical implication.
+- ManSci: 1-2 contributions, precisely stated.
+
+**The formula and its variants**:
+- "This paper contributes to X by showing Y" — standard, clear
+- "We advance understanding of X by..." — slightly more assertive
+- "This study extends X to show..." — signals extension, not challenge
+- "Our findings challenge the assumption that..." — signals an inadequacy gap contribution
+
+**Preview-discussion coherence rule**: Every contribution previewed in the introduction MUST be claimed in the discussion, and vice versa. This is a mechanical check: list the PREVIEW contributions and the discussion contributions side by side. They should map 1:1. Mismatches mean the paper drifted during drafting.
 
 **Detection patterns for bad introductions**:
 ```
@@ -144,6 +272,47 @@ Use the last sentence of one subsection and the first sentence of the next to cr
 ^(The|A)\s+literature\s+on
 ^(Scholars|Researchers|Studies)\s+have\s+(long\s+)?(shown|found|argued)
 ```
+
+#### 3.1.7 Common Structural Failure Modes
+
+Beyond surface detection patterns, these are the structural problems that sink introductions. Each is named for diagnosis.
+
+**The Premature Contribution List**
+> "This paper makes three contributions. First, we extend... Second, we show... Third, we document..."
+
+Appears in paragraph 2-3, before the reader cares. Contributions should be EARNED by the argument, not announced at the door. The PREVIEW may gesture at contributions, but the bulleted contribution list is a discussion move, never an introduction move.
+
+**The Everything Introduction**
+> Engages 5+ literatures in the introduction, each for one paragraph, with no throughline.
+
+The introduction should join ONE scholarly conversation (Zuckerman criterion 2). Engaging multiple literatures is for the theory section. If the introduction needs five literatures to motivate the gap, the gap is probably unfocused.
+
+**The Defensive Introduction**
+> Spends 500+ words justifying why the topic matters before saying what the study IS.
+
+Signals that the author knows the stakes are weak. If the problem is genuinely important, a brief, clear statement of stakes is more persuasive than a long defense. When you catch yourself writing "it is important to study X because...", ask whether a stronger opening would make the justification unnecessary.
+
+**The Methods-Forward Introduction**
+> "We conducted a two-year ethnographic study of six hospitals..." in paragraph 2, before the theoretical puzzle exists.
+
+The empirical setting serves the theoretical question, not the other way around. The reader must understand WHY the study was done before they care HOW it was done. Exception: the cold-open-with-data offramp (max 2 paragraphs), which uses empirical surprise to motivate the question.
+
+**The Too-Narrow Gap**
+> "While studies have examined X in context A, none have examined X in context B."
+
+If the contribution is "we did the same thing somewhere else," the gap is too narrow. The move to context B must be theoretically motivated — B must differ from A on dimensions that generate new insight, not just new data points.
+
+**The Too-Broad Gap**
+> "Organizations face unprecedented change, yet we lack a comprehensive theory of adaptation."
+
+No single paper can fill a gap this large. The reader will wonder which corner of this enormous gap the paper actually addresses, and will expect the answer to be modest relative to the promise. Narrow the gap to the specific process/mechanism the paper actually illuminates.
+
+**The Contribution-First Introduction**
+> Opens with "We contribute to X by showing Y" before establishing why X matters.
+
+The contribution only has meaning in the context of the gap. If the reader doesn't feel the gap, the contribution lands flat. Build the world, deepen the problem, reveal the gap, THEN preview the contribution.
+
+**Detection heuristic**: Read only the first sentence of each paragraph. If the throughline is unclear, there's a structural problem. If you can't identify which arc step each paragraph belongs to (WORLD, PROBLEM, GAP, QUESTION, PREVIEW), the introduction needs restructuring.
 
 ### 3.2 Theory / Literature Review
 
@@ -258,11 +427,37 @@ Each contribution paragraph:
 - [ ] Is the new section advancing the argument (not just continuing it)?
 
 ### Introduction Complete?
+
+**Structure**:
 - [ ] Opens with Broad Declarative, Trend Claim, or Literary Hook (not literature review)
 - [ ] Arc follows WORLD → PROBLEM → GAP → QUESTION → PREVIEW
-- [ ] Gap statement specifies missing process/mechanism (not "more research needed")
 - [ ] One clear Turn with adversative conjunction
 - [ ] Citation functions shift from consensus → steelman → absence → tension
+
+**Gap & Question**:
+- [ ] Gap type identified (absence, mechanism, framing, boundary, integration, or inadequacy)
+- [ ] Gap statement specifies missing process/mechanism (not "more research needed")
+- [ ] Gap is defensible — adjacent work acknowledged, specific absence articulated
+- [ ] Research question is answerable by the study described in PREVIEW
+- [ ] Research question form matches methodology (open → inductive; closed → deductive)
+
+**Stakes & Persuasion**:
+- [ ] Stakes escalate: practical → theoretical (→ broader, if warranted)
+- [ ] Stakes calibrated to journal (ASQ: theory-dominant; AMJ: practical + theoretical)
+- [ ] Reader would feel surprise/frustration at the gap, not just acknowledge it
+- [ ] No defensive over-justification (>500 words of "why this matters")
+
+**Preview**:
+- [ ] Study described concisely (setting, method family, scale)
+- [ ] Core finding/concept teased without spoiling mechanism
+- [ ] Contributions previewed (2-3 for ASQ/OrgSci, 1-2 for ManSci)
+- [ ] Preview contributions will map 1:1 to discussion contributions
+
+**Failure mode scan**:
+- [ ] No premature contribution list (bulleted "three contributions" before gap is earned)
+- [ ] No everything introduction (5+ literatures engaged without throughline)
+- [ ] No methods-forward framing (study described before theoretical puzzle)
+- [ ] Gap is neither too narrow (same thing, new context) nor too broad (solve all of X)
 
 ### Theory Section Complete?
 - [ ] Organized by stream, category, or funnel (not random)
