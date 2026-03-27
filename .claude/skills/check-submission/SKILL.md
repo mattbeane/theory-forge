@@ -40,6 +40,7 @@ Based on contribution type and workflow state, determine which tests to run:
 |------|----------|---------------|
 | Contribution Type | `contribution` | What kind of paper this is |
 | Paper Quality | `paper_quality` | Argument, evidence, theory, contribution, prose |
+| Introduction | `introduction` | Arc structure, gap construction, stakes, RQ, reader psychology |
 | Limitations | `limitations` | Boundary conditions properly framed |
 | Citations | `citations` | Adequate literature coverage |
 | Counter-Evidence | `counter_evidence` | Disconfirming evidence addressed |

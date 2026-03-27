@@ -60,6 +60,7 @@ Every evaluation persists scores across sessions, tracks upstream file changes f
 | `/eval-zuckerman` | Framing quality (10 criteria) | Score /50 |
 | `/eval-zuckerman-lite` | Early puzzle check (3 gates) | PASS / FAIL |
 | `/eval-paper-quality` | Argument, evidence, theory, contribution, prose | Score /50 |
+| `/eval-introduction` | Introduction arc, gap typology, stakes, reader psychology | Score /30 |
 | `/eval-contribution` | Contribution type diagnosis | Type + confidence |
 | `/eval-becker` | Generalizability | PASS / FAIL |
 | `/eval-genre` | Inductive vs. deductive register | PASS / FAIL |
@@ -154,6 +155,8 @@ Most theory-building papers follow: find something → figure out why → frame 
                                                Yes
                                                 │
                         /audit-claims → /verify-claims → /draft-paper
+                                                │
+                                       /eval-introduction
                                                 │
                                     /check-submission → /export
 ```
