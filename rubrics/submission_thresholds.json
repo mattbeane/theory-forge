@@ -15,7 +15,14 @@
     "audit_claims": { "max_high_concern": 0 },
     "counter_evidence": { "required_verdict": "PASS" },
     "alt_interpretations": { "required_verdict": "PASS" },
-    "boundary_conditions": { "required_verdict": "PASS" }
+    "boundary_conditions": { "required_verdict": "PASS" },
+    "introduction": { "min_score": 24, "max_score": 30 },
+    "findings": { "min_score": 24, "max_score": 30 },
+    "methods": { "min_score": 24, "max_score": 30 },
+    "lit_review": { "min_score": 28, "max_score": 35 },
+    "discussion": { "min_score": 24, "max_score": 30 },
+    "abstract": { "min_score": 20, "max_score": 25 },
+    "tables_figures": { "min_score": 20, "max_score": 25 }
   },
   "presets": {
     "top_journal": {

@@ -41,6 +41,11 @@ Based on contribution type and workflow state, determine which tests to run:
 | Contribution Type | `contribution` | What kind of paper this is |
 | Paper Quality | `paper_quality` | Argument, evidence, theory, contribution, prose |
 | Introduction | `introduction` | Arc structure, gap construction, stakes, RQ, reader psychology |
+| Findings | `findings` | Concept organization, evidence-theory interleaving, narrative progression |
+| Methods | `methods` | Setting justification, analytical transparency, iteration, methodological fit |
+| Literature/Theory | `lit_review` | Conversation identification, puzzle construction, citation engagement |
+| Discussion | `discussion` | Contribution positioning, implications, boundary conditions, coherence |
+| Abstract | `abstract` | Hook, arc compression, method/finding/contribution signals |
 | Limitations | `limitations` | Boundary conditions properly framed |
 | Citations | `citations` | Adequate literature coverage |
 | Counter-Evidence | `counter_evidence` | Disconfirming evidence addressed |
@@ -60,6 +65,7 @@ Based on contribution type and workflow state, determine which tests to run:
 | Audit Claims | After /audit-claims | `audit_claims` |
 | Verify Claims | After /verify-claims | `claim_verification` |
 | Simulated Review | After /draft-paper | `simulate_review` |
+| Tables & Figures | After /draft-paper | `tables_figures` |
 
 ## Step 3: Check Freshness
 

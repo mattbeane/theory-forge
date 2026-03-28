@@ -26,6 +26,13 @@ Each evaluation tracks specific files:
 | eval-genre | `analysis/manuscript/DRAFT.md` |
 | eval-becker | `analysis/framing/frame-{N}/FRAMING_OPTIONS.md` |
 | verify-claims | `analysis/audit/claims.jsonl`, `evidence.jsonl`, `links.csv` |
+| eval-introduction | `analysis/manuscript/DRAFT.md` |
+| eval-findings | `analysis/manuscript/DRAFT.md` |
+| eval-methods | `analysis/manuscript/DRAFT.md` |
+| eval-lit-review | `analysis/manuscript/DRAFT.md`, `analysis/framing/frame-{N}/FRAMING_OPTIONS.md` |
+| eval-discussion | `analysis/manuscript/DRAFT.md` |
+| eval-abstract | `analysis/manuscript/DRAFT.md` |
+| eval-tables-figures | `analysis/manuscript/DRAFT.md` |
 | check-submission | All upstream eval results (meta-staleness) |
 
 ## How Staleness Propagates

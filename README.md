@@ -61,6 +61,12 @@ Every evaluation persists scores across sessions, tracks upstream file changes f
 | `/eval-zuckerman-lite` | Early puzzle check (3 gates) | PASS / FAIL |
 | `/eval-paper-quality` | Argument, evidence, theory, contribution, prose | Score /50 |
 | `/eval-introduction` | Introduction arc, gap typology, stakes, reader psychology | Score /30 |
+| `/eval-findings` | Concept organization, evidence-theory interleaving, quote handling, narrative | Score /30 |
+| `/eval-methods` | Setting justification, data description, analytical transparency, iteration | Score /30 |
+| `/eval-lit-review` | Conversation identification, puzzle construction, citation depth, narrative arc | Score /35 |
+| `/eval-discussion` | Contribution positioning, implications, boundaries, coherence | Score /30 |
+| `/eval-abstract` | Hook, arc compression, method/finding/contribution signals | Score /25 |
+| `/eval-tables-figures` | Analytical purpose, design clarity, captions, text integration | Score /25 |
 | `/eval-contribution` | Contribution type diagnosis | Type + confidence |
 | `/eval-becker` | Generalizability | PASS / FAIL |
 | `/eval-genre` | Inductive vs. deductive register | PASS / FAIL |
@@ -156,7 +162,11 @@ Most theory-building papers follow: find something → figure out why → frame 
                                                 │
                         /audit-claims → /verify-claims → /draft-paper
                                                 │
-                                       /eval-introduction
+                                  Section-level evals (run any/all):
+                                  /eval-introduction, /eval-findings,
+                                  /eval-methods, /eval-lit-review,
+                                  /eval-discussion, /eval-abstract,
+                                  /eval-tables-figures
                                                 │
                                     /check-submission → /export
 ```
