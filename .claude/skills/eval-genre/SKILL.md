@@ -340,6 +340,88 @@ Add to the Overall Assessment table:
 
 ---
 
+## Epistemological Commitment Check
+
+### Added Check: Epistemological Consistency
+
+In addition to the genre checks above, verify the following:
+
+### 1. Epistemological Approach Named
+
+**Question**: Does the methods section explicitly name its epistemological approach?
+
+Search for explicit statements like:
+- "This study uses an inductive approach..."
+- "We employ abductive reasoning..."
+- "Following a grounded theory methodology..."
+- "Our deductive design tests..."
+
+**PASS**: Methods section explicitly names the epistemological approach (inductive, deductive, abductive, or a recognized methodology that implies one).
+**NEEDS REVISION**: Approach is implied but never named. Reader must infer the epistemology from contextual clues.
+
+### 2. Epistemological Consistency Across Sections
+
+**Question**: Is the named approach consistent across methods, findings, and cover letter?
+
+Check for mismatches:
+- Methods says "inductive" but findings are organized around pre-specified hypotheses
+- Methods says "abductive" but theory section is purely deductive (hypothesis derivation)
+- Cover letter claims "theory-building" but paper reads as theory-testing
+- Methods says "grounded theory" but data structure reflects template analysis (a priori codes)
+
+**PASS**: The named epistemological approach is consistent across all sections and the cover letter. Methods, findings, and framing all reflect the same logic of inquiry.
+**NEEDS REVISION**: Mismatches detected between the claimed approach and the actual structure of methods, findings, or cover letter.
+
+### 3. Mixed Methods Design Logic
+
+**Question**: If the paper uses mixed methods, is the design logic described?
+
+If the paper combines qualitative and quantitative methods, check for:
+- Named design type (complementary, triangulation, sequential exploratory, sequential explanatory, concurrent)
+- Explanation of how the methods relate to each other (e.g., "qual informs quant instrument" vs. "quant validates qual findings")
+- Justification for why mixed methods are appropriate for the research question
+
+**PASS**: Mixed methods design is named and the relationship between methods is explained.
+**NEEDS REVISION**: Paper uses multiple methods but doesn't describe how they relate or why the combination is appropriate.
+**N/A**: Paper uses a single method.
+
+### Output: Add to Overall Assessment Table
+
+| Check | Status |
+|-------|--------|
+| ... existing checks ... | |
+| Methods names epistemological approach | ✓/✗ |
+| Epistemology consistent across sections | ✓/✗ |
+| Mixed methods design logic described | ✓/✗/N/A |
+
+### Output: Add Epistemological Commitment Section to Report
+
+```markdown
+## Epistemological Commitment
+
+### Approach Named
+**Named approach**: [Yes: "inductive" / Yes: "abductive" / No — implied only]
+**Where stated**: [Section, paragraph, or "Not stated"]
+**Assessment**: [PASS / NEEDS REVISION]
+
+### Cross-Section Consistency
+**Methods**: [Approach claimed]
+**Findings structure**: [Consistent / Inconsistent — describe mismatch]
+**Cover letter**: [Consistent / Inconsistent / Not available]
+**Assessment**: [PASS / NEEDS REVISION]
+
+**If inconsistent:**
+- [Section]: Claims [X], but actually does [Y]
+- Suggested fix: [Specific revision]
+
+### Mixed Methods Design (if applicable)
+**Design type named**: [Yes: type / No / N/A]
+**Method relationship explained**: [Yes / No / N/A]
+**Assessment**: [PASS / NEEDS REVISION / N/A]
+```
+
+---
+
 ## Common Patterns
 
 **"Dressed-up deduction"**: Paper was actually inductive but author wrote it deductively because that's how they were trained. Fix: Reframe theory section as "sensitizing concepts I brought to the field" rather than "hypotheses derived from literature."

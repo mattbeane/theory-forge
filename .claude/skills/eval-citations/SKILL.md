@@ -167,6 +167,63 @@ For common literatures, verify these citations are present (if the literature is
 - Spence (1973) - foundational
 - Applications in labor/org context
 
+### Step 8: Literature Depth Check (Discussion)
+
+For each literature *named* in the discussion section, verify that the paper cites canonical works from that literature's core.
+
+**Why this matters**: Papers often name literatures in the discussion ("our findings contribute to the literature on organizational learning") without citing the canonical works that define those literatures. Reviewers who work in those literatures will notice immediately.
+
+**Process**:
+1. Identify every literature stream explicitly named in the discussion (e.g., "organizational learning," "ambidexterity," "knowledge transfer")
+2. For each named literature, check whether the paper cites at least 3 canonical works from that literature's core
+3. Use the canonical works reference below, plus domain knowledge
+
+**Canonical Works by Major Literature Stream**:
+
+| Literature | Canonical Works (minimum expectations) |
+|-----------|---------------------------------------|
+| Organizational Learning | March (1991); Levitt & March (1988); Argote (2013); Huber (1991) |
+| Ambidexterity | March (1991); Tushman & O'Reilly (1996); Gibson & Birkinshaw (2004); Raisch & Birkinshaw (2008) |
+| Productivity Paradox | Solow (1987); Brynjolfsson (1993); Brynjolfsson & Hitt (1998) |
+| Knowledge Transfer | Argote & Ingram (2000); Szulanski (1996); Hansen (1999); Reagans & McEvily (2003) |
+| Routines | Nelson & Winter (1982); Feldman & Pentland (2003); Pentland & Rueter (1994) |
+| Institutional Theory | DiMaggio & Powell (1983); Meyer & Rowan (1977); Scott (2014); Thornton et al. (2012) |
+| Sensemaking | Weick (1995); Weick et al. (2005); Maitlis & Christianson (2014) |
+| Identity (Organizational) | Albert & Whetten (1985); Gioia et al. (2000); Ravasi & Schultz (2006) |
+| Identity (Individual/Work) | Ibarra (1999); Pratt et al. (2006); Caza et al. (2018) |
+| Technology & Work | Orlikowski (1992, 2007); Barley (1986); Zuboff (1988); Bailey & Barley (2020) |
+| Expertise & Skill | Dreyfus & Dreyfus (1986); Ericsson et al. (1993); Lave & Wenger (1991); Beane (2019) |
+| Occupations & Professions | Abbott (1988); Anteby et al. (2016); Bechky (2003) |
+
+**Note**: This list is not exhaustive. Use domain knowledge to identify canonical works for literatures not listed. When uncertain, check whether the cited works are foundational (introduced the concept), landmark (shaped the field), or recent-canonical (major reviews/meta-analyses).
+
+**Scoring**:
+- **PASS**: Every literature named in the discussion cites 3+ canonical works from its core
+- **CONDITIONAL**: Any named literature has <3 citations from its canon
+- **FAIL**: A literature is named in the discussion with zero canonical citations
+
+**Output for this step**: Add a "Discussion Literature Depth" section to the report:
+
+```markdown
+## Discussion Literature Depth
+
+| Literature Named in Discussion | Canonical Cites Found | Count | Status |
+|-------------------------------|----------------------|-------|--------|
+| [Literature 1] | [Author Year], [Author Year], [Author Year] | 3 | PASS |
+| [Literature 2] | [Author Year] | 1 | CONDITIONAL |
+| [Literature 3] | None | 0 | FAIL |
+
+**Verdict**: [PASS / CONDITIONAL / FAIL]
+
+**Missing canonical cites to add**:
+- [Literature]: Add [Author Year] — [Why canonical]
+- [Literature]: Add [Author Year] — [Why canonical]
+```
+
+Incorporate this verdict into the overall citation evaluation. If the literature depth check is CONDITIONAL, the overall citation eval cannot be higher than CONDITIONAL.
+
+---
+
 ## Output Format
 
 Create `analysis/quality/CITATIONS_EVAL.md`:
@@ -274,7 +331,7 @@ STAGE 9: QUALITY CHECKS
   └─ /eval-citations (REQUIRED)
        ↓
      GATE F: Quality gate
-       - Paper quality score ≥35/50 OR user override
+       - Paper quality score ≥40/50 OR user override
        - Limitations section: PASS
        - Citations: ≥ minimum for target journal, no missing canonicals
 ```

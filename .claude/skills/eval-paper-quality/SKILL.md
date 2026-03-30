@@ -112,10 +112,12 @@ Also requires `ANTHROPIC_API_KEY` in environment for API calls.
 
    **Score interpretation**:
    - **45-50**: Excellent - ready for submission with minor polish
-   - **35-44**: Good - solid draft, some improvements needed
-   - **25-34**: Adequate - substantial revision required
+   - **40-44**: Good - solid draft, some improvements needed
+   - **25-39**: Adequate - substantial revision required
    - **15-24**: Weak - major problems to address
    - **0-14**: Unacceptable - needs fundamental rework
+
+   **Desk-reject risk flag**: If ANY single dimension (Argument Clarity, Evidence Quality, Theoretical Grounding, Contribution Significance, Prose Quality) scores **7 or below** (out of 10), flag the paper as having desk-reject risk on that dimension. This flag is independent of the total score -- a paper can score 42/50 overall but still carry desk-reject risk if one dimension is critically weak.
 
 ## Output Format
 
@@ -141,13 +143,13 @@ Create `analysis/quality/QUALITY_EVAL_REPORT.md`:
 
 ## Criterion Scores
 
-| Criterion | Score | Max | Rating | Flagged |
-|-----------|-------|-----|--------|---------|
-| Argument Clarity | X/10 | 10 | [Level] | [Yes/No] |
-| Evidence Quality | X/10 | 10 | [Level] | [Yes/No] |
-| Theoretical Grounding | X/10 | 10 | [Level] | [Yes/No] |
-| Contribution Significance | X/10 | 10 | [Level] | [Yes/No] |
-| Prose Quality | X/10 | 10 | [Level] | [Yes/No] |
+| Criterion | Score | Max | Rating | Flagged | Desk-Reject Risk |
+|-----------|-------|-----|--------|---------|------------------|
+| Argument Clarity | X/10 | 10 | [Level] | [Yes/No] | [Yes if <=7] |
+| Evidence Quality | X/10 | 10 | [Level] | [Yes/No] | [Yes if <=7] |
+| Theoretical Grounding | X/10 | 10 | [Level] | [Yes/No] | [Yes if <=7] |
+| Contribution Significance | X/10 | 10 | [Level] | [Yes/No] | [Yes if <=7] |
+| Prose Quality | X/10 | 10 | [Level] | [Yes/No] | [Yes if <=7] |
 
 ---
 
@@ -221,6 +223,7 @@ Create `analysis/quality/QUALITY_EVAL_REPORT.md`:
 
 Tell the user:
 - The overall score (X/50) and rating
+- Whether any dimensions carry desk-reject risk (scored <=7/10) -- call this out prominently
 - The top 3 priorities for revision
 - Which criteria were flagged for human review (if any)
 - Specific, actionable recommendations for the weakest areas
@@ -314,5 +317,5 @@ For eval result persistence, see [../../_shared/eval-persistence.md](../../_shar
 - **eval_results key**: `paper_quality`
 - **Upstream files**: `analysis/manuscript/DRAFT.md`
 - **Scores**: 10 criteria from `rubrics/paper_quality.json`
-- **Verdict**: PASS >= 35/50; FAIL < 25/50; CONDITIONAL otherwise
+- **Verdict**: PASS >= 40/50; FAIL < 25/50; CONDITIONAL otherwise
 - **Default consensus N**: 5
