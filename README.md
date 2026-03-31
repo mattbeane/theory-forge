@@ -100,6 +100,7 @@ Every evaluation persists scores across sessions, tracks upstream file changes f
 | `/status` | Workflow progress, eval results dashboard, staleness indicators |
 | `/consensus-config` | Configure consensus settings (N per stage, thresholds) |
 | `/create-agent` | Build bespoke agents for project-specific needs |
+| `/extend-forge` | Add a new skill to theory-forge — full build-and-wire workflow, then returns to research |
 | `/repair-state` | Diagnose and fix state.json problems |
 | `/student-mode` | Toggle learning scaffolding (predictions, explanations) |
 
