@@ -42,7 +42,7 @@ Check the invariant sequence: WORLD → PROBLEM → GAP → QUESTION → PREVIEW
 | Check | Pass | Fail |
 |-------|------|------|
 | Arc steps in correct order | All 5 present, in sequence | Steps missing, out of order, or repeated |
-| One Turn only | Single adversative pivot from consensus to gap | Multiple turns, no turn, or turn that backtracks |
+| One Turn only | Single adversative pivot from consensus to gap | Multiple turns, no turn, or turn that backtracks — *note: rare papers use deliberate multi-stage builds; score this contextually* |
 | Opening sentence | Broad Declarative, Trend Claim, or Literary Hook | Literature-first, narration, or vague |
 | Cold open (if used) | ≤2 paragraphs before literature engagement | Empirical content extends past paragraph 2 without citations |
 | No tracking paragraphs | Absent | "This paper proceeds as follows..." or equivalent |
@@ -77,6 +77,8 @@ Identify and evaluate the gap.
 | Gap-contribution coherence | Mechanism gap → process theory; boundary gap → contingency theory; etc. | Gap type doesn't match contribution type |
 | Scope calibrated | Big enough to matter, small enough for one paper | Too narrow (incremental) or too broad (unsolvable) |
 
+**The Martha Feldman test** (learned from Martha Feldman): Identify the three papers closest to your finding — the ones a skeptical reviewer might cite to say "but this was already done." Name them explicitly, explain what each found, and articulate exactly why your contribution is new or different relative to each. A gap that collapses under any of those three citations is not yet defensible.
+
 ---
 
 ### Dimension 3: Stakes Escalation (Persuasive)
@@ -90,7 +92,7 @@ Evaluate whether the PROBLEM step creates genuine urgency.
 | Stakes escalate | Practical → theoretical (→ broader if warranted) | All stakes stated at same level, or theoretical before practical |
 | Stakes calibrated to journal | ASQ: theory-dominant; AMJ: practical + theoretical equally; ManSci: efficiency/economic | Wrong emphasis for target journal |
 | No defensive over-justification | Stakes stated clearly in <500 words | 500+ words of "it is important to study X because..." |
-| Reader would feel the gap | Surprise, frustration, or curiosity at what's missing | Intellectual acknowledgment without emotional investment |
+| Reader would feel the gap | Surprise, frustration, or curiosity at what's missing | Intellectual acknowledgment without emotional investment — *requires real domain-expert readers or LLM consensus proxy; author self-assessment is insufficient* |
 
 **The shrug test**: After reading the PROBLEM and GAP, would a knowledgeable reviewer say "huh, you're right, that IS a problem we should understand" — or would they shrug? If they'd shrug, the stakes are undercooked.
 
@@ -114,6 +116,8 @@ Evaluate whether the PROBLEM step creates genuine urgency.
 
 This is the hardest dimension — it requires reading the introduction as a READER, not an analyst.
 
+> **Proxy caveat**: All checks in this dimension ask what a real domain-expert reader would feel. The author cannot self-assess these reliably. Use LLM consensus simulation (5+ perspectives) as an acceptable proxy. Flag scores here as "LLM-proxied" in the output.
+
 | Check | Pass | Fail |
 |-------|------|------|
 | **Recognition** (WORLD) | Reader nods: "I know this" | Reader confused or bored by paragraph 1 |
@@ -136,7 +140,7 @@ Check for the named structural failure modes:
 | **Premature contribution list** | Bulleted "three contributions" before paragraph 4 | Yes/No |
 | **Everything introduction** | 5+ distinct literatures engaged without throughline | Yes/No |
 | **Defensive introduction** | 500+ words justifying topic before stating the study | Yes/No |
-| **Methods-forward** | Study described before theoretical puzzle established | Yes/No |
+| **Methods-forward** | Study described before theoretical puzzle established — *exception: papers whose primary contribution IS a new method or design innovation may legitimately foreground study description* | Yes/No |
 | **Too-narrow gap** | "Same thing, new context" without theoretical motivation | Yes/No |
 | **Too-broad gap** | Gap that no single paper could fill | Yes/No |
 | **Contribution-first** | Contribution stated before gap established | Yes/No |

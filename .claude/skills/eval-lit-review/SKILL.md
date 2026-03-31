@@ -78,7 +78,7 @@ Check whether the literature is used to BUILD the intellectual puzzle, not just 
 |-------|------|------|
 | Literature reveals the problem | Prior work is presented to show what it CANNOT explain | Prior work presented as a catalog of what IS known |
 | Tension is constructed | Two or more findings/frameworks are placed in productive tension | Literature is harmonious; no contradictions or incompleteness surfaced |
-| Gap emerges from engagement | The gap is a logical consequence of engaging with the literature | Gap is asserted ("little is known about...") without showing WHY it's unknown |
+| Gap emerges from engagement | The gap is a logical consequence of engaging with the literature — *concrete test: the gap sentence should follow logically from a tension or limitation set up in the two preceding paragraphs; a reader should be able to say "of course that's the gap — the literature just showed it has no answer to X"* | Gap is asserted ("little is known about...") without the preceding paragraphs having set up WHY it's unknown |
 | Prior answers shown insufficient | Existing explanations are presented, then shown to be incomplete or wrong for this context | Existing explanations ignored or strawmanned |
 | Puzzle is about mechanism | What's missing is HOW something works, not just WHETHER it happens in a new context | Gap is "same thing, new context" without theoretical motivation |
 
@@ -93,7 +93,7 @@ Check whether the gap is constructed through a clear logical sequence.
 | Check | Pass | Fail |
 |-------|------|------|
 | Scaffolding sequence | Broad agreement → specific limitation → gap | Gap stated at the start without scaffolding |
-| Prior work respected | Existing literature is presented fairly before its limitations are identified | Prior work caricatured to make the gap seem larger |
+| Prior work respected | Existing literature is presented fairly before its limitations are identified — *this is Zuckerman's "save the null": you must present the existing view at its strongest before showing its limits; the gap needs to coexist with, not demolish, prior work* | Prior work caricatured to make the gap seem larger |
 | Gap is defensible | Specific enough that it can't be filled by citing one overlooked paper | Vulnerable to "but Author X already studied this" |
 | Gap aligns with introduction | Theory section gap and introduction gap are the same gap (not a drift) | Theory section identifies a different gap than the introduction |
 | Transition to method is smooth | By section end, the study design feels like the natural response to the gap | Abrupt jump from theory to methods with no bridge |
@@ -147,7 +147,7 @@ Read the theory section as a STORY, not an analysis. Check whether it has narrat
 | Each paragraph advances | Every paragraph moves the argument forward; none are detours | Paragraphs that could be deleted without weakening the argument |
 | Section has turning point | A moment where the literature is shown to be insufficient — the intellectual "turn" | Smooth survey without a turn; limitations tacked on at the end |
 | Closing sets up the study | Final paragraph makes the study feel necessary and the method choice feel natural | Abrupt ending; or generic "more research is needed" |
-| Reading experience | Reader feels growing understanding of a problem that NEEDS solving | Reader feels they've been through a comprehensive but unmotivated tour |
+| Reading experience | *(impressionistic — not rubricable with high reliability; treat as a gestalt check, not a scored criterion)* Reader feels growing understanding of a problem that NEEDS solving | Reader feels they've been through a comprehensive but unmotivated tour |
 
 **The page test**: If a reviewer is on page 5 of the theory section, are they leaning forward ("this is building to something") or checking how many pages remain? The theory section should create the same forward momentum as the introduction.
 

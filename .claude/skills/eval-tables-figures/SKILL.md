@@ -131,8 +131,8 @@ Check whether the collection of display items has the right overall density.
 |-------|------|------|
 | Sufficient display items | Paper has enough visual/tabular elements to support its claims | Claims made entirely through prose when tables/figures would strengthen them |
 | No redundant items | Each display item shows something unique | Two tables showing essentially the same comparison from different angles |
-| Process model present (if needed) | For process theories: a figure showing the model with stages and mechanisms | Process theory claimed with no visual representation |
-| Data overview present | Summary of data sources, informants, or analytical categories | Reader must reconstruct data scope from prose |
+| Process model present (if needed) | *(strongly recommended but not required)* For process theories: a figure showing the model with stages and mechanisms — often excellent when present | Process theory claimed with no visual representation AND no stated rationale for omitting one |
+| Data overview present | *(recommended but not required)* Summary of data sources, informants, or analytical categories — many excellent papers embed this in prose | Absent AND data scope is genuinely unclear from reading the methods section |
 | Total count appropriate | Consistent with journal conventions | Too many (every finding has its own table) or too few (no visual support) |
 
 **Journal conventions**:

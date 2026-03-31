@@ -92,11 +92,11 @@ Check whether the methods section demonstrates intellectual honesty about how un
 
 | Check | Pass | Fail |
 |-------|------|------|
-| Analytical reframing documented | Shows how initial understanding shifted; what was expected vs. what emerged | Linear narrative implying the final framework was there from the start |
+| Analytical reframing documented | Narrative acknowledges at least one moment where understanding shifted — even a sentence is sufficient; *note: explicit iteration documentation (full analytical logs, appendix timelines) is aspirational and rarely appears in great papers, but is excellent if present* | Linear narrative implying the final framework was there from the start, with no acknowledgment of any analytical evolution |
 | Data collection evolved | Later data collection informed by earlier analysis (theoretical sampling) | All data collected identically from start to finish |
 | Surprise documented | At least one moment where data challenged expectations | Everything found was expected; no analytical surprises |
-| Member checking or validation | Findings shared with informants, presented to stakeholders, or validated externally | No external validation of interpretations |
-| Positionality acknowledged | Author's relationship to setting, potential biases, insider/outsider status noted | No acknowledgment of researcher's position |
+| Member checking or validation | *(nice to have for certain studies; not a gate)* Findings shared with informants or presented to stakeholders — valuable when done, but absence is not a reason to reject | Absence is only notable if the study design made member checking feasible and the author explicitly chose to skip it |
+| Positionality acknowledged | Brief acknowledgment of insider/outsider status (1–2 sentences is sufficient for most org science papers) | *Extended reflexivity statements are not standard in ASQ/OrgSci and may signal unfamiliarity with the genre* — the fail is genuine omission of researcher position, not absence of a lengthy positionality section |
 
 **The honesty test**: Does the methods section read like the research actually happened (messy, iterative, surprising) or like a post-hoc rationalization (clean, linear, predetermined)? Reviewers can smell the difference.
 
@@ -125,12 +125,12 @@ Check for named structural failure modes in methods sections:
 | Failure mode | Detection | Present? |
 |--------------|-----------|----------|
 | **Distanced voice** | "Data were collected" / "Interviews were conducted" throughout | Yes/No |
-| **Methods-as-recipe** | Step 1, Step 2, Step 3 with no reflexivity or iteration | Yes/No |
+| **Methods-as-recipe** | Step 1, Step 2, Step 3 with no reflexivity or iteration — *grey area: standard methods sections use accepted genre conventions (e.g., invoking Glaser & Strauss, Spradley) even when not followed to the letter; the failure is absence of any iteration or reflexivity, not literal procedural divergence from cited canon* | Yes/No |
 | **Missing iteration** | Linear analytical narrative; no reframing, no surprises | Yes/No |
 | **Under-justified site** | Setting described but not theoretically motivated | Yes/No |
 | **Data list without logic** | "44 interviews, 200 hours observation" with no sampling/sufficiency argument | Yes/No |
 | **Overclaimed generalizability** | "Our findings generalize to..." without boundary conditions | Yes/No |
-| **Missing negative cases** | No mention of disconfirming evidence or analytical surprises | Yes/No |
+| **Missing negative cases** | No acknowledgment of negative case status — *note: explicitly presenting counterexamples is not standard practice in great papers, though valuable; the minimum bar is a statement that the data contained no (or very few) instances directly contradicting the main story* | Yes/No |
 | **Orphaned quantitative data** | Quant data mentioned but never integrated with qual analysis | Yes/No |
 
 ---

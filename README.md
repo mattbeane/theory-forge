@@ -82,6 +82,8 @@ Every evaluation persists scores across sessions, tracks upstream file changes f
 
 **Thresholds** are configurable per project or per target journal via `rubrics/submission_thresholds.json`, with presets for `top_journal`, `field_journal`, and `working_paper`.
 
+**Want to review the eval standards?** Open `docs/theory-forge-navigator.html` in any browser — a self-contained interface that lets you walk through every check across all 7 section evals, annotate where you agree/disagree/have questions, and export your annotations as JSON or Markdown.
+
 ### Output
 
 | Skill | What It Does |
