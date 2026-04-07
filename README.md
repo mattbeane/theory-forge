@@ -2,6 +2,8 @@
 
 **AI-assisted theory building from qualitative and mixed-methods data, with systematic quality checks.**
 
+> **Note (April 2026):** theory-forge is the panjandrum that [research-quals v1](https://github.com/mattbeane/research-quals) is the protocol layer for. If you are using theory-forge for PhD training (your own or your students'), read research-quals v1's [V1_PROTOCOL_LAYER_PLAN.md](https://github.com/mattbeane/research-quals/blob/main/docs/V1_PROTOCOL_LAYER_PLAN.md) first — it explains why theory-forge alone is not enough and what to wrap around it.
+
 Theory-forge is a collection of AI agents (Claude Code skills) that handle the full arc of producing a theory-building paper — discovering patterns, building framings, auditing claims, drafting manuscripts. Each agent handles one analytical task. You compose them however your project demands.
 
 What makes it different: built-in quality checks that run multiple times through a statistical consensus engine, persist scores across sessions with automatic staleness tracking, and produce a single submission-readiness verdict via `/check-submission`. You see exactly where your paper is strong, where it's weak, and what to fix — before reviewers do.
@@ -213,6 +215,22 @@ Theory-forge is designed to be extended. Three skills scaffold new capabilities:
 **`/create-agent`** — Build a bespoke analytical agent for project-specific needs. Custom agents live alongside core skills and register in `registry.json`.
 
 To contribute upstream: run the authoring skill, fork the repo, copy the generated files, open a PR. The skills produce everything needed.
+
+---
+
+## research-quals v1 integration (April 2026)
+
+theory-forge now ships three skills that integrate it with [research-quals v1](https://github.com/mattbeane/research-quals):
+
+| Skill | What it does | Status |
+|---|---|---|
+| `/export-trace` | Capture the current session as a publishable trace bundle for the research-quals trace library | `built` |
+| `/copilot-session` | Run theory-forge as a two-participant joint session (Seeking pathway from *Inverted Apprenticeships*) | `built` (file-based handoff) |
+| `sandbox-mode` | Honor research-quals v1 sandbox sessions: no public writes, no telemetry, no audit-trail propagation | `built` (contract documented; per-skill enforcement is ongoing) |
+
+These exist because theory-forge alone is *not* enough infrastructure for PhD training. Used without supervision, agentic research suites crash apprenticeship from both ends — see Beane (2019) on Shadow Learning and Beane & Anthony on Inverted Apprenticeships. research-quals v1 wraps theory-forge with the protocol layer that re-establishes the conditions LPP used to guarantee. If you're a faculty member using theory-forge with students, you almost certainly want research-quals v1 too.
+
+**Honest state:** The three v1-integration skills above are documented and functional. The core theory-forge experience is unchanged for solo use. The sandbox contract is documented but per-skill enforcement is ongoing (a v1.1 audit pass will check every theory-forge skill against it).
 
 ---
 
