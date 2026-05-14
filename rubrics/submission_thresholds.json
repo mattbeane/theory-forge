@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "description": "Submission readiness thresholds for the /check-submission test suite. Override per-project in state.json submission_thresholds.overrides.",
   "defaults": {
     "zuckerman": { "min_score": 35, "max_score": 50, "min_criteria_pass": 7 },

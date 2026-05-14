@@ -4,6 +4,8 @@
 
 > **Note (April 2026):** theory-forge is the panjandrum that [research-quals v1](https://github.com/mattbeane/research-quals) is the protocol layer for. If you are using theory-forge for PhD training (your own or your students'), read research-quals v1's [V1_PROTOCOL_LAYER_PLAN.md](https://github.com/mattbeane/research-quals/blob/main/docs/V1_PROTOCOL_LAYER_PLAN.md) first — it explains why theory-forge alone is not enough and what to wrap around it.
 
+> **Note on versioning:** Rubrics and skills in this repo are not semantically versioned. In theory they should be — each is a non-trivial artifact whose criteria, weights, and examples could plausibly carry breaking changes. In practice I mod them constantly until they actually work, and a version number on each would imply a stability that does not match how the artifacts are developed. Treat anything in `rubrics/` or `.claude/skills/` as the current working iteration. If you fork or contribute, expect frequent in-place revision rather than tagged releases.
+
 Theory-forge is a collection of AI agents (Claude Code skills) that handle the full arc of producing a theory-building paper — discovering patterns, building framings, auditing claims, drafting manuscripts. Each agent handles one analytical task. You compose them however your project demands.
 
 What makes it different: built-in quality checks that run multiple times through a statistical consensus engine, persist scores across sessions with automatic staleness tracking, and produce a single submission-readiness verdict via `/check-submission`. You see exactly where your paper is strong, where it's weak, and what to fix — before reviewers do.

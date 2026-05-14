@@ -1,6 +1,5 @@
 {
   "name": "Inductive Theory-Building Paper Criteria",
-  "version": "0.2",
   "description": "Criteria for evaluating inductive theory-building papers for ASQ/OrgSci. Includes ethnographic, grounded theory, and MULTIMETHOD papers where theory emerges from fieldwork (even if supplemented by rudimentary quantitative analysis). Key principle: FINDINGS = THEORY. The theoretical contribution emerges progressively through evidence-rich findings sections, NOT previewed in theory/background.",
   "max_score": 50,
   "genre_flexibility": {
