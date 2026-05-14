@@ -158,6 +158,20 @@
       "pass_threshold": null,
       "exemplar_journals": ["ASQ", "AMJ", "Organization Science"],
       "builtin": true
+    },
+    {
+      "id": "quote-density",
+      "name": "Quote Density Per Sub-Finding",
+      "tradition": "Calibrated qualitative evidence deployment",
+      "description": "Decision and evaluation rubric for how many quotes a qualitative or mixed-methods paper should deploy per analytical sub-finding. Includes a nine-type taxonomy of sub-findings (vivid instance, mechanism specification, multi-voice generality, contrast, sequenced, typology, counterintuitive, theoretical complement, definitional) with default counts plus escalator and de-escalator conditions. Induced from 9 exemplar papers across ASQ, OS, ASR, AMJ.",
+      "rubric": "rubrics/quote_density.json",
+      "eval_skill": null,
+      "contribution_type": null,
+      "criteria_count": 5,
+      "pass_threshold": "35/50 (Good or higher across all criteria)",
+      "exemplar_journals": ["ASQ", "Organization Science", "ASR", "AMJ"],
+      "builtin": true,
+      "notes": "Supports both drafting (recommend quote count per sub-finding) and evaluation (score a draft's overall calibration). First test implementation: Hedging with Talent (Beane & Sholler 2026, ASQ)."
     }
   ],
 
