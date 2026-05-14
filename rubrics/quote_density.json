@@ -1,0 +1,287 @@
+{
+  "name": "Quote Density Per Sub-Finding",
+  "description": "Decision and evaluation rubric for how many quotes a qualitative or mixed-methods paper should deploy in support of a single analytical sub-finding. Induced from 9 exemplar papers (Beane 2023 ASQ; Bailey et al. 2012 OS; Barley 1990 ASQ; Beane & Orlikowski 2015 OS; Bernstein 2012 ASQ; Brayne 2017 ASR; Karunakaran et al. 2022 OS; Leonardi 2011 OS; O'Mahony & Bechky 2006 AMJ). Applies to findings sections only; does not govern introduction, theory, methods, or discussion.",
+  "max_score": 50,
+  "scope": {
+    "applies_to": "Qualitative and mixed-methods papers reporting interview, observation, or field-note evidence",
+    "does_not_apply_to": "Quantitative-forward papers; sections other than Findings; literature review prose"
+  },
+  "empirical_baseline": {
+    "source": "9 exemplar papers across ASQ, OS, ASR, AMJ",
+    "distribution": {
+      "one_quote": "~20% of sub-findings",
+      "two_quotes": "~45% of sub-findings (modal)",
+      "three_or_more": "~35% of sub-findings",
+      "five_plus_or_table": "rare — typology enumerations"
+    },
+    "journal_calibration": {
+      "ASQ": "median 2–3 quotes per sub-finding; heavy use of tables for typologies; field notes deployed alongside quotes",
+      "Organization Science": "median 3 quotes per sub-finding; multi-voice corroboration prized for theoretical novelty",
+      "ASR": "median 2–3 quotes per sub-finding; variation-documentation framing common",
+      "AMJ": "median 1–2 quotes per sub-finding; single strong exemplars often work harder"
+    }
+  },
+  "decision_framework": {
+    "purpose": "Recommend a quote count for a given sub-finding during drafting, or evaluate the count in a draft.",
+    "step_1_classify_sub_finding": {
+      "instructions": "Classify the sub-finding into one or more of the types below. Types are not mutually exclusive. If multiple types apply, use the highest default count among them.",
+      "types": [
+        {
+          "id": "A",
+          "label": "Vivid single instance",
+          "description": "Straightforward illustration of an established or intuitive pattern. Also covers voice/texture work where the speaker's perspective is itself the point.",
+          "default_quote_count": 1,
+          "example_from_corpus": "O'Mahony & Bechky 2006: camera operator's 'hitting his mark' as illustration of competence differentiation. One quote suffices because the pattern is established and the quote is vivid."
+        },
+        {
+          "id": "B",
+          "label": "Mechanism specification",
+          "description": "Claim about HOW something works, not just THAT it happens. Often requires showing both instance and explanation.",
+          "default_quote_count": 2,
+          "example_from_corpus": "Bernstein 2012: operator on management 'no idea how people operate down here' + nine-year veteran on workers finding better methods but unable to surface them. Two quotes show both the deviance and the barriers to surfacing it."
+        },
+        {
+          "id": "C",
+          "label": "Multi-voice generality",
+          "description": "Claim that a pattern holds across roles, levels, or sites. Requires showing the pattern from at least two distinct speaker positions.",
+          "default_quote_count": 2,
+          "example_from_corpus": "Beane 2023: circulator on team continuity + surgeon on rising experience concentration. Two roles, same pattern."
+        },
+        {
+          "id": "D",
+          "label": "Contrast or boundary case",
+          "description": "Sub-finding works by juxtaposition: showing what's different about an opposed case or context.",
+          "default_quote_count": 2,
+          "example_from_corpus": "Brayne 2017: officer on experiential knowledge ('I already know where the crime's at') + captain challenging that expertise. Contrast shows conflicting logics in the same organization."
+        },
+        {
+          "id": "E",
+          "label": "Sequenced or layered mechanism",
+          "description": "Mechanism unfolds in stages: trigger → response → outcome, or one condition enables another. Each stage may need its own anchor quote.",
+          "default_quote_count": 2,
+          "max_quote_count": 3,
+          "example_from_corpus": "Bailey et al. 2012: offshore engineer creating symmetric fuel system + Suresh/Vijay debate on penetrations + field notes on guessing. Three quotes show how low access to physical referents cascaded into cultural failure."
+        },
+        {
+          "id": "F",
+          "label": "Typology or sub-pattern enumeration",
+          "description": "Sub-finding introduces a typology or set of distinct sub-patterns. Each category needs at least one anchor instance.",
+          "default_quote_count": "one per category (often 3–5, frequently tabulated)",
+          "format_recommendation": "If 4+ categories, convert to table rather than narrative quote-stack.",
+          "example_from_corpus": "Barley 1990: four interpretive-discussion patterns (telling, teaching, mutual discussion, reverse teaching) — one example per type. Beane 2023: five workaround types in table format."
+        },
+        {
+          "id": "G",
+          "label": "Counterintuitive or novel claim",
+          "description": "Claim challenges prior accounts or established expectations. Extra evidence builds credibility.",
+          "default_quote_count": 3,
+          "example_from_corpus": "Leonardi 2011: the claim that analysts in different departments framed the same problem differently — anchored with four quotes from four departments (Gene, Jensen Lu, Jason Chan, Kaleeb). Counterintuitive claim builds credibility through diversity of voices."
+        },
+        {
+          "id": "H",
+          "label": "Theoretical complement",
+          "description": "Sub-finding establishes a second version of the same mechanism (e.g., strategic AND routine forms; deliberate AND emergent variants). Each variant gets its own anchor, with the complementarity explicitly named in surrounding prose.",
+          "default_quote_count": "1 per variant (typically 2)",
+          "example_from_corpus": "Test case (Hedging with Talent, 4.2): Area Supervisor's strategic 'half the crew won't come in tomorrow' quote paired with the same supervisor's routine 'until I don't see the actual process taking in place I don't attack it.' Two quotes establish that the mechanism operates through both strategic and routine registers — neither alone makes the theoretical point."
+        },
+        {
+          "id": "I",
+          "label": "Definitional anchoring",
+          "description": "Sub-finding introduces a new concept the paper will build on. Multiple instances anchor the concept across cases.",
+          "default_quote_count": "2–3",
+          "example_from_corpus": "Karunakaran et al. 2022: four response types (justification, apology, stock response, private follow-up) — each anchored with an exemplar."
+        }
+      ]
+    },
+    "step_2_escalators": {
+      "instructions": "Starting from the default count, ADD one quote for each condition that applies.",
+      "conditions": [
+        {
+          "trigger": "A reasonable reviewer would call the claim 'ungrounded' or 'single-source' with the current count",
+          "add": 1
+        },
+        {
+          "trigger": "The sub-finding spans multiple speaker roles (manager + worker; junior + senior; multiple sites) and the current quote set hasn't shown that diversity",
+          "add": 1
+        },
+        {
+          "trigger": "The sub-finding's theoretical work requires showing BOTH that X happens AND how it happens, and the current quotes only show one",
+          "add": 1
+        },
+        {
+          "trigger": "The sub-finding is the paper's named contribution or core concept, and the conceptual handle benefits from instance variety",
+          "add": 1
+        }
+      ]
+    },
+    "step_3_de_escalators": {
+      "instructions": "Starting from the post-escalation count, SUBTRACT or CONVERT for each condition that applies.",
+      "conditions": [
+        {
+          "trigger": "The strongest quote in the set encodes multiple concepts at once and does double duty",
+          "action": "subtract 1"
+        },
+        {
+          "trigger": "A second quote restates the first in different prose without adding new evidence",
+          "action": "subtract 1"
+        },
+        {
+          "trigger": "A quantitative figure or table can carry the variation more efficiently",
+          "action": "subtract 1; consider table substitution"
+        },
+        {
+          "trigger": "Quote count reaches 4+ AND the structure is a typology with distinct categories",
+          "action": "convert to table rather than narrative quote-stack"
+        }
+      ]
+    },
+    "step_4_final_check": {
+      "instructions": "For each retained quote, ask: 'What does this quote do that the others don't?' If you cannot name the analytical function in a sentence, cut the quote.",
+      "function_categories_to_choose_from": [
+        "Illustration of pattern",
+        "Mechanism specification",
+        "Multi-voice corroboration",
+        "Variation or range",
+        "Contrast or counter-example",
+        "Theoretical complement",
+        "Definitional anchor",
+        "Voice or texture"
+      ]
+    }
+  },
+  "criteria": [
+    {
+      "id": 1,
+      "name": "Type Classification Accuracy",
+      "description": "For each sub-finding in the findings section, does the deployed quote count match the analytical type of the claim? Counterintuitive claims should not rest on one quote; vivid single instances should not be over-corroborated.",
+      "weight": 10,
+      "levels": {
+        "5": "Every sub-finding's quote count is well-matched to its type. Vivid single instances stay lean; counterintuitive claims are well-supported; typologies are fully enumerated.",
+        "4": "Most sub-findings well-calibrated. One or two minor mismatches.",
+        "3": "Mixed calibration. Some sub-findings under-supported, others over-quoted.",
+        "2": "Frequent miscalibration. Counterintuitive claims under-evidenced or routine illustrations over-quoted.",
+        "1": "Systematic miscalibration. Quote counts appear arbitrary."
+      },
+      "examples": {
+        "good": "Hedging with Talent 4.2: managerial rationale (type B + G, novel) uses one strong quote; theoretical complement (type H) uses one quote per variant with complementarity named.",
+        "bad": "Single quote supporting a generalizing claim like 'managers across facilities...' OR four quotes saying the same thing different ways for an intuitive observation."
+      }
+    },
+    {
+      "id": 2,
+      "name": "Quote Function Differentiation",
+      "description": "For sub-findings with multiple quotes, does each quote do distinct analytical work? Reader should be able to name what each quote contributes.",
+      "weight": 10,
+      "levels": {
+        "5": "Each quote serves a nameable function (illustration, mechanism, multi-voice, contrast, etc.) — no quote is redundant.",
+        "4": "Mostly differentiated. One or two quotes whose distinct work is fuzzy.",
+        "3": "Some redundancy. Several quotes serve overlapping functions.",
+        "2": "Substantial redundancy. Multiple quotes paraphrase each other.",
+        "1": "Quote stacks throughout — quotes pile up without distinct work."
+      },
+      "examples": {
+        "good": "Leonardi 2011 on departmental framings: four quotes, each from a different department, each showing a distinct framing of the same problem.",
+        "bad": "Three quotes all illustrating 'workers were uninformed' in slightly different language."
+      }
+    },
+    {
+      "id": 3,
+      "name": "Escalation Discipline",
+      "description": "Does the paper escalate quote count when the claim is novel, counterintuitive, multi-voice, or layered — and avoid escalating for routine illustration?",
+      "weight": 10,
+      "levels": {
+        "5": "Escalation tracks claim type. Novel claims get 3+; routine illustrations stay at 1.",
+        "4": "Mostly disciplined. A few escalations missing or overdone.",
+        "3": "Inconsistent. Some novel claims under-escalated; some routine claims over-escalated.",
+        "2": "Systematic mis-escalation. Routine claims get heavy quote support; novel claims get one quote.",
+        "1": "Escalation appears unrelated to claim type."
+      },
+      "examples": {
+        "good": "Hedging with Talent 4.2: counterintuitive 'manager-side rationale for not saying the word robot' supported by a single vivid quote because the quote itself encodes the calculation; counter-example claim (R10's 'Carl Lewis' framing) gets one quote because the contrast is the work.",
+        "bad": "Three quotes deployed to support 'workers do not always know about automation' (an intuitive claim) while a counterintuitive subsidiary claim about cascading shielding gets one fragment."
+      }
+    },
+    {
+      "id": 4,
+      "name": "Anti-Pattern Avoidance",
+      "description": "Does the paper avoid quote stacking, restatement, decorative quotes, lone-source over-claiming, and buried typologies?",
+      "weight": 10,
+      "levels": {
+        "5": "No anti-patterns evident. Every quote earns its place.",
+        "4": "One or two minor instances. Mostly clean.",
+        "3": "Several anti-pattern instances. Tightening would improve the paper.",
+        "2": "Frequent anti-patterns. Findings section reads as quote-heavy.",
+        "1": "Findings dominated by anti-pattern usage. Quotes feel obligatory rather than analytical."
+      },
+      "examples": {
+        "good": "Each quote serves a distinct, nameable analytical function.",
+        "bad": "Three back-to-back quotes saying the same thing; a quote with no analytical claim attached; a generalizing claim ('managers across the firm...') supported by one quote."
+      }
+    },
+    {
+      "id": 5,
+      "name": "Format Choice",
+      "description": "When the sub-finding is a typology or enumeration of variants, does the paper use the right format — narrative quote sequence vs. table?",
+      "weight": 10,
+      "levels": {
+        "5": "Typologies with 4+ categories use tables; narrative quote sequences are used for 2–3 instances and for variation that needs prose context.",
+        "4": "Mostly appropriate. One or two cases where a table would have served better, or vice versa.",
+        "3": "Mixed. Some typologies buried in narrative; some narrative claims forced into table format.",
+        "2": "Frequent format mismatches.",
+        "1": "Tables and narrative quote sequences appear interchangeable; format choice is not analytical."
+      },
+      "examples": {
+        "good": "Beane 2023 workaround typology in table; Hedging with Talent 4.2 worker-opacity quotes in narrative because the variation crosses organizational levels and benefits from prose linking.",
+        "bad": "Five workaround types each presented as a block quote with full analytical paragraph, when a table would have shown the typology more efficiently."
+      }
+    }
+  ],
+  "anti_patterns": [
+    "Quote stacking — 3+ quotes that illustrate the same point in the same way without adding contrast, mechanism, or variation",
+    "Restatement quotes — second quote paraphrases the first in different prose",
+    "Decorative quotes — quote present for atmosphere only, with no analytical claim attached",
+    "Burying typology in prose — 4+ quotes embedded in flowing paragraphs that would read better as a table",
+    "Lone-source over-claiming — single quote supporting a generalizing claim like 'managers across facilities…'",
+    "Quote dump — multiple quotes presented sequentially with thin analytical bridging",
+    "Orphaned quotes — quote with no analytical setup or follow-through",
+    "Quote ventriloquism — quote inserted that doesn't actually make the analytical claim the surrounding prose attributes to it",
+    "Symmetric padding — multiple quotes used to make sub-findings appear equally evidenced when they are not"
+  ],
+  "format_substitutes": {
+    "principle": "Tables, field notes, and quantitative figures can do work that quote stacks cannot — and vice versa. Format choice is analytical.",
+    "use_table_when": [
+      "Sub-finding is a typology with 4+ categories",
+      "Each category needs an anchor instance but full analytical development is in surrounding prose",
+      "Variation across cases is the substantive point"
+    ],
+    "use_field_notes_when": [
+      "Practice being documented is one workers wouldn't articulate in interviews (workarounds, embodied routines)",
+      "Researcher observation captures something the speaker would not name"
+    ],
+    "use_quantitative_figure_when": [
+      "Variation has a magnitude readers should see directly",
+      "Comparison across many cases would require many quotes to convey"
+    ],
+    "use_narrative_quote_sequence_when": [
+      "Variation crosses organizational levels and prose linking is doing analytical work",
+      "Quote does layered work — speaker's framing matters beyond the propositional content",
+      "2–3 quotes can carry the variation without becoming a stack"
+    ]
+  },
+  "notes": {
+    "key_principle": "Each quote in a findings section should do nameable analytical work distinct from every other quote supporting the same sub-finding. Quote count is determined by the analytical structure of the claim, not by uniform application of a rule.",
+    "drafting_vs_evaluation": "The decision_framework supports drafting (recommend a count for a given sub-finding). The criteria support evaluation (score a draft's overall quote-density calibration). Both reference the same type taxonomy.",
+    "exemplar_sources": [
+      "Beane 2023 ASQ — Resourcing a Technological Portfolio",
+      "Bailey et al. 2012 OS — Lure of the Virtual",
+      "Barley 1990 ASQ — Technology and Structure",
+      "Beane & Orlikowski 2015 OS — What Difference Does a Robot Make",
+      "Bernstein 2012 ASQ — Transparency Paradox",
+      "Brayne 2017 ASR — Big Data Surveillance",
+      "Karunakaran et al. 2022 OS — Crowd-based Accountability",
+      "Leonardi 2011 OS — Innovation Blindness",
+      "O'Mahony & Bechky 2006 AMJ — Stretchwork"
+    ],
+    "first_test_implementation": "Hedging with Talent (Beane & Sholler 2026, ASQ submission). Section 4.2 (Information Shielding) was rebuilt during May 2026 revisions using this rubric. The non-strategic shielding insert (type H — theoretical complement) is the clearest live application: one quote per variant (strategic + routine) with the complementarity explicitly named in surrounding prose."
+  }
+}
